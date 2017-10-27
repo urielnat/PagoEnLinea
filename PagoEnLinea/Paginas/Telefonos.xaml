@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Telefonos" Icon="telephonew.png">
+	<ContentPage.Content>
+         <StackLayout Padding="20,20,20,10">
+            <ScrollView>
+           <ListView x:Name="listView" RowHeight="70" ItemSelected="Handle_ItemSelected">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell >
+                    <Frame HasShadow="true" Margin="5">
+                      
+                              <Grid ColumnSpacing="0" RowSpacing="0">
+               <Grid.RowDefinitions>
+                  <RowDefinition Height="auto" />
+                
+                 
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+
+                  <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="*" /> 
+
+                </Grid.ColumnDefinitions>
+                   <Label Text="Teléfono" Grid.Row ="0" Grid.Column="0"/>
+                    
+                </Grid>
+                    </Frame>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+    </ScrollView>            
+         
+
+        </StackLayout>
+	</ContentPage.Content>
+</ContentPage>

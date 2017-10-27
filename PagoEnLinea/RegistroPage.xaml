@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.RegistroPage" xmlns:xfx="clr-namespace:Xfx;assembly=Xfx.Controls" Title="Datos de inicio de sesión">
+	   <ContentPage.Content>
+
+        <StackLayout Padding="30,0,30,0">
+         <ScrollView> 
+        <Grid RowSpacing="10" ColumnSpacing="10"  >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition>
+            <RowDefinition.Height>
+                <OnPlatform x:TypeArguments="GridLength"
+                                  iOS="auto"
+                               Android="auto"
+                        />
+            </RowDefinition.Height>
+        </RowDefinition>
+               
+                        
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" /> 
+                <RowDefinition Height="auto" />  
+                <RowDefinition Height="auto" />      
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="4*" />
+                 <ColumnDefinition Width="5*" />        
+                   
+            </Grid.ColumnDefinitions>
+
+             <Label Grid.Row ="0" Text="Registro (1/2)"  Grid.ColumnSpan="3" HorizontalTextAlignment="Center" Font="bold,30"/>
+
+             <Image Source="id.png" Grid.Row="1" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+            <xfx:XfxEntry x:Name="enCURP" Grid.Row="1"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"
+                          Placeholder="CURP"
+                          VerticalOptions="End"
+
+                              />        
+            <Image Source="user.png" Grid.Row="2" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+            <xfx:XfxEntry x:Name="enNombre" Grid.Row="2"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"
+                          Placeholder="Nombre(s)"
+                          VerticalOptions="End"
+
+                              />
+                
+              <Image Source="user.png" Grid.Row="3" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+             <xfx:XfxEntry x:Name="enPaterno" Grid.Row="3"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"
+                          Placeholder="Apellido paterno"
+                          />
+
+            <Image Source="user.png" Grid.Row="4" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
+             <xfx:XfxEntry x:Name="enMaterno" Grid.Row="4"
+                          Grid.Column="1"
+                           Grid.ColumnSpan="2"
+                          Placeholder="Apellido Materno"
+                          />   
+
+                <Image Source="gender.png" Grid.Row="5" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
+                            <Picker x:Name="pkSexo" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Title="Selecciona tu sexo" HorizontalOptions="FillAndExpand">
+                             <Picker.Items>
+                                 <x:String>Hombre</x:String> 
+                                 <x:String>Mujer</x:String>
+                                 <x:String>Otro</x:String>
+                              </Picker.Items>
+                              </Picker>   
+               <Image Source="mail.png" Grid.Row="8" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
+             <xfx:XfxEntry x:Name="enCorreo" Grid.Row="8"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"
+                          Placeholder="Correo electrónico"
+                          Keyboard="Email"
+                          />
+               <Image Source="calendar.png" Grid.Row="6" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+                <Label Text="Fecha de Nacimiento" VerticalTextAlignment="Start" YAlign="Center" XAlign="Center" Grid.Row="6" Grid.Column="1" />  
+                <DatePicker  Grid.Row="6" Grid.Column="2" Format="dd/MM/yyyy" Date="01/01/2017" MinimumDate="01/01/1900"></DatePicker>     
+
+                    <Image Source="gender.png" Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
+                            <Picker x:Name="pkEstCvl" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Title="Selecciona tu estado civil" HorizontalOptions="FillAndExpand">
+                             <Picker.Items>
+                                 <x:String>Soltero</x:String> 
+                                 <x:String>Casado</x:String>
+                              </Picker.Items>
+                              </Picker>      
+              <!--  
+              <Image Source="pass.png" Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+             <xfx:XfxEntry x:Name="enPassword" Grid.Row="7"
+                          Grid.Column="1"
+                          Placeholder="Ingresa una contraseña"
+                           IsPassword="true"
+                          />    
+              <Image Source="pass.png" Grid.Row="8" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+             <xfx:XfxEntry x:Name="enPassword2" Grid.Row="8"
+                          Grid.Column="1"
+                          Placeholder="Confirma tu contraseña"
+                           IsPassword="true"
+                          />   
+                    -->   
+                
+                </Grid>   
+      
+        
+       </ScrollView>  
+       
+     
+       <Grid RowSpacing="0" ColumnSpacing="0" VerticalOptions="End">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="2*" />    
+            </Grid.ColumnDefinitions>
+           
+            <Button Text="Siguiente" Grid.Row="0" Grid.Column="2"  BackgroundColor="#2d88ca" TextColor="White" Clicked="Handle_Clicked" />     
+             <Button Text="capturar" Grid.Row="0" Grid.Column="1"  BackgroundColor="Red" TextColor="White" Clicked="OCR_Clicked" />         
+             <ActivityIndicator x:Name="indicador"  Grid.Row="0" Grid.Column="0" Color="Teal" IsRunning="false" ></ActivityIndicator>   
+            </Grid>
+
+      </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

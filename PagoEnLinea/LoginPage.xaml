@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.LoginPage"   xmlns:xfx="clr-namespace:Xfx;assembly=Xfx.Controls" >
+    <ContentPage.Content>
+       <StackLayout Padding="30,30,30,0" >
+          <ScrollView >
+        <Grid RowSpacing="30" ColumnSpacing="0"  >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />   
+                <RowDefinition Height="*" /> 
+                <RowDefinition Height="auto" />     
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                   
+            </Grid.ColumnDefinitions>
+
+           
+           <Label Text="Iniciar Sesión" FontSize="30" TextColor="#13445A" Grid.Row="0"  HorizontalTextAlignment="Center" />
+
+                 <xfx:XfxEntry x:Name="enUsuario" Grid.Row="1"
+                          Grid.Column="0"
+                          Placeholder="Usuario"
+                          />
+                
+               
+
+           
+            <xfx:XfxEntry x:Name="enContraseña" Grid.Row="2"
+                          Grid.Column="0"
+                          Placeholder="Contraseña"
+                          IsPassword="True"
+                          />
+              
+            <Button Text="Ingresar" Grid.Column="0" Grid.Row="3" BackgroundColor="#59b853" TextColor="White" Clicked="Handle_Clicked" /> 
+            <Button Text="Registrar" Grid.Column="0" Grid.Row="4" BackgroundColor="#999999" TextColor="White"  Clicked="Registrar_Clicked"/>    
+            <Label x:Name="olvido" Text="¿Haz olvidado tu contraseña?" Grid.Row="5" HorizontalTextAlignment="Center" TextColor="#4b3aff">
+                 
+                </Label>    
+        </Grid>
+                 
+       </ScrollView>   
+         <ActivityIndicator   x:Name="indicador" IsVisible="false"    IsRunning="true"
+                           Color="#13445A"
+                          />
+    </StackLayout>
+        
+    </ContentPage.Content>
+</ContentPage>
