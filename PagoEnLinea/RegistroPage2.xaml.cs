@@ -71,19 +71,9 @@ namespace PagoEnLinea
                 a4 = true;
             }
 
-            if (ValidarVacio(enColonia.Text))
-            {
-                enColonia.ErrorText = "Introduzca una colonia";
-                a5 = false;
-
-            }
-            else
-            {
-                enColonia.ErrorText = "";
-                a5 = true;
-            }
 
 
+            /*
             if (!(pkEstado.SelectedIndex > -1))
             {
                 await DisplayAlert("Campo vacio", "selecciona su estado", "ok");
@@ -93,8 +83,8 @@ namespace PagoEnLinea
             else
             {
                 a6 = true;
-            }
-
+            }*/
+            /*
             if (ValidarVacio(enCiudad.Text))
             {
                 enCiudad.ErrorText = "Introduzca su ciudad";
@@ -105,7 +95,7 @@ namespace PagoEnLinea
             {
                 enCiudad.ErrorText = "";
                 a7 = true;
-            }
+            }*/
             if (ValidarVacio(enTelefono.Text))
             {  await DisplayAlert("Sin número telefónico","Deslice la pantalla para ver todas las opciones","ok");
                 enTelefono.ErrorText = "Introduzca su teléfono";
@@ -117,6 +107,7 @@ namespace PagoEnLinea
                 enTelefono.ErrorText = "";
                 a8 = true;
             }
+            /*
             if (ValidarVacio(enMunicipio.Text))
             {
                 enMunicipio.ErrorText = "Introduzca su municipio";
@@ -127,7 +118,7 @@ namespace PagoEnLinea
             {
                 enMunicipio.ErrorText = "";
                 a9 = true;
-            }
+            }*/
 
             if (ValidarVacio(enLADA.Text))
             {
@@ -151,14 +142,20 @@ namespace PagoEnLinea
                 enCelular.ErrorText = "";
                 a11 = true;
             }
-            if ( a2 && a3 && a4 && a5 && a6 && a7 &&a8&&a9&&a10&&a11)
+            if ( a2 && a3 && a4  &&a8&&a10&&a11)
             { 
                 user.razonSocial = enMunicipio.Text;
                 user.domicilio = enDomicilio.Text;
                 user.numero = enNumero.Text;
                 user.codigoPostal = enCod.Text;
                 user.colonia = enColonia.Text;
-                user.estado = pkEstado.Items[pkEstado.SelectedIndex];
+                System.Diagnostics.Debug.WriteLine(user.contraseña);
+                if(!(pkEstado.SelectedIndex > -1)){
+                    user.estado = null;    
+                }else{
+                    user.estado = pkEstado.Items[pkEstado.SelectedIndex]; 
+                }
+
                 user.ciudad = enCiudad.Text;
                 user.telefono = enTelefono.Text;
 

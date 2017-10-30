@@ -38,7 +38,7 @@
             <xfx:XfxEntry x:Name="enCURP" Grid.Row="1"
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
-                          Placeholder="CURP"
+                          Placeholder="*CURP"
                           VerticalOptions="End"
 
                               />        
@@ -46,7 +46,7 @@
             <xfx:XfxEntry x:Name="enNombre" Grid.Row="2"
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
-                          Placeholder="Nombre(s)"
+                          Placeholder="*Nombre(s)"
                           VerticalOptions="End"
 
                               />
@@ -55,7 +55,7 @@
              <xfx:XfxEntry x:Name="enPaterno" Grid.Row="3"
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
-                          Placeholder="Apellido paterno"
+                          Placeholder="*Apellido paterno"
                           />
 
             <Image Source="user.png" Grid.Row="4" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
@@ -66,7 +66,7 @@
                           />   
 
                 <Image Source="gender.png" Grid.Row="5" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
-                            <Picker x:Name="pkSexo" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Title="Selecciona tu sexo" HorizontalOptions="FillAndExpand">
+                            <Picker x:Name="pkSexo" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu sexo" HorizontalOptions="FillAndExpand">
                              <Picker.Items>
                                  <x:String>Hombre</x:String> 
                                  <x:String>Mujer</x:String>
@@ -77,34 +77,36 @@
              <xfx:XfxEntry x:Name="enCorreo" Grid.Row="8"
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
-                          Placeholder="Correo electrónico"
+                          Placeholder="*Correo electrónico"
                           Keyboard="Email"
                           />
                <Image Source="calendar.png" Grid.Row="6" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-                <Label Text="Fecha de Nacimiento" VerticalTextAlignment="Start" YAlign="Center" XAlign="Center" Grid.Row="6" Grid.Column="1" />  
-                <DatePicker  Grid.Row="6" Grid.Column="2" Format="dd/MM/yyyy" Date="01/01/2017" MinimumDate="01/01/1900"></DatePicker>     
+                <Label Text="*Fecha de Nacimiento" VerticalTextAlignment="Start" YAlign="Center" XAlign="Center" Grid.Row="6" Grid.Column="1" />  
+                <DatePicker x:Name="dtFecha" Grid.Row="6" Grid.Column="2" Format="dd/MM/yyyy" Date="01/01/2017" MinimumDate="01/01/1900"></DatePicker>     
 
                     <Image Source="gender.png" Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
-                            <Picker x:Name="pkEstCvl" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Title="Selecciona tu estado civil" HorizontalOptions="FillAndExpand">
+                            <Picker x:Name="pkEstCvl" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu estado civil" HorizontalOptions="FillAndExpand">
                              <Picker.Items>
                                  <x:String>Soltero</x:String> 
                                  <x:String>Casado</x:String>
                               </Picker.Items>
                               </Picker>      
-              <!--  
-              <Image Source="pass.png" Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-             <xfx:XfxEntry x:Name="enPassword" Grid.Row="7"
+              
+              <Image Source="pass.png" Grid.Row="9" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+             <xfx:XfxEntry x:Name="enPassword" Grid.Row="9"
                           Grid.Column="1"
-                          Placeholder="Ingresa una contraseña"
+                           Grid.ColumnSpan="2"
+                          Placeholder="*Ingresa una contraseña"
                            IsPassword="true"
                           />    
-              <Image Source="pass.png" Grid.Row="8" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-             <xfx:XfxEntry x:Name="enPassword2" Grid.Row="8"
+              <Image Source="pass.png" Grid.Row="10" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+             <xfx:XfxEntry x:Name="enPassword2" Grid.Row="10"
                           Grid.Column="1"
-                          Placeholder="Confirma tu contraseña"
+                           Grid.ColumnSpan="2"
+                          Placeholder="*Confirma tu contraseña"
                            IsPassword="true"
                           />   
-                    -->   
+                  
                 
                 </Grid>   
       

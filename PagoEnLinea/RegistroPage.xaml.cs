@@ -24,8 +24,8 @@ namespace PagoEnLinea
             enPaterno.TextChanged += borrarError;
             enMaterno.TextChanged += borrarError;
             enCorreo.TextChanged += borrarError;
-            //enPassword.TextChanged += borrarError;
-            //enPassword2.TextChanged += borrarError;
+            enPassword.TextChanged += borrarError;
+            enPassword2.TextChanged += borrarError;
         }
 
 
@@ -34,8 +34,8 @@ namespace PagoEnLinea
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
-            
-            Boolean a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false, a7 = false;
+
+            Boolean a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = true,a9=true;
             if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
             {
                 enNombre.ErrorText = "Introduzca un nombre valido";
@@ -57,17 +57,7 @@ namespace PagoEnLinea
                 enPaterno.ErrorText = "";
                 a2 = true;
             }
-            if (string.IsNullOrEmpty(enMaterno.Text) || !Regex.Match(enMaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
-            {
-                enMaterno.ErrorText = "Introduzca un apellido valido";
-                a3 = false;
-
-            }
-            else
-            {
-                enMaterno.ErrorText = "";
-                a3 = true;
-            }
+          
 
             if (string.IsNullOrEmpty(enCorreo.Text) || !Regex.Match(enCorreo.Text, "^(?(\")(\".+?(?<!\\\\)\"@)|(([0-9A-Za-z]((\\.(?!\\.))|[-!#\\$%&'\\*\\+/=\\?\\^`\\{\\}\\|~\\w])*)(?<=[0-9A-Za-z])@))(?(\\[)(\\[(\\d{1,3}\\.){3}\\d{1,3}\\])|(([0-9a-z][-\\w]*[0-9a-z]*\\.)+[a-z0-9][\\-a-z0-9]{0,22}[a-z0-9]))$").Success)
             {
@@ -99,35 +89,35 @@ namespace PagoEnLinea
             {
                 a6 = true;
             }
-            /**
+
             if (string.IsNullOrEmpty(enPassword.Text) || enPassword.Text.Length < 3 || enPassword.Text.Length > 16)
             {
                 enPassword.ErrorText = "contraseña invalida ";
-                a5 = false;
+                a8 = false;
             }
             else
             {
                 enPassword.ErrorText = "";
-                a5 = true;
+                a8 = true;
             }
             if(!(string.IsNullOrEmpty(enPassword.Text)&&string.IsNullOrEmpty(enPassword2.Text))){
                 if (enPassword.Text.Equals(enPassword2.Text))
                 {   
                     enPassword2.ErrorText = "";
-                    a6 = true;
+                    a9 = true;
 
                 }
                 else
                 {
 
                     enPassword2.ErrorText = "Las contraseñas no concuerdan";
-                    a6 = false;
+                    a9 = false;
 
 
                 }
             }else{ await DisplayAlert("Campo vacio", "Deslice su pantalla para ver todas las opciones", "Ok"); }
 
-           */
+           
             if (!(pkSexo.SelectedIndex > -1))
             {
                 await DisplayAlert("Campo vacio", "seleccion su sexo", "ok");
@@ -138,15 +128,16 @@ namespace PagoEnLinea
             {
                 a7 = true;
             }
-            if(a1&&a2&& a3&& a4&& a5&& a6&& a7){
+            if(a1&&a2&& a4&& a5&& a6&& a7){
+
 
                 user.nombre = enNombre.Text;
                 user.apellidoPaterno = enPaterno.Text;
                 user.apellidoMaterno = enMaterno.Text;
                 user.sexo = pkSexo.Items[pkSexo.SelectedIndex];
                 user.correo = enCorreo.Text;
-               // user.contraseña = enPassword.Text;
-                //user.confirmarContraseña = enPassword2.Text;
+                 user.contraseña = enPassword.Text;
+                user.confirmarContraseña = enPassword2.Text;
 
 
                 await Navigation.PushAsync(new RegistroPage2(user));
@@ -173,9 +164,10 @@ namespace PagoEnLinea
 
             await CrossMedia.Current.Initialize();
             MediaFile photo;
-            bool match = false;
+            bool match = false, match2 = false, gender = false;
             int cont = 0;
             var nombre = "";
+            var genero = "";
 
             if (CrossMedia.Current.IsCameraAvailable)
             {
@@ -190,6 +182,7 @@ namespace PagoEnLinea
                 indicador.IsRunning = true;
                 string texto = "",CURP="";
                 var hasTwoNames = false;
+                var fecha="";
                 try
                 {
                    
@@ -225,17 +218,28 @@ namespace PagoEnLinea
                               
                                     cont++;
                                 }
-                                
+                                if(words.Text.Equals("SEXO")){
+                                    gender = true;
+                                }
+                                if(gender&&(words.Text.Equals("M")||words.Text.Equals("H"))){
+                                    genero = words.Text;
+                                    gender = false;
+                                  
+                                  
+                                }
                                 if(words.Text.Length==18){
                                     
                                    
                                     CURP= words.Text;
 
+                                    System.Diagnostics.Debug.WriteLine(CURP.Substring(4,6));
+                                    fecha = CURP.Substring(8, 2) + "/" + CURP.Substring(6, 2) + "/" + "19" + CURP.Substring(4, 2);
+                                   
                                 }
                                 texto = texto + words.Text +"\n";
                               
                             }
-                          
+                           
 
                         }
                     }
@@ -251,9 +255,21 @@ namespace PagoEnLinea
                         enCURP.Text = CURP;
                         System.Diagnostics.Debug.WriteLine(texto);
                     }catch(IndexOutOfRangeException){
-                        await DisplayAlert("Error", "No Fue posible capturar los campos", "OK");
+                        await DisplayAlert("Error", "No fue posible capturar los campos", "OK");
                     }
-
+                    try
+                    {
+                        dtFecha.Date = DateTime.Parse(fecha);
+                      }
+                    catch (Exception){
+                        await DisplayAlert("Fallo de captura", "No fue posible capturar la fecha", "Ok");
+                     }
+                    if(genero.Equals("M")){
+                        pkSexo.SelectedIndex = 1;
+                       
+                    }else{
+                        pkSexo.SelectedIndex = 0;
+                    }
                 }
                 catch (ClientException ex)
                 {
