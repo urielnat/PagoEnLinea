@@ -28,6 +28,10 @@ namespace PagoEnLinea
             enDomicilio.TextChanged += borrarError;
             enCiudad.TextChanged += borrarError;
             enTelefono.TextChanged += borrarError;
+            enDomicilio.Text = u.domicilio;
+            enColonia.Text = u.colonia;
+            enCod.Text = u.codigoPostal;
+            enNumero.Text = u.numero;
 
         }
 

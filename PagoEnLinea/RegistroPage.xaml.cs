@@ -8,6 +8,7 @@ using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
+using Plugin.Connectivity;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Xamarin.Forms;
@@ -164,8 +165,8 @@ namespace PagoEnLinea
 
             await CrossMedia.Current.Initialize();
             MediaFile photo;
-            bool match = false, match2 = false, gender = false;
-            int cont = 0;
+            bool match = false, match2 = false,gender = false;
+            int cont = 0, cont2=0;
             var nombre = "";
             var genero = "";
 
@@ -183,6 +184,7 @@ namespace PagoEnLinea
                 string texto = "",CURP="";
                 var hasTwoNames = false;
                 var fecha="";
+                string calle = "", domicilio = "";
                 try
                 {
                    
@@ -215,8 +217,9 @@ namespace PagoEnLinea
                                     System.Diagnostics.Debug.WriteLine("tiene un nombre");
                                 }
                                     nombre += words.Text + "#";
-                              
+                                     
                                     cont++;
+                               
                                 }
                                 if(words.Text.Equals("SEXO")){
                                     gender = true;
@@ -236,9 +239,32 @@ namespace PagoEnLinea
                                     fecha = CURP.Substring(8, 2) + "/" + CURP.Substring(6, 2) + "/" + "19" + CURP.Substring(4, 2);
                                    
                                 }
-                                texto = texto + words.Text +"\n";
+                               // texto = texto + words.Text +"\n";
                               
+                                if (words.Text.Equals("DOMICILIO"))
+                                {
+                                    match2 = true;
+                                    break;
+                                }
+
+                                if (cont2 == 1)
+                                {
+
+                                    calle = calle + words.Text + "%";
+                                    //match = false;
+                                }
+                                if (cont2 == 2)
+                                {
+                                    domicilio = domicilio + words.Text + "#";
+                                }
+
+                               // texto = texto + words.Text;
                             }
+                            if (match2)
+                            {
+                                cont2++;
+                            }
+
                            
 
                         }
@@ -248,21 +274,43 @@ namespace PagoEnLinea
                         
                         enPaterno.Text = nombrex[0];
                         enMaterno.Text = nombrex[1];
+                        if(!nombre.Contains("INSTI")){
                         enNombre.Text = nombrex[2];
                         if(hasTwoNames){
                             enNombre.Text = nombrex[2] +"\t"+ nombrex[3];
                         }
+                        }else{
+                            enNombre.Text = "";
+                        }
                         enCURP.Text = CURP;
-                        System.Diagnostics.Debug.WriteLine(texto);
+                     
+                        String[] callex = calle.Split('%');
+
+                        String[] domiciliox = domicilio.Split('#');
+
+                       
+
+                        user.domicilio = callex[0] + "\t" + callex[1];
+                        user.numero = callex[callex.Length - 2];
+                        for (int i = 0; i < domiciliox.Length - 2; i++)
+                        {
+                            user.colonia = user.colonia + domiciliox[i] + "\t";
+                        }
+
+
+                        user.codigoPostal = domiciliox[domiciliox.Length - 2];
+
+
                     }catch(IndexOutOfRangeException){
-                        await DisplayAlert("Error", "No fue posible capturar los campos", "OK");
+                        await DisplayAlert("Error", "No fue posible capturar algunos campos", "OK");
                     }
                     try
-                    {
-                        dtFecha.Date = DateTime.Parse(fecha);
+                    {   System.Diagnostics.Debug.WriteLine(fecha);  
+                        dtFecha.Date = DateTime.ParseExact(fecha, "dd/MM/yyyy", null);
                       }
-                    catch (Exception){
+                    catch (Exception e){
                         await DisplayAlert("Fallo de captura", "No fue posible capturar la fecha", "Ok");
+                        System.Diagnostics.Debug.WriteLine(e.Message);
                      }
                     if(genero.Equals("M")){
                         pkSexo.SelectedIndex = 1;
@@ -286,7 +334,13 @@ namespace PagoEnLinea
 
         async void OCR_Clicked(object sender, System.EventArgs e)
         {
-          await TakePicture();
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                await TakePicture();
+            }else{
+                await DisplayAlert("Error de conexión", "Es necesario estar conectado a internet para acceder este servicio", "Ok");
+            }   
+         
         }
     }
 }
