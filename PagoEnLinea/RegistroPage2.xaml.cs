@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FullCameraPage;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
+using Plugin.Connectivity;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Xamarin.Forms;
@@ -213,22 +215,18 @@ namespace PagoEnLinea
             return await visionClient.RecognizeTextAsync(imageStream, "es", true);
         }
 
-        private async Task TakePicture()
+        private async void TakePicture(PhotoResultEventArgs result)
         {    
+            await Navigation.PopModalAsync();
+            if (!result.Success)
+                return;
 
-            await CrossMedia.Current.Initialize();
-            MediaFile photo;
+
             bool match = false;
            
           
 
-            if (CrossMedia.Current.IsCameraAvailable)
-            {
-                photo = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
-                {
-                    Directory = "Invoices",
-                    Name = "Invoice.jpg"
-                });
+          
 
 
                 var cont = 0;
@@ -238,7 +236,7 @@ namespace PagoEnLinea
                 try
                 {
 
-                    var ocr = await GetTextDescription(photo.GetStream());
+                var ocr = await GetTextDescription(new MemoryStream(result.Image));
 
 
                     foreach (var region in ocr.Regions)
@@ -309,17 +307,23 @@ namespace PagoEnLinea
                 }
                 //System.Diagnostics.Debug.WriteLine(texto);
                 indicador.IsRunning = false;
-            }
-            else
-            {
-                photo = await CrossMedia.Current.PickPhotoAsync();
-            }
+            
         }
 
         async void OCR_Clicked(object sender, System.EventArgs e)
         {
             enColonia.Text = ""; 
-            await TakePicture();
+
+
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                var cameraPage = new CameraPage();
+                cameraPage.OnPhotoResult += TakePicture;
+                //await CameraPage_OnPhotoResult();
+                await Navigation.PushModalAsync(cameraPage);
+            }else{
+                await DisplayAlert("Error de conexión", "Es necesario estar conectado a internet para acceder este servicio", "Ok");
+            }  
         }
     }
 }

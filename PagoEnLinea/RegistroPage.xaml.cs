@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using FullCameraPage;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
 using PagoEnLinea.Modelos;
@@ -129,7 +130,7 @@ namespace PagoEnLinea
             {
                 a7 = true;
             }
-            if(a1&&a2&& a4&& a5&& a6&& a7){
+            if(a1&&a2&& a4&& a5&& a6&& a7&&a8&&a9){
 
 
                 user.nombre = enNombre.Text;
@@ -153,94 +154,128 @@ namespace PagoEnLinea
 
         private async Task<OcrResults> GetTextDescription(Stream imageStream)
         {
-
-
-
-
+            
             return await visionClient.RecognizeTextAsync(imageStream, "es", true);
         }
 
-        private async Task TakePicture()
+       
+        async void OCR_Clicked(object sender, System.EventArgs e)
         {
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                var cameraPage = new CameraPage();
+                cameraPage.OnPhotoResult += CameraPage_OnPhotoResult;
+                //await CameraPage_OnPhotoResult();
+                await Navigation.PushModalAsync(cameraPage);
+            }else{
+                await DisplayAlert("Error de conexión", "Es necesario estar conectado a internet para acceder este servicio", "Ok");
+            }   
+         
+        }
 
-            await CrossMedia.Current.Initialize();
-            MediaFile photo;
-            bool match = false, match2 = false,gender = false;
-            int cont = 0, cont2=0;
+
+
+        async void CameraPage_OnPhotoResult(PhotoResultEventArgs result)
+        {
+            await Navigation.PopModalAsync();
+            if (!result.Success)
+                return;
+
+            //Photo.Source = ImageSource.FromStream(() => new MemoryStream(result.Image));
+
+
+           
+
+            bool match = false, match2 = false, gender = false, respaldo = false;
+            int cont = 0, cont2 = 0,respcont=0;
             var nombre = "";
             var genero = "";
+            var respnom = new string[2];
 
-            if (CrossMedia.Current.IsCameraAvailable)
-            {
-                photo = await CrossMedia.Current.TakePhotoAsync(new StoreCameraMediaOptions
-                {
-                    Directory = "Invoices",
-                    Name = "Invoice.jpg"
-                });
 
 
 
                 indicador.IsRunning = true;
-                string texto = "",CURP="";
-                var hasTwoNames = false;
-                var fecha="";
+                string texto = "", CURP = "";
+                bool hasTwoNames = false, respTwoNames = false;
+                var fecha = "";
                 string calle = "", domicilio = "";
                 try
                 {
-                   
-                    var ocr = await GetTextDescription(photo.GetStream());
-                 
+
+                var ocr = await GetTextDescription(new MemoryStream(result.Image));
+
 
 
                     foreach (var region in ocr.Regions)
                     {
-                     
+
                         foreach (var line in region.Lines)
                         {
                             var lineStack = new StackLayout
                             { Orientation = StackOrientation.Horizontal };
-                           
+
 
                             foreach (var words in line.Words)
                             {
-                                if (words.Text.Equals("NOMBRE"))
+                            texto = texto + words.Text + "\n";
+                            if (words.Text.Equals("NOMBRE"))
                                 {
+                                texto = words.Text;
                                     match = true;
                                     break;
                                 }
 
                                 if (match && cont < 4)
-                                { if(line.Words.Length>1&&cont==3){
+                                {
+                                    if (line.Words.Length > 1 && cont == 3)
+                                    {
                                         hasTwoNames = true;
                                         System.Diagnostics.Debug.WriteLine("tiene dos nombres");
-                                }else{
-                                    System.Diagnostics.Debug.WriteLine("tiene un nombre");
-                                }
+                                    }
+                                    else
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("tiene un nombre");
+                                    }
                                     nombre += words.Text + "#";
-                                     
+
                                     cont++;
-                               
+
                                 }
-                                if(words.Text.Equals("SEXO")){
+                                if (words.Text.Equals("SEXO"))
+                                {
                                     gender = true;
                                 }
-                                if(gender&&(words.Text.Equals("M")||words.Text.Equals("H"))){
+                                if (gender && (words.Text.Equals("M") || words.Text.Equals("H")))
+                                {
                                     genero = words.Text;
                                     gender = false;
-                                  
-                                  
+                                    respaldo = true;
+                                    break;
                                 }
-                                if(words.Text.Length==18){
-                                    
-                                   
-                                    CURP= words.Text;
 
-                                    System.Diagnostics.Debug.WriteLine(CURP.Substring(4,6));
-                                    fecha = CURP.Substring(8, 2) + "/" + CURP.Substring(6, 2) + "/" + "19" + CURP.Substring(4, 2);
-                                   
+                            if(respaldo&&respcont<2){
+                                if(line.Words.Length>1){
+                                    respTwoNames = true;
+                                    respnom[respcont] = words.Text;
+                                    respcont++;
+                                }else{
+                                    respnom[0] = words.Text;
+                                    respcont = 2;
                                 }
-                               // texto = texto + words.Text +"\n";
-                              
+                            }
+                                if (words.Text.Length == 18)
+                                {
+
+
+                                     CURP = words.Text;
+
+                                    System.Diagnostics.Debug.WriteLine(CURP.Substring(4, 6));
+                                    fecha = CURP.Substring(8, 2) + "/" + CURP.Substring(6, 2) + "/" + "19" + CURP.Substring(4, 2);
+
+                                }
+                                // texto = texto + words.Text +"\n";
+
                                 if (words.Text.Equals("DOMICILIO"))
                                 {
                                     match2 = true;
@@ -258,37 +293,47 @@ namespace PagoEnLinea
                                     domicilio = domicilio + words.Text + "#";
                                 }
 
-                               // texto = texto + words.Text;
+                               
                             }
                             if (match2)
                             {
                                 cont2++;
                             }
 
-                           
+
 
                         }
                     }
                     String[] nombrex = nombre.Split('#');
-                    try{
-                        
+                System.Diagnostics.Debug.WriteLine(texto);
+                    try
+                    {
+                    enCURP.Text = CURP;
+
                         enPaterno.Text = nombrex[0];
                         enMaterno.Text = nombrex[1];
-                        if(!nombre.Contains("INSTI")){
-                        enNombre.Text = nombrex[2];
-                        if(hasTwoNames){
-                            enNombre.Text = nombrex[2] +"\t"+ nombrex[3];
+                        if (!nombre.Contains("INSTI"))
+                        {
+                            enNombre.Text = nombrex[2];
+                            if (hasTwoNames)
+                            {
+                                enNombre.Text = nombrex[2] + "\t" + nombrex[3];
+                            }
                         }
+                        else
+                        {
+                          if(respTwoNames){
+                            enNombre.Text = respnom[0] + "\t" + respnom[1];
                         }else{
-                            enNombre.Text = "";
+                            enNombre.Text = respnom[0];
+                        } 
                         }
-                        enCURP.Text = CURP;
-                     
+                        
                         String[] callex = calle.Split('%');
 
                         String[] domiciliox = domicilio.Split('#');
 
-                       
+
 
                         user.domicilio = callex[0] + "\t" + callex[1];
                         user.numero = callex[callex.Length - 2];
@@ -299,23 +344,31 @@ namespace PagoEnLinea
 
 
                         user.codigoPostal = domiciliox[domiciliox.Length - 2];
+                      
 
-
-                    }catch(IndexOutOfRangeException){
-                        await DisplayAlert("Error", "No fue posible capturar algunos campos", "OK");
+                    }
+                    catch (IndexOutOfRangeException)
+                    {
+                        await DisplayAlert("Advertencia", "No fue posible capturar algunos campos", "OK");
+                    System.Diagnostics.Debug.WriteLine(texto + "$");
                     }
                     try
-                    {   System.Diagnostics.Debug.WriteLine(fecha);  
+                    {
+                        System.Diagnostics.Debug.WriteLine(fecha);
                         dtFecha.Date = DateTime.ParseExact(fecha, "dd/MM/yyyy", null);
-                      }
-                    catch (Exception e){
+                    }
+                    catch (Exception e)
+                    {
                         await DisplayAlert("Fallo de captura", "No fue posible capturar la fecha", "Ok");
                         System.Diagnostics.Debug.WriteLine(e.Message);
-                     }
-                    if(genero.Equals("M")){
+                    }
+                    if (genero.Equals("M"))
+                    {
                         pkSexo.SelectedIndex = 1;
-                       
-                    }else{
+
+                    }
+                    else
+                    {
                         pkSexo.SelectedIndex = 0;
                     }
                 }
@@ -325,22 +378,7 @@ namespace PagoEnLinea
                 }
                 //System.Diagnostics.Debug.WriteLine(texto);
                 indicador.IsRunning = false;
-            }
-            else
-            {
-                photo = await CrossMedia.Current.PickPhotoAsync();
-            }
-        }
-
-        async void OCR_Clicked(object sender, System.EventArgs e)
-        {
-            if (CrossConnectivity.Current.IsConnected)
-            {
-                await TakePicture();
-            }else{
-                await DisplayAlert("Error de conexión", "Es necesario estar conectado a internet para acceder este servicio", "Ok");
-            }   
-         
+            
         }
     }
 }
