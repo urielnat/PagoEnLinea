@@ -22,10 +22,9 @@
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="2*" />   
                 <ColumnDefinition Width="2*" />   
-                    
             </Grid.ColumnDefinitions>
 
-             <Label Grid.Row ="0" Text="Registro (2/2)"  Grid.ColumnSpan="5" HorizontalTextAlignment="Center" Font="bold,30"/>
+             <Label Grid.Row ="0" Text="Registro (2/2)"  Grid.ColumnSpan="4" HorizontalTextAlignment="Center" Font="bold,30"/>
 
             <Image Source="map.png" Grid.Row="5" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
             <xfx:XfxEntry x:Name="enMunicipio" Grid.Row="5"

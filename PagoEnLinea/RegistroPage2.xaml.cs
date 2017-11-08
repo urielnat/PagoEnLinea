@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FullCameraPage;
 using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
+using Newtonsoft.Json;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
 using Plugin.Connectivity;
@@ -18,10 +19,15 @@ namespace PagoEnLinea
 {
     public partial class RegistroPage2 : ContentPage
     {
-        public Usuario user { set; get; }
-        public RegistroPage2(Usuario u)
+        public Usuarios user { set; get; }
+        public Direccion dire { set; get; }
+        public CatalogoDir catdire { set; get; }
+        public Direccion direc = new Direccion();
+        public RegistroPage2(Usuarios u,Direccion d, CatalogoDir cd)
         {
             user = u;
+            catdire = cd;
+
             InitializeComponent();
             enCod.TextChanged += OnTextChanged;
             enNumero.TextChanged += validarNumero;
@@ -30,10 +36,18 @@ namespace PagoEnLinea
             enDomicilio.TextChanged += borrarError;
             enCiudad.TextChanged += borrarError;
             enTelefono.TextChanged += borrarError;
-            enDomicilio.Text = u.domicilio;
-            enColonia.Text = u.colonia;
-            enCod.Text = u.codigoPostal;
-            enNumero.Text = u.numero;
+            enDomicilio.Text = d.calle;
+
+            var jsonstring = JsonConvert.SerializeObject(u);
+            System.Diagnostics.Debug.WriteLine(jsonstring);
+            jsonstring = jsonstring.Substring(1, jsonstring.Length - 2);
+           
+           
+           
+
+            enColonia.Text = cd.asentamiento;
+            enCod.Text = cd.cp;
+            enNumero.Text = d.numero;
 
         }
 
@@ -79,7 +93,7 @@ namespace PagoEnLinea
 
 
 
-            /*
+
             if (!(pkEstado.SelectedIndex > -1))
             {
                 await DisplayAlert("Campo vacio", "selecciona su estado", "ok");
@@ -89,8 +103,8 @@ namespace PagoEnLinea
             else
             {
                 a6 = true;
-            }*/
-            /*
+            }
+
             if (ValidarVacio(enCiudad.Text))
             {
                 enCiudad.ErrorText = "Introduzca su ciudad";
@@ -101,7 +115,7 @@ namespace PagoEnLinea
             {
                 enCiudad.ErrorText = "";
                 a7 = true;
-            }*/
+            }
             if (ValidarVacio(enTelefono.Text))
             {  await DisplayAlert("Sin número telefónico","Deslice la pantalla para ver todas las opciones","ok");
                 enTelefono.ErrorText = "Introduzca su teléfono";
@@ -113,7 +127,7 @@ namespace PagoEnLinea
                 enTelefono.ErrorText = "";
                 a8 = true;
             }
-            /*
+
             if (ValidarVacio(enMunicipio.Text))
             {
                 enMunicipio.ErrorText = "Introduzca su municipio";
@@ -124,7 +138,7 @@ namespace PagoEnLinea
             {
                 enMunicipio.ErrorText = "";
                 a9 = true;
-            }*/
+            }
 
             if (ValidarVacio(enLADA.Text))
             {
@@ -149,26 +163,59 @@ namespace PagoEnLinea
                 a11 = true;
             }
             if ( a2 && a3 && a4  &&a8&&a10&&a11)
-            { 
-                user.razonSocial = enMunicipio.Text;
-                user.domicilio = enDomicilio.Text;
-                user.numero = enNumero.Text;
-                user.codigoPostal = enCod.Text;
-                user.colonia = enColonia.Text;
-                System.Diagnostics.Debug.WriteLine(user.contraseña);
-                if(!(pkEstado.SelectedIndex > -1)){
-                    user.estado = null;    
-                }else{
-                    user.estado = pkEstado.Items[pkEstado.SelectedIndex]; 
-                }
+            {
+                user.direccion = new Direccion { calle = enDomicilio.Text,
+                        numero = enNumero.Text,
+                        tipo = "DOMICILIO",
+                        catalogoDir = new CatalogoDir{
+                            asentamiento = enColonia.Text,
+                      cp = enCod.Text,
+                    ciudad = enCiudad.Text,
+                    estado = pkEstado.Items[pkEstado.SelectedIndex],
+                    municipio = enMunicipio.Text,
+                            tipoasentamiento = "RESINDECIAL",
+                            pais = "MEXICO"
 
-                user.ciudad = enCiudad.Text;
-                user.telefono = enTelefono.Text;
 
-                //ClienteRest cliente = new ClienteRest();
-                //cliente.PUT("", user);
+                        }};
+                  
 
-                await Navigation.PopToRootAsync();
+
+                user.telefono =  new Telefono{
+                        telefono = enTelefono.Text,
+                        lada = enLADA.Text,
+                        tipo ="FIJO"
+
+                    };
+
+
+
+                System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(user));
+
+                ClienteRest cliente = new ClienteRest();
+
+                 cliente.POST("http://192.168.0.18:8080/api/registrar", user,1);
+
+                //FALTAN TELÉFONOS
+                /*
+
+                 if(!(pkEstado.SelectedIndex > -1)){
+                     user.estado = null;    
+                 }else{
+                     user.estado = pkEstado.Items[pkEstado.SelectedIndex]; 
+                 }
+
+                 user.ciudad = enCiudad.Text;
+                 user.telefono = enTelefono.Text;
+
+                 //ClienteRest cliente = new ClienteRest();
+                 //cliente.PUT("", user);
+                 **/
+                MessagingCenter.Subscribe<ClienteRest>(this, "OK", async (Sender) => {
+                    await DisplayAlert("Guardado", "Usuario registrado con exito", "Ok");
+                    await Navigation.PopToRootAsync(); });
+                MessagingCenter.Subscribe<ClienteRest>(this, "error", async (Sender) => { await DisplayAlert("Error", "No fue posible dar de alta al usuario", "Ok");});
+                //await Navigation.PopToRootAsync();
             }  
         }
         public void OnTextChanged(object sender, TextChangedEventArgs args)
@@ -216,98 +263,103 @@ namespace PagoEnLinea
         }
 
         private async void TakePicture(PhotoResultEventArgs result)
-        {    
+        {
             await Navigation.PopModalAsync();
             if (!result.Success)
                 return;
 
 
             bool match = false;
-           
-          
-
-          
 
 
-                var cont = 0;
-               indicador.IsRunning = true;
-                string calle = "", domicilio="",texto="";
-                //var hasTwoNames = false;
-                try
-                {
+
+
+
+
+            var cont = 0;
+            indicador.IsRunning = true;
+            string calle = "", domicilio = "", texto = "";
+            //var hasTwoNames = false;
+            if (CrossConnectivity.Current.IsConnected){ 
+               try{
 
                 var ocr = await GetTextDescription(new MemoryStream(result.Image));
 
 
-                    foreach (var region in ocr.Regions)
-                    {
-
-                        foreach (var line in region.Lines)
-                        {
-                            var lineStack = new StackLayout
-                            { Orientation = StackOrientation.Horizontal };
-
-
-                            foreach (var words in line.Words)
-                            {
-                                if (words.Text.Equals("DOMICILIO"))
-                                {
-                                    match = true;
-                                    break;
-                                }
-
-                                if (cont==1)
-                                {
-                                   
-                                    calle = calle + words.Text+"%";
-                                    //match = false;
-                                }
-                                if(cont==2){
-                                    domicilio = domicilio + words.Text+"#";
-                                }
-
-                                texto = texto + words.Text;
-                            }
-                            if(match){
-                                cont++;
-                            }
-
-                        }
-                    }
-
-
-                    try
-                    {  
-                        String[] callex = calle.Split('%');
-
-                        String[] domiciliox = domicilio.Split('#');
-                           
-                        System.Diagnostics.Debug.WriteLine(callex[callex.Length-2]+" "+callex[1]+" "+callex[2]+" #" +callex.Length);
-                        System.Diagnostics.Debug.WriteLine(domicilio);
-                        System.Diagnostics.Debug.WriteLine(texto);
-                        enDomicilio.Text = callex[0] +"\t"+ callex[1];
-                        enNumero.Text = callex[callex.Length - 2];
-                        for (int i = 0; i < domiciliox.Length-2;i++){
-                            enColonia.Text = enColonia.Text + domiciliox[i]+"\t";  
-                        }
-
-
-                        enCod.Text = domiciliox[domiciliox.Length - 2];
-
-                    }
-                    catch (IndexOutOfRangeException)
-                    {
-                        await DisplayAlert("Error", "No Fue posible capturar los campos", "OK");
-                    }
-
-                }
-                catch (ClientException ex)
+                foreach (var region in ocr.Regions)
                 {
-                    System.Diagnostics.Debug.WriteLine(ex.Message);
+
+                    foreach (var line in region.Lines)
+                    {
+                        var lineStack = new StackLayout
+                        { Orientation = StackOrientation.Horizontal };
+
+
+                        foreach (var words in line.Words)
+                        {
+                            if (words.Text.Equals("DOMICILIO"))
+                            {
+                                match = true;
+                                break;
+                            }
+
+                            if (cont == 1)
+                            {
+
+                                calle = calle + words.Text + "%";
+                                //match = false;
+                            }
+                            if (cont == 2)
+                            {
+                                domicilio = domicilio + words.Text + "#";
+                            }
+
+                            texto = texto + words.Text;
+                        }
+                        if (match)
+                        {
+                            cont++;
+                        }
+
+                    }
                 }
-                //System.Diagnostics.Debug.WriteLine(texto);
-                indicador.IsRunning = false;
-            
+
+
+                try
+                {
+                    String[] callex = calle.Split('%');
+
+                    String[] domiciliox = domicilio.Split('#');
+
+                    System.Diagnostics.Debug.WriteLine(callex[callex.Length - 2] + " " + callex[1] + " " + callex[2] + " #" + callex.Length);
+                    System.Diagnostics.Debug.WriteLine(domicilio);
+                    System.Diagnostics.Debug.WriteLine(texto);
+                    enDomicilio.Text = callex[0] + "\t" + callex[1];
+                    enNumero.Text = callex[callex.Length - 2];
+                    for (int i = 0; i < domiciliox.Length - 2; i++)
+                    {
+                        enColonia.Text = enColonia.Text + domiciliox[i] + "\t";
+                    }
+
+
+                    enCod.Text = domiciliox[domiciliox.Length - 2];
+
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    await DisplayAlert("Error", "No Fue posible capturar los campos", "OK");
+                }
+
+            }
+            catch (ClientException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+            //System.Diagnostics.Debug.WriteLine(texto);
+            indicador.IsRunning = false;
+            }else{
+                await DisplayAlert("Error de conexión", "Es necesario estar conectado a internet para acceder este servicio", "Ok");
+            }
         }
 
         async void OCR_Clicked(object sender, System.EventArgs e)

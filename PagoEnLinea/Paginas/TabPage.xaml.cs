@@ -15,7 +15,7 @@ namespace PagoEnLinea.Paginas
             Children.Add(new Direccion());
             Children.Add(new CorreosElectronicos());
             Children.Add(new Telefonos());
-
+           
         }
     }
 }

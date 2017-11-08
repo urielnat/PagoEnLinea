@@ -3,15 +3,15 @@
 	<ContentPage.Content>
         <StackLayout Padding="20,20,20,10">
           <ScrollView>
-           <ListView x:Name="listView" RowHeight="70" ItemSelected="Handle_ItemSelected">
+           <ListView x:Name="listView" RowHeight="70" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
                     <Frame HasShadow="true" Margin="5">
                       
                             <StackLayout Orientation="Horizontal">
-                                <Label Text="Correo electrónico" />
-                                <Label Text="{Binding correo}" />
+                                <Label Text="Email: " />
+                                <Label Text="{Binding correoe}" />
                             </StackLayout>
                     </Frame>
                 </ViewCell>

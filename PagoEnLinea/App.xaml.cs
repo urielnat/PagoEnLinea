@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using PagoEnLinea.Paginas;
+using Xamarin.Forms;
 
 namespace PagoEnLinea
 {
@@ -7,10 +8,20 @@ namespace PagoEnLinea
         public App()
         {
             InitializeComponent();
+            Current.Properties.Clear();
+            //MessagingCenter.Subscribe<PopupCarga>(this, "login", (Sender) => { MainPage = new NavigationPage(new Menu()); });
+            if (Current.Properties.ContainsKey("user"))
+            {
+                MainPage = new NavigationPage(new Menu());
+                //var id = Current.Properties["user"] as string;
+                // do something with id
+            }else{
+                MainPage = new NavigationPage(new LoginPage());
+            }
 
-            MainPage = new NavigationPage(new LoginPage());
         }
-
+    
+   
         protected override void OnStart()
         {
             // Handle when your app starts

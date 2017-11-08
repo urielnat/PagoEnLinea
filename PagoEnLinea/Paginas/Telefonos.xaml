@@ -3,7 +3,7 @@
 	<ContentPage.Content>
          <StackLayout Padding="20,20,20,10">
             <ScrollView>
-           <ListView x:Name="listView" RowHeight="70" ItemSelected="Handle_ItemSelected">
+           <ListView x:Name="listView" RowHeight="70" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
@@ -23,7 +23,7 @@
 
                 </Grid.ColumnDefinitions>
                    <Label Text="Teléfono" Grid.Row ="0" Grid.Column="0"/>
-                    
+                     <Label Text="{Binding telefono}" Grid.Row ="0" Grid.Column="1"/>
                 </Grid>
                     </Frame>
                 </ViewCell>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage x:Name="contenedor" Padding="20" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.MenuMaster" Icon="hamburger.png" Title="Bienvenido" >
+	
+         <ContentPage.Content>
+           
+            <StackLayout>
+            
+            <ListView x:Name="ListMenu" ItemSelected="Handle_ItemSelected"  SeparatorVisibility="None">
+               
+            </ListView>
+        
+            </StackLayout>
+	</ContentPage.Content>
+</ContentPage>

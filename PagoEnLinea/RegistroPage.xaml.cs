@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -18,7 +19,10 @@ namespace PagoEnLinea
 {
     public partial class RegistroPage : ContentPage
     {
-        public Usuario user = new Usuario();
+        public Usuarios users = new Usuarios();
+        public Persona p = new Persona();
+        public Direccion dire = new Direccion();
+        public CatalogoDir catDir = new CatalogoDir();
         public RegistroPage()
         {
             InitializeComponent();
@@ -37,7 +41,7 @@ namespace PagoEnLinea
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
 
-            Boolean a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = true,a9=true;
+            Boolean a1 = false, a2 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = true,a9=true;
             if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
             {
                 enNombre.ErrorText = "Introduzca un nombre valido";
@@ -92,7 +96,7 @@ namespace PagoEnLinea
                 a6 = true;
             }
 
-            if (string.IsNullOrEmpty(enPassword.Text) || enPassword.Text.Length < 3 || enPassword.Text.Length > 16)
+            if (string.IsNullOrEmpty(enPassword.Text) || enPassword.Text.Length < 6 || enPassword.Text.Length > 16)
             {
                 enPassword.ErrorText = "contraseña invalida ";
                 a8 = false;
@@ -133,16 +137,34 @@ namespace PagoEnLinea
             if(a1&&a2&& a4&& a5&& a6&& a7&&a8&&a9){
 
 
-                user.nombre = enNombre.Text;
-                user.apellidoPaterno = enPaterno.Text;
-                user.apellidoMaterno = enMaterno.Text;
-                user.sexo = pkSexo.Items[pkSexo.SelectedIndex];
-                user.correo = enCorreo.Text;
-                 user.contraseña = enPassword.Text;
-                user.confirmarContraseña = enPassword2.Text;
+                users.tipousuario = "CONTRIBUYENTE";
+                users.contrasena = enPassword.Text;
+                users.persona = new Persona
+                {
+                    nombre = enNombre.Text,
+                    apaterno = enPaterno.Text,
+                    amaterno = enMaterno.Text,
+                    sexo = pkSexo.Items[pkSexo.SelectedIndex],
+                    curp = enCURP.Text,
+                    edoCivil = pkEstCvl.Items[pkEstCvl.SelectedIndex],
+                    fechanac = dtFecha.Date.ToString("yyyy-MM-dd")
+                };
+                users.email = new Email
+                {
+                    correoe = enCorreo.Text,
+                    tipo = "PERSONAL"
+                };
 
+ 
+                /**
+                users.persona.amaterno = enMaterno.Text;
+                users.persona.sexo = pkSexo.Items[pkSexo.SelectedIndex];
+                users.email.correoe = enCorreo.Text;
+                users.usuario.password = enPassword.Text;
+                **/
+               //FALTA CONTRASEÑA Y CORREO
 
-                await Navigation.PushAsync(new RegistroPage2(user));
+                await Navigation.PushAsync(new RegistroPage2(users,dire,catDir));
             }
 
         }
@@ -192,7 +214,7 @@ namespace PagoEnLinea
             var genero = "";
             var respnom = new string[2];
 
-
+           
 
 
                 indicador.IsRunning = true;
@@ -332,30 +354,30 @@ namespace PagoEnLinea
                         String[] callex = calle.Split('%');
 
                         String[] domiciliox = domicilio.Split('#');
-
-
-
-                        user.domicilio = callex[0] + "\t" + callex[1];
-                        user.numero = callex[callex.Length - 2];
+                 
+         
+                    dire.calle = callex[0] + "\t" + callex[1];
+                        dire.numero = callex[callex.Length - 2];
                         for (int i = 0; i < domiciliox.Length - 2; i++)
                         {
-                            user.colonia = user.colonia + domiciliox[i] + "\t";
+                        catDir.asentamiento = catDir.asentamiento + domiciliox[i] + "\t";
                         }
 
 
-                        user.codigoPostal = domiciliox[domiciliox.Length - 2];
+                        catDir.cp = domiciliox[domiciliox.Length - 2];
                       
 
                     }
                     catch (IndexOutOfRangeException)
                     {
                         await DisplayAlert("Advertencia", "No fue posible capturar algunos campos", "OK");
-                    System.Diagnostics.Debug.WriteLine(texto + "$");
+                    System.Diagnostics.Debug.WriteLine(texto);
                     }
                     try
                     {
                         System.Diagnostics.Debug.WriteLine(fecha);
                         dtFecha.Date = DateTime.ParseExact(fecha, "dd/MM/yyyy", null);
+
                     }
                     catch (Exception e)
                     {

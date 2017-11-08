@@ -4,14 +4,19 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 using Rg.Plugins.Popup.Services;
 using PagoEnLinea.servicios;
+using PagoEnLinea.Paginas;
 
 namespace PagoEnLinea
 {
     public partial class LoginPage : ContentPage
     {
+       
+        MasterDetailPage fpm = new MasterDetailPage();
+       
         public LoginPage()
         {
             InitializeComponent();
+           
             var tgr = new TapGestureRecognizer();
             tgr.Tapped += (sender, e) =>
             {
@@ -21,7 +26,7 @@ namespace PagoEnLinea
             };
             //algo asj
 
-            MessagingCenter.Subscribe<ClienteRest>(this, "error", (Sender) => { enUsuario.ErrorText = "Correo electronico"; enContraseña.ErrorText = "algo"; });
+            MessagingCenter.Subscribe<PopupCarga>(this, "noAuth", (Sender) => { enUsuario.ErrorText = "Correo electronico"; enContraseña.ErrorText = "contraseña"; });
 
 
             olvido.GestureRecognizers.Add(tgr);
@@ -35,9 +40,14 @@ namespace PagoEnLinea
             Navigation.PushAsync(new RegistroPage());
         }
 
-        async void Handle_Clicked(object sender, System.EventArgs e)
+       async void Handle_Clicked(object sender, System.EventArgs e)
         {
+            //Application.Current.MainPage = new Menu();
+
+           // Application.Current.MainPage = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage()) };
+            //await Navigation.PushModalAsync(new NavigationPage(fmp);
             await PopupNavigation.PushAsync(new PopupCarga(enUsuario.Text, enContraseña.Text), true);
+            //viewModel.SignIn();
         }
     }
 }

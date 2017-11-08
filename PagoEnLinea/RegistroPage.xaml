@@ -68,9 +68,9 @@
                 <Image Source="gender.png" Grid.Row="5" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
                             <Picker x:Name="pkSexo" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu sexo" HorizontalOptions="FillAndExpand">
                              <Picker.Items>
-                                 <x:String>Hombre</x:String> 
-                                 <x:String>Mujer</x:String>
-                                 <x:String>Otro</x:String>
+                                 <x:String>MASCULINO</x:String> 
+                                 <x:String>FEMENINO</x:String>
+
                               </Picker.Items>
                               </Picker>   
                <Image Source="mail.png" Grid.Row="8" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
@@ -82,13 +82,19 @@
                           />
                <Image Source="calendar.png" Grid.Row="6" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
                 <Label Text="*Fecha de Nacimiento" VerticalTextAlignment="Start" YAlign="Center" XAlign="Center" Grid.Row="6" Grid.Column="1" />  
-                <DatePicker x:Name="dtFecha" Grid.Row="6" Grid.Column="2" Format="dd/MM/yyyy" Date="01/01/2017" MinimumDate="01/01/1900"></DatePicker>     
+                <DatePicker x:Name="dtFecha" Grid.Row="6" Grid.Column="2" Format="yyyy-MM-dd" Date="01/01/2017" MinimumDate="01/01/1900"></DatePicker>     
 
                     <Image Source="gender.png" Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand"/> 
                             <Picker x:Name="pkEstCvl" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu estado civil" HorizontalOptions="FillAndExpand">
                              <Picker.Items>
-                                 <x:String>Soltero</x:String> 
-                                 <x:String>Casado</x:String>
+                              
+                                 <x:String>SOLTERO</x:String>
+                                 <x:String>CASADO</x:String>
+                                 <x:String>DIVORCIADO</x:String>
+                                 <x:String>COMPROMETIDO</x:String>
+                                 <x:String>UNION_LIBRE</x:String>
+                                 <x:String>VIUDO</x:String>
+
                               </Picker.Items>
                               </Picker>      
               

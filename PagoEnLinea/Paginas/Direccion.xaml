@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Direccion" Icon="mapw.png">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Direccion" Icon="mapw.png" >
 	<ContentPage.Content>
         <StackLayout Padding="20,20,20,10">
 
           <ScrollView>
-           <ListView x:Name="listView" RowHeight="130" ItemSelected="Handle_ItemSelected">
+           <ListView x:Name="listView" RowHeight="150" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
-                    <Frame HasShadow="true" Margin="5">
+                    <Frame HasShadow="true" Margin="5,5,5,5">
             
                 <Grid ColumnSpacing="0" RowSpacing="0">
                <Grid.RowDefinitions>
@@ -26,11 +26,16 @@
                    <ColumnDefinition Width="*" /> 
 
                 </Grid.ColumnDefinitions>
-                   <Label Text="Calle" Grid.Row ="0" Grid.Column="0"/>
-                     <Label Text="Número" Grid.Row ="1" Grid.Column="0"/>
-                     <Label Text="Número exterior" Grid.Row ="2" Grid.Column="0"/>
-                     <Label Text="Codigo postal" Grid.Row ="3" Grid.Column="0"/>
-                     <Label Text="Colonia" Grid.Row ="4" Grid.Column="0"/>
+                   <Label Text="Calle:" Grid.Row ="0" Grid.Column="0"/>
+                   <Label x:Name="lblCalle" Text="{Binding calle}" Grid.Row ="0" Grid.Column="1"/>                     
+                     <Label Text="Número:" Grid.Row ="1" Grid.Column="0"/>
+                      <Label x:Name="lblNumero" Text="{Binding numero}" Grid.Row ="1" Grid.Column="1"/>                  
+                     <Label Text="Número Interior" Grid.Row ="2" Grid.Column="0"/>
+                     <Label x:Name="lblNumeroInterior" Text="{Binding numeroInterior}" Grid.Row ="2" Grid.Column="1"/>                   
+                     <Label Text="Codigo postal:" Grid.Row ="3" Grid.Column="0"/>
+                      <Label x:Name="lblCP" Text="{Binding cp}" Grid.Row ="3" Grid.Column="1"/>                  
+                     <Label Text="Colonia:"  Grid.Row ="4" Grid.Column="0"/>
+                     <Label x:Name="lblAsentamiento" Text="{Binding asentamiento}" Grid.Row ="4" Grid.Column="1"/>                   
                 </Grid>
             </Frame>
                 </ViewCell>

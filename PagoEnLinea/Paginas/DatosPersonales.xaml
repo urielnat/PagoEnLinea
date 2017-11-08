@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.DatosPersonales" Icon="userw.png">
 	<ContentPage.Content>
          <StackLayout Padding ="20,20,20,0">
+          <ScrollView>
         <Grid ColumnSpacing="0" RowSpacing="10">
                <Grid.RowDefinitions>
                   <RowDefinition Height="auto" />
@@ -9,7 +10,12 @@
                   <RowDefinition Height="auto" />
                   <RowDefinition Height="auto" />
                   <RowDefinition Height="auto" />
-                 <RowDefinition Height="auto" />    
+                 <RowDefinition Height="auto" />   
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" />
+                 <RowDefinition Height="auto" />  
+                 <RowDefinition Height="auto" />          
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -18,17 +24,43 @@
                    <ColumnDefinition Width="*" /> 
                     <ColumnDefinition Width="*" /> 
                 </Grid.ColumnDefinitions>
-                <Entry Text = "Yonatan Uriel" IsEnabled="false" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Entry x:Name="enNombre" IsEnabled="false" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Nombre" Grid.Row="1" Grid.Column="0" YAlign="Center"/>
-                <Entry Text = "Hernández" IsEnabled="false" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Entry x:Name="enPaterno"  IsEnabled="false" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Apellido Paterno" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
-                <Entry Text = "Montelongo" IsEnabled="false" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Entry x:Name="enMaterno" IsEnabled="false" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Apellido Materno" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enCurp" IsEnabled="false" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "CURP" Grid.Row="4" Grid.Column="0" YAlign="Center"/>
+                <Label Text = "Genero" Grid.Row="5" Grid.Column="0" YAlign="Center"/>
+                <Picker x:Name="pkSexo" Grid.Row="5" Grid.Column="1"  SelectedItem="0" HorizontalOptions="FillAndExpand">
+                             <Picker.Items>
+                                 <x:String>MASCULINO</x:String> 
+                                 <x:String>FEMENINO</x:String>
 
-                <Button Text="Modificar Datos" Grid.Row ="7" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#3f85bd" TextColor="White" Clicked="Handle_Clicked"/>
-                <Button Text="Modificar Contraseña" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="contraseña_Clicked"/>
-                <Button Text="Guardar" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver" TextColor="White" />
+                              </Picker.Items>
+                              </Picker>  
+                          <Label Text = "Fecha de Nacimiento" Grid.Row="6" Grid.Column="0" YAlign="Center"/>
+                <DatePicker x:Name="dtFecha" Grid.Row="6" Grid.Column="1" Format="yyyy-MM-dd" Date="01/01/2017" MinimumDate="01/01/1900"></DatePicker>     
+                <Label Text = "Estado Civil" Grid.Row="7" Grid.Column="0" YAlign="Center"/>
+                <Picker x:Name="pkEstCvl" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu estado civil" HorizontalOptions="FillAndExpand">
+                             <Picker.Items>
+                              
+                                 <x:String>SOLTERO</x:String>
+                                 <x:String>CASADO</x:String>
+                                 <x:String>DIVORCIADO</x:String>
+                                 <x:String>COMPROMETIDO</x:String>
+                                 <x:String>UNION_LIBRE</x:String>
+                                 <x:String>VIUDO</x:String>
+
+                              </Picker.Items>
+                              </Picker>   
+                <Button Text="Modificar Datos" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#3f85bd" TextColor="White" Clicked="Handle_Clicked"/>
+                <Button Text="Modificar Contraseña" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="contraseña_Clicked"/>
+                <Button Text="Guardar" Grid.Row ="10" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver" TextColor="White" />
             </Grid>  
+             </ScrollView>      
         </StackLayout>
+       
 	</ContentPage.Content>
 </ContentPage>
