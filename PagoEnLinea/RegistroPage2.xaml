@@ -26,13 +26,7 @@
 
              <Label Grid.Row ="0" Text="Registro (2/2)"  Grid.ColumnSpan="4" HorizontalTextAlignment="Center" Font="bold,30"/>
 
-            <Image Source="map.png" Grid.Row="5" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-            <xfx:XfxEntry x:Name="enMunicipio" Grid.Row="5"
-                          Grid.Column="1"
-                          Grid.ColumnSpan="3"
-                          Placeholder="Ingresa tu municipio"
-                          VerticalOptions="End"
-                              />
+            
                 
              <Image Source="map.png" Grid.Row="1" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
             <xfx:XfxEntry x:Name="enDomicilio" Grid.Row="1"
@@ -44,19 +38,33 @@
 
               <Label Text="*Num." x:Name="lblnum" Grid.Row="2" Grid.Column="0" XAlign="Center" YAlign="Center" Font="bold"/>
                 <Entry x:Name="enNumero" Placeholder="No." Grid.Row="2" Grid.Column="1" Keyboard="Numeric"/>
-                <Label x:Name="lblCod" Text="*Código postal" XAlign="Center" Grid.Row="2" Grid.Column="2" YAlign="Center" Font="bold"/>
-                <Entry x:Name="enCod" Placeholder="00000" Grid.Row="2" Grid.Column="3" Keyboard="Numeric" />  
 
-                <Image Source="map.png" Grid.Row="3" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-            <xfx:XfxEntry x:Name="enColonia" Grid.Row="3"
+                 <Label x:Name="lblNumInt" Text="Número interior" XAlign="Center" Grid.Row="2" Grid.Column="2" YAlign="Center" Font="bold"/>
+                <Entry x:Name="enNumInt" Placeholder="No." Grid.Row="2" Grid.Column="3" Keyboard="Numeric" />     
+                    <Label x:Name="lblCod" Text="*Código postal" XAlign="Center" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" YAlign="Center" Font="bold"/>
+                <Entry x:Name="enCod" Placeholder="00000" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Keyboard="Numeric" />  
+
+                <Image Source="map.png" Grid.Row="4" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+            <xfx:XfxEntry x:Name="enColonia" Grid.Row="4"
                           Grid.Column="1"
                           Grid.ColumnSpan="3"
-                          Placeholder="Ingresa tu colonia"
+                          Placeholder="*Ingresa tu asentamiento"
                           VerticalOptions="End"
                               />
-                <Image Source="city.png" Grid.Row="4" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-                            <Picker x:Name="pkEstado"  Title="Selecciona un estado" HorizontalOptions="FillAndExpand" 
-                           Grid.Row="4"
+
+                  <Image Source="map.png" Grid.Row="5" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+                            <Picker x:Name="pkTipoAsentamiento"  Title="*Selecciona un tipo de asentamiento" HorizontalOptions="FillAndExpand" 
+                           Grid.Row="5"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="3"
+                          >
+                         
+                              </Picker>
+
+                    
+                <Image Source="city.png" Grid.Row="6" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+                            <Picker x:Name="pkEstado"  Title="*Selecciona un estado" HorizontalOptions="FillAndExpand" 
+                           Grid.Row="6"
                           Grid.Column="1"
                           Grid.ColumnSpan="3"
                           >
@@ -96,34 +104,60 @@
 
                               </Picker.Items>
                               </Picker>
-           <Image Source="city.png" Grid.Row="6" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-            <xfx:XfxEntry x:Name="enCiudad" Grid.Row="6"
+
+
+             <Image Source="map.png" Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+            <xfx:XfxEntry x:Name="enMunicipio" Grid.Row="7"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="3"
+                          Placeholder="*Ingresa tu municipio"
+                          VerticalOptions="End"
+                              />       
+           <Image Source="city.png" Grid.Row="8" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+            <xfx:XfxEntry x:Name="enCiudad" Grid.Row="8"
                           Grid.Column="1"
                           Grid.ColumnSpan="3"
                           VerticalOptions="End"
                           Placeholder="Ingresa tu ciudad"
                               />
-            <Image Source="telephone.png" Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-            <xfx:XfxEntry x:Name="enTelefono" Grid.Row="7"
+
+              <Image Source="city.png" Grid.Row="9" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+            <xfx:XfxEntry x:Name="enPais" Grid.Row="9"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="3"
+                          VerticalOptions="End"
+                          Placeholder="*Ingresa tu País"
+                              />      
+                    
+            <Image Source="telephone.png" Grid.Row="10" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+            <xfx:XfxEntry x:Name="enTelefono" Grid.Row="10"
                           Grid.Column="2"
                           Grid.ColumnSpan="2"
                           VerticalOptions="End"
                           Placeholder="*Ingresa tu teléfono"
                           Keyboard="Telephone"
                               />  
-               <xfx:XfxEntry x:Name="enLADA" Grid.Row="7"
+               <xfx:XfxEntry x:Name="enLADA" Grid.Row="10"
                           Grid.Column="1"
                          
                           VerticalOptions="End"
                           Placeholder="*LADA"
                           Keyboard="Telephone"
-                              />        
-                   <Image Source="cellphone.png" Grid.Row="8" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-            <xfx:XfxEntry x:Name="enCelular" Grid.Row="8"
+                              />   
+                    
+                   <Image Source="cellphone.png" Grid.Row="11" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
+                     <xfx:XfxEntry x:Name="enLADA2" Grid.Row="11"
                           Grid.Column="1"
-                          Grid.ColumnSpan="3"
+                         
                           VerticalOptions="End"
-                          Placeholder="*Ingresa tu Celular"
+                          Placeholder="LADA"
+                          Keyboard="Telephone"
+                              />   
+            <xfx:XfxEntry x:Name="enCelular" Grid.Row="11"
+                          Grid.Column="2"
+                          Grid.ColumnSpan="2"
+                          VerticalOptions="End"
+                          Placeholder="Ingresa tu Celular"
                           Keyboard="Telephone"
                               />  
            

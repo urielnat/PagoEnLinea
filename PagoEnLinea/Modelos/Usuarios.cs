@@ -22,7 +22,7 @@ namespace PagoEnLinea.Modelos
         public string id { get; set; }
         public string numero { get; set; }
         public string numeroInterior { get; set; }
-        public string tipo { get; set; }
+        public string tipo = "DOMICILIO";
     }
 
     public class Email
@@ -62,7 +62,7 @@ namespace PagoEnLinea.Modelos
         public Email email { get; set; }
         public string llave { get; set; }
         public Persona persona { get; set; }
-        public Telefono telefono { get; set; }
+        public IList<Telefono> telefono { get; set; }
         public string tipousuario { get; set; }
         public object rolsistema { get; set; }
         public IList<object> datosFacturacion { get; set; }
@@ -77,7 +77,7 @@ namespace PagoEnLinea.Modelos
     }
 
     public class info{
-        public string rol { get; set; }
+        public string rol = "CONTRIBUYENTE";
         public string usuario { get; set;}
 
     }
@@ -106,8 +106,20 @@ namespace PagoEnLinea.Modelos
         public string numero { get; set; }
         public string numeroInterior { get; set; }
         public string tipo { get; set; }
+        public string idCat { get; set; }
+       
     }
 
+    public class contraseña
+    {
+        public string contrasena { get; set; }
+        public Persona persona { get; set; }
+       
+    }
 
+    public class TipoAsentamiento
+    {
+        public IList<string> respuesta { get; set; }
+    }
 }
 

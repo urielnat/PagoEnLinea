@@ -143,6 +143,16 @@
     <Reference Include="Plugin.Connectivity">
       <HintPath>..\packages\Xam.Plugin.Connectivity.3.0.3\lib\MonoAndroid10\Plugin.Connectivity.dll</HintPath>
     </Reference>
+    <Reference Include="SuaveControls.FloatingActionButton">
+      <HintPath>..\packages\SuaveControls.FloatingActionButton.2017.10.17\lib\monoandroid80\SuaveControls.FloatingActionButton.dll</HintPath>
+    </Reference>
+    <Reference Include="SuaveControls.FloatingActionButton.Droid">
+      <HintPath>..\packages\SuaveControls.FloatingActionButton.2017.10.17\lib\monoandroid80\SuaveControls.FloatingActionButton.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Java.Interop" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PagoEnLinea\PagoEnLinea.csproj">
@@ -187,6 +197,8 @@
     <AndroidResource Include="Resources\drawable\id.png" />
     <AndroidResource Include="Resources\drawable\calendar.png" />
     <AndroidResource Include="Resources\drawable\cellphone.png" />
+    <AndroidResource Include="Resources\drawable\logout.png" />
+    <AndroidResource Include="Resources\drawable\ic_add_white.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Build.Download.0.4.7\build\Xamarin.Build.Download.targets" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.7\build\Xamarin.Build.Download.targets')" />

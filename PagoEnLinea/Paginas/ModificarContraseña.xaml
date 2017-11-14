@@ -18,15 +18,15 @@
                    <ColumnDefinition Width="*" /> 
                     <ColumnDefinition Width="*" /> 
                 </Grid.ColumnDefinitions>
-                <Entry  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Contraseña actual" Grid.Row="1" Grid.Column="0" YAlign="Center"/>
-                <Entry  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Nueva contraseña" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
-                <Entry  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Confirmar nueva contraseña" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enPsw0" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" IsPassword="true"/>
+                <Label Text = "Contraseña actual" Grid.Row="1" Grid.Column="0" YAlign="Center"  />
+                <Entry x:Name="enPsw" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" IsPassword="true"/>
+                <Label  Text = "Nueva contraseña" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
+                <Entry  x:Name="enPsw2" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" IsPassword="true"/>
+                <Label  Text = "Confirmar nueva contraseña" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
 
                
-                <Button Text="Confirmar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White"/>
+                <Button Text="Confirmar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="Handle_Clicked"/>
               
             </Grid>  
         </StackLayout>

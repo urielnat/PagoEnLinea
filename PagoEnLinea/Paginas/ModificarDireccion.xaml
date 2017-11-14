@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.ModificarDireccion">
 	<ContentPage.Content>
+        <ScrollView>
                  <StackLayout Padding ="20,20,20,0">
         <Grid ColumnSpacing="0" RowSpacing="10">
                <Grid.RowDefinitions>
@@ -9,7 +10,12 @@
                   <RowDefinition Height="auto" />
                   <RowDefinition Height="auto" />
                   <RowDefinition Height="auto" />
-                 <RowDefinition Height="auto" />    
+                 <RowDefinition Height="auto" />  
+                  <RowDefinition Height="auto" />
+                 <RowDefinition Height="auto" /> 
+                  <RowDefinition Height="auto" />  
+                  <RowDefinition Height="auto" />
+                 <RowDefinition Height="auto" />   
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -20,19 +26,29 @@
 
                     
                 </Grid.ColumnDefinitions>
-                <Entry  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Calle" Grid.Row="1" Grid.Column="0" YAlign="Center"/>
-                <Entry  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Numero" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
-                <Entry  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Numero exterior" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
-                <Entry Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Código postal" Grid.Row="4" Grid.Column="0" YAlign="Center"/>
-                <Entry Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Colonia" Grid.Row="5" Grid.Column="0" YAlign="Center"/>
-    
-                <Button Text="Guardar" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver" TextColor="White" />
+                <Entry x:Name="enCalle" Text="{Binding calle}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Calle:" Grid.Row="1" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enNumero" Text="{Binding numero}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Número" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enNumeroInterior" Text="{Binding numeroInterior}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Número Interior:" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enCP" Text="{Binding cp}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Código postal:" Grid.Row="4" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enAsentamiento" Text="{Binding asentamiento}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Asentamiento:" Grid.Row="5" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enTipoAsentamiento" Text="{Binding tipoasentamiento}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Tipo:" Grid.Row="6" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enCiudad" Text="{Binding ciudad}" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Ciudad:" Grid.Row="7" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enMunicipio" Text="{Binding municipio}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Municipio:" Grid.Row="8" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enEstado" Text="{Binding estado}" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Estado:" Grid.Row="9" Grid.Column="0" YAlign="Center"/>
+                <Entry x:Name="enpais" Text="{Binding pais}" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "País:" Grid.Row="10" Grid.Column="0" YAlign="Center"/>
+                <Button Text="Guardar" Grid.Row ="11" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver" TextColor="White" Clicked="Handle_Clicked" />
             </Grid>  
         </StackLayout>
+        </ScrollView>    
 	</ContentPage.Content>
 </ContentPage>

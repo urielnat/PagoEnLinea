@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PagoEnLinea.Modelos;
+using PagoEnLinea.Paginas;
 using Xamarin.Forms;
 
 namespace PagoEnLinea.servicios
@@ -22,7 +23,7 @@ namespace PagoEnLinea.servicios
                 {
                     System.Diagnostics.Debug.WriteLine("SE HIZO LA CONEXION");
                     var jsonString = await response.Content.ReadAsStringAsync();
-                    jsonString = "{\"data\":" + jsonString + "}";
+                  
                     System.Diagnostics.Debug.WriteLine(jsonString);
                     return JsonConvert.DeserializeObject<T>(jsonString); 
 
@@ -101,10 +102,19 @@ namespace PagoEnLinea.servicios
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
+                    System.Diagnostics.Debug.WriteLine("ENTRO");
                     System.Diagnostics.Debug.WriteLine("SE GUARDO POR PUT");
-                    MessagingCenter.Send(this, "OK");
+                    MessagingCenter.Send(this, "putcontraseña");
+                    MessagingCenter.Send(this, "putdireccion");
+                    MessagingCenter.Send(this, "putcorreo");
+                    MessagingCenter.Send(this, "putpersona");
 
-                }else{MessagingCenter.Send(this, "error"); System.Diagnostics.Debug.WriteLine(response);}
+                }else{
+                    MessagingCenter.Send(this, "errorContraseña");
+                    MessagingCenter.Send(this, "errorDireccion");
+                    MessagingCenter.Send(this, "errorCorreo");
+                    MessagingCenter.Send(this, "errorPersona");
+                    System.Diagnostics.Debug.WriteLine(response);}
             }
             catch (HttpRequestException e)
             {

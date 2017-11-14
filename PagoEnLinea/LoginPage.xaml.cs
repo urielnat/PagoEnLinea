@@ -46,7 +46,7 @@ namespace PagoEnLinea
 
            // Application.Current.MainPage = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage()) };
             //await Navigation.PushModalAsync(new NavigationPage(fmp);
-            await PopupNavigation.PushAsync(new PopupCarga(enUsuario.Text, enContraseña.Text), true);
+            await PopupNavigation.PushAsync(new PopupCarga(enUsuario.Text, enContraseña.Text), false);
             //viewModel.SignIn();
         }
     }

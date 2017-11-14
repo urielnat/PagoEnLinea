@@ -33,7 +33,7 @@
                 <Entry x:Name="enCurp" IsEnabled="false" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "CURP" Grid.Row="4" Grid.Column="0" YAlign="Center"/>
                 <Label Text = "Genero" Grid.Row="5" Grid.Column="0" YAlign="Center"/>
-                <Picker x:Name="pkSexo" Grid.Row="5" Grid.Column="1"  SelectedItem="0" HorizontalOptions="FillAndExpand">
+                <Picker x:Name="pkSexo" IsEnabled="false" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" SelectedItem="0" HorizontalOptions="FillAndExpand">
                              <Picker.Items>
                                  <x:String>MASCULINO</x:String> 
                                  <x:String>FEMENINO</x:String>
@@ -41,9 +41,9 @@
                               </Picker.Items>
                               </Picker>  
                           <Label Text = "Fecha de Nacimiento" Grid.Row="6" Grid.Column="0" YAlign="Center"/>
-                <DatePicker x:Name="dtFecha" Grid.Row="6" Grid.Column="1" Format="yyyy-MM-dd" Date="01/01/2017" MinimumDate="01/01/1900"></DatePicker>     
+                <DatePicker x:Name="dtFecha" IsEnabled="false" Grid.Row="6" Grid.Column="1" Format="yyyy-MM-dd" Date="01/01/2017" MinimumDate="01/01/1900"></DatePicker>     
                 <Label Text = "Estado Civil" Grid.Row="7" Grid.Column="0" YAlign="Center"/>
-                <Picker x:Name="pkEstCvl" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu estado civil" HorizontalOptions="FillAndExpand">
+                <Picker x:Name="pkEstCvl" Grid.Row="7" IsEnabled="false" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu estado civil" HorizontalOptions="FillAndExpand">
                              <Picker.Items>
                               
                                  <x:String>SOLTERO</x:String>
@@ -55,9 +55,9 @@
 
                               </Picker.Items>
                               </Picker>   
-                <Button Text="Modificar Datos" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#3f85bd" TextColor="White" Clicked="Handle_Clicked"/>
-                <Button Text="Modificar Contraseña" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="contraseña_Clicked"/>
-                <Button Text="Guardar" Grid.Row ="10" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver" TextColor="White" />
+                <Button x:Name="btnModificar" Text="Modificar Datos" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="Handle_Clicked"/>
+                <Button x:Name="btnContraseña" Text="Modificar Contraseña" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#3f85bd" TextColor="White" Clicked="contraseña_Clicked"/>
+                <Button x:Name="btnGuardar" Text="Guardar" Grid.Row ="10" IsEnabled="false" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver" TextColor="White" Clicked="modificar_Clicked" />
             </Grid>  
              </ScrollView>      
         </StackLayout>

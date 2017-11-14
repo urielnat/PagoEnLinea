@@ -13,12 +13,13 @@ namespace PagoEnLinea
       
         authenticate auth = new authenticate();
         info inf = new info();
-       
+        string contraseña;
         public PopupCarga(string user, string psw)
         {
             auth.username = user;
             auth.password = psw;
-            inf.usuario = user; 
+            inf.usuario = user;
+           
             InitializeComponent();
             conecta();
         }
@@ -39,10 +40,13 @@ namespace PagoEnLinea
                     MessagingCenter.Send(this,"noAuth");
                 });
                 MessagingCenter.Subscribe<ClienteRest>(this, "OKR", async (Sender) => {
-                   // client.POST("http://192.168.0.18:8080/api/info-contribuyente",inf);
-                    MessagingCenter.Unsubscribe<ClienteRest>(this,"ok");
+                    // client.POST("http://192.168.0.18:8080/api/info-contribuyente",inf);
+
+
                     await PopupNavigation.PopAsync();
+                                               
                    Application.Current.Properties["user"] = inf.usuario;
+                    Application.Current.Properties["psw"] = auth.password;
                     await Application.Current.SavePropertiesAsync();
                     Application.Current.MainPage = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage("")) };
                 });

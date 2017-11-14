@@ -17,8 +17,10 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea
 {
+  
     public partial class RegistroPage2 : ContentPage
     {
+        public static List<string> tipoas;
         public Usuarios user { set; get; }
         public Direccion dire { set; get; }
         public CatalogoDir catdire { set; get; }
@@ -48,18 +50,31 @@ namespace PagoEnLinea
             enColonia.Text = cd.asentamiento;
             enCod.Text = cd.cp;
             enNumero.Text = d.numero;
-
+            llenarPicker();
         }
 
        
 
         async void registrar_Clicked(object sender, System.EventArgs e)
         {
-            bool a2 = false, a3 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = false, a9 = false, a10 = false, a11 = false;
+            bool a1  = false ,a2 = false, a3 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = false, a9 = false, a10 = false, a11 = false;
          
+
+            if (ValidarVacio(enColonia.Text))
+            {
+                enDomicilio.ErrorText = "Introduzca un asentamiento";
+                a1 = false;
+
+            }
+            else
+            {
+                enDomicilio.ErrorText = "";
+                a1 = true;
+            }
+
             if (ValidarVacio(enDomicilio.Text))
             {
-                enDomicilio.ErrorText = "Introduzca un domicilio";
+                enDomicilio.ErrorText = "Introduzca una calle";
                 a2 = false;
 
             }
@@ -92,7 +107,16 @@ namespace PagoEnLinea
             }
 
 
+            if (!(pkTipoAsentamiento.SelectedIndex > -1))
+            {
+                await DisplayAlert("Campo vacio", "selecciona un tipo de asentamiento", "ok");
+                a5 = false;
 
+            }
+            else
+            {
+                a5 = true;
+            }
 
             if (!(pkEstado.SelectedIndex > -1))
             {
@@ -104,7 +128,7 @@ namespace PagoEnLinea
             {
                 a6 = true;
             }
-
+            /*
             if (ValidarVacio(enCiudad.Text))
             {
                 enCiudad.ErrorText = "Introduzca su ciudad";
@@ -115,7 +139,7 @@ namespace PagoEnLinea
             {
                 enCiudad.ErrorText = "";
                 a7 = true;
-            }
+            }*/
             if (ValidarVacio(enTelefono.Text))
             {  await DisplayAlert("Sin número telefónico","Deslice la pantalla para ver todas las opciones","ok");
                 enTelefono.ErrorText = "Introduzca su teléfono";
@@ -151,6 +175,7 @@ namespace PagoEnLinea
                 enLADA.ErrorText = "";
                 a10 = true;
             }
+            /**
             if (ValidarVacio(enCelular.Text))
             {
                 enCelular.ErrorText = "Ingrese su Número de celular";
@@ -161,8 +186,8 @@ namespace PagoEnLinea
             {
                 enCelular.ErrorText = "";
                 a11 = true;
-            }
-            if ( a2 && a3 && a4  &&a8&&a10&&a11)
+            }**/
+            if ( a1 && a2 && a3 && a4 && a5 && a6 && a8 && a9 && a10)
             {
                 user.direccion = new Direccion { calle = enDomicilio.Text,
                         numero = enNumero.Text,
@@ -173,20 +198,30 @@ namespace PagoEnLinea
                     ciudad = enCiudad.Text,
                     estado = pkEstado.Items[pkEstado.SelectedIndex],
                     municipio = enMunicipio.Text,
-                            tipoasentamiento = "RESINDECIAL",
-                            pais = "MEXICO"
+                        tipoasentamiento = pkEstado.Items[pkTipoAsentamiento.SelectedIndex],
+                        pais = enPais.Text
 
 
                         }};
-                  
 
 
-                user.telefono =  new Telefono{
-                        telefono = enTelefono.Text,
-                        lada = enLADA.Text,
-                        tipo ="FIJO"
 
-                    };
+                user.telefono = new List<Telefono>();
+
+
+                user.telefono.Add(new Telefono{telefono = enTelefono.Text,
+                    lada = enLADA.Text,
+                    tipo = "FIJO"});
+
+                if(a11){
+                    user.telefono.Add(new Telefono
+                    {
+                        telefono = enCelular.Text,
+                        lada = enLADA2.Text,
+                        tipo = "MOVIL"
+                    });
+                }
+
 
 
 
@@ -376,6 +411,36 @@ namespace PagoEnLinea
             }else{
                 await DisplayAlert("Error de conexión", "Es necesario estar conectado a internet para acceder este servicio", "Ok");
             }  
+        }
+
+        void llenarPicker()
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+           {
+               if (CrossConnectivity.Current.IsConnected)
+               {
+                   ClienteRest client = new ClienteRest();
+                    var httpclient = await client.GET<TipoAsentamiento>("http://192.168.0.18:8080/api/catalogo-dirs/tipo-asentamiento");
+                    tipoas = new List<string>();
+                   if (httpclient != null)
+                   {
+
+                       foreach (var dato in httpclient.respuesta)
+                       {
+                            tipoas.Add(dato);
+                       }
+
+                       foreach (var nom in tipoas)
+                       {
+                           pkTipoAsentamiento.Items.Add(nom);
+                       }
+                   }
+
+
+               }
+               else { await DisplayAlert("Error de conexion", "No hay coneccion a internet", "ok"); }
+
+           });
         }
     }
 }

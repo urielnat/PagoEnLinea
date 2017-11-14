@@ -8,11 +8,11 @@ namespace PagoEnLinea
         public App()
         {
             InitializeComponent();
-            Current.Properties.Clear();
+
             //MessagingCenter.Subscribe<PopupCarga>(this, "login", (Sender) => { MainPage = new NavigationPage(new Menu()); });
             if (Current.Properties.ContainsKey("user"))
             {
-                MainPage = new NavigationPage(new Menu());
+                MainPage = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage("")) };
                 //var id = Current.Properties["user"] as string;
                 // do something with id
             }else{

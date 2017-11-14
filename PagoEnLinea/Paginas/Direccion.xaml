@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Direccion" Icon="mapw.png" >
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:controls="clr-namespace:SuaveControls.Views;assembly=SuaveControls.FloatingActionButton" x:Class="PagoEnLinea.Paginas.Direccion" Icon="mapw.png" >
 	<ContentPage.Content>
         <StackLayout Padding="20,20,20,10">
 
@@ -45,7 +45,7 @@
     </ScrollView>   
 
 
-            
+             <controls:FloatingActionButton x:Name="FAB" HorizontalOptions="End" WidthRequest="50" HeightRequest="50" Image="ic_add_white.png" VerticalOptions="End"  ButtonColor="#5CB85C" />
 
         </StackLayout>
 	</ContentPage.Content>

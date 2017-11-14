@@ -18,7 +18,8 @@ namespace PagoEnLinea.Paginas
 
         async void Handle_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
         {
-            await Navigation.PushAsync(new ModificarCorreo());
+            
+            await Navigation.PushAsync(new ModificarCorreo((e.SelectedItem as Email).id){ BindingContext = (Email)e.SelectedItem });
         }
         async void conectar()
         {
@@ -36,7 +37,7 @@ namespace PagoEnLinea.Paginas
                         //catdir.cp = dato.catalogoDir.cp;
                         list.Add(new Email
                         {
-
+                            id=dato.id,
                             correoe = dato.correoe,
                             tipo = dato.tipo,
 

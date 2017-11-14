@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using SuaveControls.FloatingActionButton.iOS.Renderers;
 using UIKit;
 using Xfx;
 
@@ -15,6 +16,7 @@ namespace PagoEnLinea.iOS
         {
             XfxControls.Init();
             global::Xamarin.Forms.Forms.Init();
+            FloatingActionButtonRenderer.InitRenderer();
 
             LoadApplication(new App());
 

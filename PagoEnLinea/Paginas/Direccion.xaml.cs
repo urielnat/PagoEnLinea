@@ -10,6 +10,7 @@ namespace PagoEnLinea.Paginas
     {
         public static List<Modelos.infodir> list;
         public infodir infdir { set; get; }
+        public CatalogoDir catdir { set; get; }
         public Direccion()
         {
           
@@ -19,7 +20,9 @@ namespace PagoEnLinea.Paginas
 
         async void Handle_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
         {
-            await Navigation.PushAsync(new ModificarDireccion());
+            var info = (infodir)e.SelectedItem;
+            //var catinfo = (CatalogoDir)e.SelectedItem;
+            await Navigation.PushAsync(new ModificarDireccion(info.id,info.idCat){BindingContext = (infodir)e.SelectedItem});
         }
 
         async void conectar()
@@ -31,20 +34,27 @@ namespace PagoEnLinea.Paginas
                 ClienteRest cliente = new ClienteRest();
                 var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["user"] as string);
                 list = new List<Modelos.infodir>();
+
                 if (inf != null)
                 {
                     foreach (var dato in inf.direcciones){
-                        //catdir.cp = dato.catalogoDir.cp;
+                       
                         list.Add(new Modelos.infodir
                         {
-
+                            id = dato.id,
                             calle = dato.calle,
                             numero = dato.numero,
                             numeroInterior = dato.numeroInterior,
-
+                            tipo = dato.tipo,
 
                             cp = dato.catalogoDir.cp,
-                            asentamiento = dato.catalogoDir.asentamiento
+                            asentamiento = dato.catalogoDir.asentamiento,
+                            municipio = dato.catalogoDir.municipio,
+                            estado = dato.catalogoDir.estado,
+                            pais = dato.catalogoDir.pais,
+                            tipoasentamiento = dato.catalogoDir.tipoasentamiento,
+                            ciudad = dato.catalogoDir.ciudad,
+                            idCat = dato.catalogoDir.id
                                                                         
                             
 

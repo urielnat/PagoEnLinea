@@ -19,7 +19,7 @@ namespace PagoEnLinea.Paginas
 
         async void correo_Clicked(object sender, System.EventArgs e)
         {
-            await Navigation.PushAsync(new ModificarCorreo());
+            await Navigation.PushAsync(new ModificarCorreo(null));
         }
     }
 }
