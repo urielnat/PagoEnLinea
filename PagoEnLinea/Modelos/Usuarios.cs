@@ -88,12 +88,13 @@ namespace PagoEnLinea.Modelos
         public IList<Telefono> telefonos { get; set; }
         public IList<Direccion> direcciones { get; set; }
         public object usuario { get; set; }
-        public object rolsistema { get; set; }
-        public IList<object> datosFacturacion { get; set; }
+        public object rolsistema { get; set; }  
+        public IList<DatosFacturacion> datosFacturacion { get; set; }
     }
 
     public class infodir
     {
+        public string NumerodeDireccion { get; set; }
         public string asentamiento { get; set; }
         public string ciudad { get; set; }
         public string cp { get; set; }
@@ -120,6 +121,67 @@ namespace PagoEnLinea.Modelos
     public class TipoAsentamiento
     {
         public IList<string> respuesta { get; set; }
+    }
+
+    public  class AgregarDireccion{
+        public Direccion direccion { get; set; }
+        public Persona persona { get; set; }
+        
+    }
+
+    public class Token
+    {
+        public string id_token { get; set; }
+    }
+
+    public class ModificarTelefono{
+        public string id { get; set; }
+        public Persona persona { get; set; }
+        public Telefono telefono { get; set; }
+
+    }
+
+    public class DatosFacturacion{
+        public Direccion direccion { get; set; }
+        public Email email { get; set; }
+        public string id { get; set; } //o int
+        public string nomrazonSocial { get; set; }
+        public Persona persona { get; set; }
+        public string rfc { get; set; }
+
+    }
+
+
+    public class MostrarDatosFacturacion
+    {
+        public string direccion { get; set; }
+        public string email { get; set; }
+        public string id { get; set; }
+        public string nomrazonSocial { get; set; }
+        public Persona persona { get; set; }
+        public string rfc { get; set; }
+        public string idDireccion { get; set; }
+        public string idCatDir { get; set; }
+
+    }
+
+
+    public class AgregarCorreo
+    {
+        public Email email { get; set; }
+        public string id { get; set; }
+        public Persona persona { get; set; }
+    }
+
+
+    public static class Constantes{
+
+       public  static string URL = "http://192.168.0.18:8080/api";
+    }
+
+    public class Respuesta
+    {
+        public string respuesta { get; set; }
     }
 }
 

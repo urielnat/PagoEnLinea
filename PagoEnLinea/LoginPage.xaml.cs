@@ -10,8 +10,8 @@ namespace PagoEnLinea
 {
     public partial class LoginPage : ContentPage
     {
-       
-        MasterDetailPage fpm = new MasterDetailPage();
+
+        MasterDetailPage fpm;
        
         public LoginPage()
         {
@@ -20,16 +20,30 @@ namespace PagoEnLinea
             var tgr = new TapGestureRecognizer();
             tgr.Tapped += (sender, e) =>
             {
-                olvido.Text = "Favor de comunicarse con Soporte Técnico \nTelefono: \nCorreo Electronico:";
-                olvido.HorizontalTextAlignment = TextAlignment.Start;
-                olvido.TextColor = Color.Black;
+                Navigation.PushAsync(new RecuperarPage());
             };
             //algo asj
 
             MessagingCenter.Subscribe<PopupCarga>(this, "noAuth", (Sender) => { enUsuario.ErrorText = "Correo electronico"; enContraseña.ErrorText = "contraseña"; });
 
+            MessagingCenter.Subscribe<PopupCarga>(this, "errorServidor", (Sender) => { DisplayAlert("Error","No fué posible conectarse al servidor intente mas tarde","OK"); });
+
+            MessagingCenter.Subscribe<PopupCarga>(this, "Auth", (Sender) => {
+                Application.Current.Properties["user"] = enUsuario.Text;
+                Application.Current.Properties["psw"] = enContraseña.Text;
+                System.Diagnostics.Debug.WriteLine(Application.Current.Properties["user"] as string);
+
+                Application.Current.SavePropertiesAsync();
+
+                fpm = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage()) };
+            
+                Navigation.PushModalAsync(fpm);
+            });
+
 
             olvido.GestureRecognizers.Add(tgr);
+
+           
 
         }
 

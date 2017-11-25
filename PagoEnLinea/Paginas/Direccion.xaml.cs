@@ -18,21 +18,23 @@ namespace PagoEnLinea.Paginas
           
         }
 
+
+        //cambiar por tabbed item
         async void Handle_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
         {
             var info = (infodir)e.SelectedItem;
             //var catinfo = (CatalogoDir)e.SelectedItem;
-            await Navigation.PushAsync(new ModificarDireccion(info.id,info.idCat){BindingContext = (infodir)e.SelectedItem});
+            await Navigation.PushAsync(new ModificarDireccion(info.id,info.idCat,0){BindingContext = (infodir)e.SelectedItem});
         }
 
         async void conectar()
         {
-            if (Application.Current.Properties.ContainsKey("user"))
+            if (Application.Current.Properties.ContainsKey("token"))
             {
-
+                var cont = 1;
 
                 ClienteRest cliente = new ClienteRest();
-                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["user"] as string);
+                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["token"] as string);
                 list = new List<Modelos.infodir>();
 
                 if (inf != null)
@@ -41,6 +43,7 @@ namespace PagoEnLinea.Paginas
                        
                         list.Add(new Modelos.infodir
                         {
+                            NumerodeDireccion = "Dirección " + cont+":",
                             id = dato.id,
                             calle = dato.calle,
                             numero = dato.numero,
@@ -55,10 +58,13 @@ namespace PagoEnLinea.Paginas
                             tipoasentamiento = dato.catalogoDir.tipoasentamiento,
                             ciudad = dato.catalogoDir.ciudad,
                             idCat = dato.catalogoDir.id
-                                                                        
-                            
+                               
+
+
 
                         });
+                        cont++;
+                        System.Diagnostics.Debug.WriteLine(dato.catalogoDir.municipio);
                     }
 
 
@@ -72,6 +78,11 @@ namespace PagoEnLinea.Paginas
         protected override void OnAppearing()
         {
             conectar();
+        }
+
+        void Handle_Clicked(object sender, System.EventArgs e)
+        {
+            Navigation.PushAsync(new ModificarDireccion(null, null, 1));
         }
     }
 }

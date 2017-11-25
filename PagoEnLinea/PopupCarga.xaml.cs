@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
 using Rg.Plugins.Popup.Services;
@@ -13,43 +15,63 @@ namespace PagoEnLinea
       
         authenticate auth = new authenticate();
         info inf = new info();
-        string contraseña;
+       
         public PopupCarga(string user, string psw)
         {
             auth.username = user;
             auth.password = psw;
             inf.usuario = user;
-           
+            Application.Current.Properties.Clear(); 
             InitializeComponent();
             conecta();
         }
-        void conecta()
+        async void conecta()
         {
             try
-            { //1002000001
+            { 
+
+
+
+
+                    HttpResponseMessage response;
+
+                    string ContentType = "application/json"; // or application/xml
+                    var jsonstring = JsonConvert.SerializeObject(auth);
+
+
+                    try
+                    {
+                        HttpClient cliente = new HttpClient();
+                    response = await cliente.PostAsync(Constantes.URL+"/authenticate", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                        var y = await response.Content.ReadAsStringAsync();
+                        //System.Diagnostics.Debug.WriteLine(y);
+                        if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            
+                        var users = JsonConvert.DeserializeObject<Token>(y);
+                        System.Diagnostics.Debug.WriteLine(users.id_token);
+                        Application.Current.Properties["token"] = users.id_token;
+                        MessagingCenter.Send(this, "Auth");  
+                        await PopupNavigation.PopAsync();
+
+                    }else{
+                        MessagingCenter.Send(this, "noAuth"); 
+                        await PopupNavigation.PopAsync();
+                    }
+                       
+                        
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        System.Diagnostics.Debug.WriteLine(e.InnerException.Message);
+                    MessagingCenter.Send(this, "errorServidor");
+                    await PopupNavigation.PopAsync();
+
+                    }
                 
-                ClienteRest client = new ClienteRest();
-                client.POST("http://192.168.0.18:8080/api/authenticate",auth,0);
-
-
-
-
                
-                MessagingCenter.Subscribe<ClienteRest>(this, "errorp",async (Sender) => {
-                    await PopupNavigation.PopAsync();
-                    MessagingCenter.Send(this,"noAuth");
-                });
-                MessagingCenter.Subscribe<ClienteRest>(this, "OKR", async (Sender) => {
-                    // client.POST("http://192.168.0.18:8080/api/info-contribuyente",inf);
+               
 
-
-                    await PopupNavigation.PopAsync();
-                                               
-                   Application.Current.Properties["user"] = inf.usuario;
-                    Application.Current.Properties["psw"] = auth.password;
-                    await Application.Current.SavePropertiesAsync();
-                    Application.Current.MainPage = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage("")) };
-                });
 
 
 

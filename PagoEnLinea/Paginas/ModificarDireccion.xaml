@@ -36,17 +36,61 @@
                 <Label Text = "Código postal:" Grid.Row="4" Grid.Column="0" YAlign="Center"/>
                 <Entry x:Name="enAsentamiento" Text="{Binding asentamiento}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Asentamiento:" Grid.Row="5" Grid.Column="0" YAlign="Center"/>
-                <Entry x:Name="enTipoAsentamiento" Text="{Binding tipoasentamiento}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Picker x:Name="pkTipoAsentamiento"  Title="*Selecciona un tipo de asentamiento" HorizontalOptions="FillAndExpand" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Tipo:" Grid.Row="6" Grid.Column="0" YAlign="Center"/>
                 <Entry x:Name="enCiudad" Text="{Binding ciudad}" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Ciudad:" Grid.Row="7" Grid.Column="0" YAlign="Center"/>
                 <Entry x:Name="enMunicipio" Text="{Binding municipio}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Municipio:" Grid.Row="8" Grid.Column="0" YAlign="Center"/>
-                <Entry x:Name="enEstado" Text="{Binding estado}" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Picker x:Name="pkEstado"  Title="*Selecciona un estado" HorizontalOptions="FillAndExpand"  Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2">
+                         <Picker.Items>
+                                 <x:String>Aguascalientes</x:String> 
+                                 <x:String>Baja California</x:String>
+                                 <x:String>Baja California Sur</x:String>
+                                 <x:String>Campeche</x:String>
+                                 <x:String>Chiapas</x:String>  
+                                 <x:String>Chihuahua</x:String>
+                                 <x:String>Ciudad de México</x:String>
+                                 <x:String>Coahuila</x:String>
+                                 <x:String>Colima</x:String>       
+                                 <x:String>Durango</x:String>
+                                 <x:String>Estado de México</x:String>
+                                 <x:String>Guanajuato</x:String>
+                                 <x:String>Guerrero</x:String>
+                                 <x:String>Hidalgo</x:String>
+                                 <x:String>Jalisco</x:String>
+                                 <x:String>Michoacán</x:String>
+                                 <x:String>Morelos</x:String>
+                                 <x:String>Nayarit</x:String>
+                                 <x:String>Nuevo León</x:String>
+                                 <x:String>Oaxaca</x:String>
+                                 <x:String>Puebla</x:String>
+                                 <x:String>Querétaro</x:String>
+                                 <x:String>Quintana Roo</x:String>
+                                 <x:String>San Luis Potosí</x:String>
+                                 <x:String>Sinaloa</x:String>
+                                 <x:String>Sonora</x:String>
+                                 <x:String>Tabasco</x:String>
+                                 <x:String>Tamaulipas</x:String>
+                                 <x:String>Tlaxcala</x:String>
+                                 <x:String>Veracruz</x:String>
+                                 <x:String>Yucatán</x:String>
+                                 <x:String>Zacatecas</x:String>
+
+                              </Picker.Items>
+                              </Picker>
                 <Label Text = "Estado:" Grid.Row="9" Grid.Column="0" YAlign="Center"/>
-                <Entry x:Name="enpais" Text="{Binding pais}" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "País:" Grid.Row="10" Grid.Column="0" YAlign="Center"/>
-                <Button Text="Guardar" Grid.Row ="11" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver" TextColor="White" Clicked="Handle_Clicked" />
+               
+                <Picker x:Name="pkpais" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu país" HorizontalOptions="FillAndExpand" IsEnabled="false">
+                             <Picker.Items>
+                                 <x:String>MEXICO</x:String> 
+                                
+
+                              </Picker.Items>
+                              </Picker> 
+                    <Label Text = "País:" Grid.Row="10" Grid.Column="0" YAlign="Center"/>
+                <Button x:Name="btnModificar" Text="Modificar" Grid.Row ="11" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="Handle_Clicked" IsVisible="false" />
+                <Button x:Name="btnAgregar" Text="Guardar" Grid.Row ="11" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="Guardar_Clicked" IsVisible="false" />    
             </Grid>  
         </StackLayout>
         </ScrollView>    

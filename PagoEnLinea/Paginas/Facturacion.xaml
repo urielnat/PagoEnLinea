@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Facturacion" Icon="bills.png">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Facturacion" xmlns:controls="clr-namespace:SuaveControls.Views;assembly=SuaveControls.FloatingActionButton" Icon="bills.png">
 	<ContentPage.Content>
-        <StackLayout Padding="20,20,20,20">
+        <StackLayout Padding="20,20,20,5">
+            <Label HorizontalTextAlignment="Center" Text="Datos de Facturación" FontSize="15"/> 
                 <ScrollView>
-           <ListView x:Name="listView" RowHeight="150" ItemSelected="Handle_ItemSelected">
+           <ListView x:Name="listView" RowHeight="170" ItemSelected="Handle_ItemSelected">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
@@ -30,10 +31,15 @@
                 </Grid.ColumnDefinitions>
                    
                    <Label Text="RFC" Grid.Row ="1" Grid.Column="0"/>
-                     <Label Text="Razon social" Grid.Row ="2" Grid.Column="0"/>
-                     <Label Text="Direccion" Grid.Row ="3" Grid.Column="0"/>
-                     <Label Text="Correo" Grid.Row ="4" Grid.Column="0"/>
-                     <Label Text="Teléfono" Grid.Row ="5" Grid.Column="0"/>
+                     <Label Text="{Binding rfc}" Grid.Row ="1" Grid.Column="1"/>                   
+                     <Label Text="Razon social" Grid.Row ="2" Grid.Column="0"/>   
+                     <Label Text="{Binding nomrazonSocial}" Grid.Row ="2" Grid.Column="1"/>
+                     <Label Text="Correo" Grid.Row ="3" Grid.Column="0"/>
+                     <Label Text="{Binding email}" Grid.Row ="3" Grid.Column="1"/>                   
+                     <Label Text="Direccion" Grid.Row ="4" Grid.Column="0"/>
+                     <Label Text="{Binding direccion}" Grid.Row ="4" Grid.Column="1"/>                   
+                                      
+                     
                 </Grid>                 
                     
                 
@@ -44,7 +50,7 @@
     </ListView>
     </ScrollView>            
          
-          
+                 <controls:FloatingActionButton x:Name="FAB" HorizontalOptions="End" WidthRequest="50" HeightRequest="50" Image="ic_add_white.png" VerticalOptions="EndAndExpand"  ButtonColor="#5CB85C"  Clicked="Handle_Clicked"/>      
         </StackLayout>
 	</ContentPage.Content>
 </ContentPage>

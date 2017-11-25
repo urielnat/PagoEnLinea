@@ -23,7 +23,7 @@
             <Label x:Name ="lblNomre" Text="{Binding nombre}" Font="Bold"  TextColor="White"/>
                 </Frame>  
               </Grid>       
-            <ListView x:Name="ListMenu" ItemSelected="Handle_ItemSelected"  SeparatorVisibility="None">
+            <ListView x:Name="ListMenu"   SeparatorVisibility="None">
                
             </ListView>
         

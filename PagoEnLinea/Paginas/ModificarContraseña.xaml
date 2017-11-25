@@ -26,8 +26,10 @@
                 <Label  Text = "Confirmar nueva contraseña" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
 
                
-                <Button Text="Confirmar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="Handle_Clicked"/>
-              
+
+                 <Button x:Name="btnAñadir" Text="Confirmar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White"  />
+                 <Button x:Name="btnCambiar" Text="algo" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Red" TextColor="White"  IsVisible="false"/>
+                
             </Grid>  
         </StackLayout>
 	</ContentPage.Content>

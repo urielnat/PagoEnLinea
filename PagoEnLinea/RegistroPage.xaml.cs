@@ -14,6 +14,7 @@ using Plugin.Connectivity;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Xamarin.Forms;
+using Rg.Plugins.Popup.Services;
 
 namespace PagoEnLinea
 {
@@ -32,6 +33,9 @@ namespace PagoEnLinea
             enCorreo.TextChanged += borrarError;
             enPassword.TextChanged += borrarError;
             enPassword2.TextChanged += borrarError;
+            enCURP.TextChanged += MayusChanged;
+
+            PopupNavigation.PushAsync(new TutorialPopUp(), false);
         }
 
 
@@ -40,11 +44,13 @@ namespace PagoEnLinea
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
+            
 
             Boolean a1 = false, a2 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = true,a9=true;
+            Boolean comodin = true;
             if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
             {
-                enNombre.ErrorText = "Introduzca un nombre valido";
+                enNombre.ErrorText = "Introduzca un nombre válido";
                 a1 = false;
             }
             else
@@ -54,7 +60,7 @@ namespace PagoEnLinea
             }
             if (string.IsNullOrEmpty(enPaterno.Text) || !Regex.Match(enPaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
             {
-                enPaterno.ErrorText = "Introduzca un apellido valido";
+                enPaterno.ErrorText = "Introduzca un apellido válido";
                 a2 = false;
 
             }
@@ -63,11 +69,24 @@ namespace PagoEnLinea
                 enPaterno.ErrorText = "";
                 a2 = true;
             }
-          
+
+            if(!string.IsNullOrEmpty(enMaterno.Text)){
+                if (!Regex.Match(enMaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
+                {
+                    enMaterno.ErrorText = "Introduzca un apellido válido";
+                    comodin = false;
+
+                }else{
+                    comodin = true;
+                }
+            }else
+            {
+                comodin = true;
+            }
 
             if (string.IsNullOrEmpty(enCorreo.Text) || !Regex.Match(enCorreo.Text, "^(?(\")(\".+?(?<!\\\\)\"@)|(([0-9A-Za-z]((\\.(?!\\.))|[-!#\\$%&'\\*\\+/=\\?\\^`\\{\\}\\|~\\w])*)(?<=[0-9A-Za-z])@))(?(\\[)(\\[(\\d{1,3}\\.){3}\\d{1,3}\\])|(([0-9a-z][-\\w]*[0-9a-z]*\\.)+[a-z0-9][\\-a-z0-9]{0,22}[a-z0-9]))$").Success)
             {
-                enCorreo.ErrorText = "Introduzca un correo electrónico valido";
+                enCorreo.ErrorText = "Introduzca un correo electrónico válido";
                 a4 = false;
             }
             else
@@ -96,9 +115,9 @@ namespace PagoEnLinea
                 a6 = true;
             }
 
-            if (string.IsNullOrEmpty(enPassword.Text) || enPassword.Text.Length < 6 || enPassword.Text.Length > 16)
+            if (string.IsNullOrEmpty(enPassword.Text) || enPassword.Text.Length < 8 || enPassword.Text.Length > 16)
             {
-                enPassword.ErrorText = "contraseña invalida ";
+                enPassword.ErrorText = "contraseña inválida (mínimo 8 caracteres)";
                 a8 = false;
             }
             else
@@ -126,7 +145,7 @@ namespace PagoEnLinea
            
             if (!(pkSexo.SelectedIndex > -1))
             {
-                await DisplayAlert("Campo vacio", "seleccion su sexo", "ok");
+                await DisplayAlert("Campo vacio", "seleccione su sexo", "ok");
                 a7 = false;
 
             }
@@ -134,7 +153,7 @@ namespace PagoEnLinea
             {
                 a7 = true;
             }
-            if(a1&&a2&& a4&& a5&& a6&& a7&&a8&&a9){
+            if(a1&&a2&& a4&& a5&& a6&& a7&&a8&&a9&&comodin){
 
 
                 users.tipousuario = "CONTRIBUYENTE";
@@ -400,7 +419,15 @@ namespace PagoEnLinea
                 }
                 //System.Diagnostics.Debug.WriteLine(texto);
                 indicador.IsRunning = false;
+
+             
             
+        }
+
+        private void MayusChanged(object sender, TextChangedEventArgs e) { 
+            
+            (sender as Entry).Text = e.NewTextValue.ToUpper();
+
         }
     }
 }

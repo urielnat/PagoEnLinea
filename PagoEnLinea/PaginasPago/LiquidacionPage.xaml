@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasPago.LiquidacionPage">
+	<ContentPage.Content>
+         <StackLayout Padding="20,20,20,20">
+             <SearchBar x:Name="buscar" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
+                <ScrollView>
+           <ListView x:Name="listView" RowHeight="150" ItemSelected="Handle_ItemSelected">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell >
+                    <Frame HasShadow="true" Margin="5">
+                      
+                            
+               
+                  <Grid ColumnSpacing="0" RowSpacing="0">
+                  <Grid.RowDefinitions>
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" />
+                
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+
+                  <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="*" /> 
+                    
+
+                </Grid.ColumnDefinitions>
+                   
+                   <Label Text="Liquidacíon" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
+                                      
+                     <Label Text="Descripción:" Grid.Row ="1" Grid.Column="0"/>
+                      <Label x:Name="lblDescripción" Text="" Grid.Row ="1" Grid.Column="1"/>                  
+                     <Label Text="Total a Pagar: $" Grid.Row ="2" Grid.Column="0"/>
+                     <Label x:Name="lblPago"  Grid.Row ="2" Grid.Column="1"/>                   
+                  
+                </Grid>                 
+                    
+                
+                    </Frame>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+    </ScrollView>            
+         
+          
+        </StackLayout>
+	</ContentPage.Content>
+</ContentPage>

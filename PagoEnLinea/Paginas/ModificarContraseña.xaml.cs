@@ -11,16 +11,19 @@ namespace PagoEnLinea.Paginas
         public ModificarContraseña()
         {
             InitializeComponent();
+          
+            btnAñadir.Clicked += BtnAñadir_Clicked;
+           // btnCambiar.Clicked += Handle_Clicked;
         }
 
         async void conectar()
         {
-            if (Application.Current.Properties.ContainsKey("user"))
+            if (Application.Current.Properties.ContainsKey("token"))
             {
 
 
                 ClienteRest cliente = new ClienteRest();
-                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["user"] as string);
+                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["token"] as string);
                 if (inf != null)
                 {
                     contraseña psw = new contraseña();
@@ -28,7 +31,7 @@ namespace PagoEnLinea.Paginas
                     bool auth = false, auth2 = false, auth3 = false;
                     psw.contrasena = enPsw.Text;
                     ClienteRest client = new ClienteRest();
-                    if(!String.IsNullOrEmpty(enPsw.Text)&&!(enPsw.Text.Length<6)){
+                    if(!String.IsNullOrEmpty(enPsw.Text)&&!(enPsw.Text.Length<8)){
 
                         auth = true;
 
@@ -36,8 +39,11 @@ namespace PagoEnLinea.Paginas
                         auth = false;
                        await DisplayAlert("Error","Contraseña Invalida","ok");
                     }
-                    if(enPsw2.Text.Equals(enPsw.Text)){
-                        auth2 = true;
+                    if(!(string.IsNullOrEmpty(enPsw2.Text))){
+                        if(enPsw2.Text.Equals(enPsw.Text)){
+                            auth2 = true;
+                        }
+
                     }else{
                         auth2 = false;
                         await DisplayAlert("Error", "Las Contraseñas No Concuerdan", "OK");
@@ -52,7 +58,7 @@ namespace PagoEnLinea.Paginas
                    
 
                     if(auth&&auth2&&auth3){
-                        client.PUT("http://192.168.0.18:8080/api/usuarios/actualizar-contrasena", psw);
+                        client.PUT(Constantes.URL+"/usuarios/actualizar-contrasena", psw);
                         MessagingCenter.Subscribe<ClienteRest>(this, "putcontraseña", (Sender) => {
                             DisplayAlert("Guardado","¡Contraseña Modificada con Exito!","OK");
                             Navigation.PopAsync();
@@ -70,8 +76,17 @@ namespace PagoEnLinea.Paginas
         }
 
 
+
+
         void Handle_Clicked(object sender, System.EventArgs e)
         {
+            
+            conectar();
+        }
+
+        void BtnAñadir_Clicked(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("algoaaaa");
             conectar();
         }
     }

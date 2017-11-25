@@ -20,13 +20,14 @@
                   <ColumnDefinition Width="*" /> 
                   <ColumnDefinition Width="*" /> 
                 </Grid.ColumnDefinitions>
-                <Entry x:Name="enTipo" Text="{Binding tipo}"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Entry x:Name="enTipo" Text="{Binding tipo}"  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" IsEnabled="false"/>
                 <Label Text = "Tipo" Grid.Row="1" Grid.Column="0" YAlign="Center"/>
-                <Entry x:Name="enCorreo"  Text="{Binding correoe}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Entry x:Name="enCorreo"  Text="{Binding correoe}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Keyboard="Email"/>
                 <Label Text = "Correo electrònico" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
                
                
-                <Button Text="Guardar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="Handle_Clicked"/>
+                <Button x:Name="btnModificar" Text="Modificar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" IsVisible="false" Clicked="Handle_Clicked"/>
+                <Button x:Name="btnAgregar" Text="Agregar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" IsVisible="false" Clicked="Agregar_Clicked"/>
               
             </Grid>  
         </StackLayout>

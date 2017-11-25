@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Modificarfacturacion">
 	<ContentPage.Content>
          <StackLayout Padding ="20,20,20,0">
+          <Label HorizontalTextAlignment="Center" Text="Datos de Facturación" FontSize="15"/> 
         <Grid ColumnSpacing="0" RowSpacing="10">
                <Grid.RowDefinitions>
                   <RowDefinition Height="auto" />
@@ -20,18 +21,22 @@
 
                     
                 </Grid.ColumnDefinitions>
-                <Entry Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                          
+                <Entry x:Name="enRFC" Text="{Binding rfc}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "RFC" Grid.Row="1" Grid.Column="0" YAlign="Center"/>
-                <Entry Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Entry x:Name="enRazon" Text="{Binding nomrazonSocial}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Razon social" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
-                <Entry  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Picker x:Name="pkDireccion"  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Title="Selecciona una dirección" SelectedIndexChanged="Direccion_SelectedIndexChanged"/>
                 <Label Text = "Dirección" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
-                <Button Text = "agregar"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Clicked="correo_Clicked"/>
+                <Picker x:Name="pkCorreo"  Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Title="Selecciona un correo" SelectedIndexChanged="Correo_SelectedIndexChanged"/>
                 <Label Text = "Correo Electrónico" Grid.Row="4" Grid.Column="0" YAlign="Center"/>
-                <Button Text ="agregar"  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Clicked="telefono_Clicked"/>
+
+                <!--
+                <Picker x:Name="pkTelefono"  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Title="Selecciona un teléfono"/>
                 <Label Text = "Teléfono" Grid.Row="5" Grid.Column="0" YAlign="Center"/>
-    
-                <Button Text="Guardar" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="Silver" TextColor="White" />
+                -->
+                <Button x:Name="btnAgregar" Text="Agregar" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="Agregar_Clicked" IsVisible="false"/>
+                <Button x:Name="btnModificar" Text="Modificar" Grid.Row ="9" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" Clicked="Modificar_Clicked" IsVisible="false"/>
             </Grid>  
         </StackLayout>
 	</ContentPage.Content>

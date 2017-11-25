@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
@@ -17,16 +18,17 @@ namespace PagoEnLinea.Paginas
         public DatosPersonales()
         {
             InitializeComponent();
+            enCurp.TextChanged += MayusChanged;
         }
 
         async void conectar()
         {
-            if (Application.Current.Properties.ContainsKey("user"))
+            if (Application.Current.Properties.ContainsKey("token"))
             {
 
 
                 ClienteRest cliente = new ClienteRest();
-                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["user"] as string);
+                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["token"] as string);
                 if (inf != null)
                 {
                     
@@ -73,6 +75,9 @@ namespace PagoEnLinea.Paginas
             btnGuardar.IsEnabled = true;
             btnModificar.IsEnabled = false;
 
+            btnGuardar.BackgroundColor = Color.FromHex("#5CB85C");
+            btnModificar.BackgroundColor = Color.Silver;
+
         }
 
         async void contraseña_Clicked(object sender, System.EventArgs e)
@@ -84,6 +89,50 @@ namespace PagoEnLinea.Paginas
 
          void modificar_Clicked(object sender, System.EventArgs e)
         {
+
+
+            Boolean a1 = false, a2 = false, a3 = false;
+
+            if (string.IsNullOrEmpty(enCurp.Text))
+            {
+                DisplayAlert("Campo incorrecto", "Introduzca un CURP válido", "ok");
+                a1 = false;
+            }
+            else
+            {
+
+                a1 = true;
+            }
+
+
+            if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
+            {
+                DisplayAlert("Campo incorrecto","Introduzca un nombre válido","ok");
+                a2 = false;
+            }
+            else
+            {
+                
+                a2 = true;
+            }
+            if (string.IsNullOrEmpty(enPaterno.Text) || !Regex.Match(enPaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
+            {
+                DisplayAlert("Campo incorrecto", "Introduzca un apellido válido", "ok");
+                a3 = false;
+
+            }
+            else
+            {
+                
+                a3 = true;
+            }
+
+
+
+
+            if(a1&&a2&&a3){
+
+
             ClienteRest client = new ClienteRest();
          
             persona.nombre = enNombre.Text;
@@ -104,22 +153,44 @@ namespace PagoEnLinea.Paginas
 
            
 
-            client.PUT("http://192.168.0.18:8080/api/personas", persona);
+                client.PUT(Constantes.URL+"/personas/actualizar", persona);
 
             MessagingCenter.Subscribe<ClienteRest>(this, "putpersona", (send) =>
             {
                 DisplayAlert("Guardado", "¡Datos Modificados con Exito!", "OK");
+                MessagingCenter.Unsubscribe<ClienteRest>(this,"putpersona");
+                    btnGuardar.IsEnabled = false;
+                btnModificar.IsEnabled = true;
+                btnModificar.BackgroundColor = Color.FromHex("#5CB85C");
+                btnGuardar.BackgroundColor = Color.Silver;
 
             });
 
             MessagingCenter.Subscribe<ClienteRest>(this, "errorPersona", (Sender) => {
+                    
                 DisplayAlert("Error", "¡No fue posible modifcar los datos!", "OK");
+                    MessagingCenter.Unsubscribe<ClienteRest>(this, "errorPersona");
+                    btnGuardar.IsEnabled = false;
+                btnModificar.IsEnabled = true;
+                btnModificar.BackgroundColor = Color.FromHex("#5CB85C");
+                btnGuardar.BackgroundColor = Color.Silver;
 
             });
 
-            btnGuardar.IsEnabled = false;
-            btnModificar.IsEnabled = true;
-          
+
+            }else{
+                btnGuardar.IsEnabled = true;
+                btnModificar.IsEnabled = false;
+                btnGuardar.BackgroundColor = Color.FromHex("#5CB85C");
+                btnModificar.BackgroundColor = Color.Silver;
+            }
+           
+        }
+        private void MayusChanged(object sender, TextChangedEventArgs e)
+        {
+
+            (sender as Entry).Text = e.NewTextValue.ToUpper();
+
         }
     }
 }

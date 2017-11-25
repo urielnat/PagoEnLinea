@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:controls="clr-namespace:SuaveControls.Views;assembly=SuaveControls.FloatingActionButton" x:Class="PagoEnLinea.Paginas.Direccion" Icon="mapw.png" >
 	<ContentPage.Content>
-        <StackLayout Padding="20,20,20,10">
+        <StackLayout Padding="20,20,20,5">
 
           <ScrollView>
-           <ListView x:Name="listView" RowHeight="150" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
+           <ListView x:Name="listView" RowHeight="180" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
@@ -26,16 +26,18 @@
                    <ColumnDefinition Width="*" /> 
 
                 </Grid.ColumnDefinitions>
-                   <Label Text="Calle:" Grid.Row ="0" Grid.Column="0"/>
-                   <Label x:Name="lblCalle" Text="{Binding calle}" Grid.Row ="0" Grid.Column="1"/>                     
-                     <Label Text="Número:" Grid.Row ="1" Grid.Column="0"/>
-                      <Label x:Name="lblNumero" Text="{Binding numero}" Grid.Row ="1" Grid.Column="1"/>                  
-                     <Label Text="Número Interior" Grid.Row ="2" Grid.Column="0"/>
-                     <Label x:Name="lblNumeroInterior" Text="{Binding numeroInterior}" Grid.Row ="2" Grid.Column="1"/>                   
-                     <Label Text="Codigo postal:" Grid.Row ="3" Grid.Column="0"/>
-                      <Label x:Name="lblCP" Text="{Binding cp}" Grid.Row ="3" Grid.Column="1"/>                  
-                     <Label Text="Colonia:"  Grid.Row ="4" Grid.Column="0"/>
-                     <Label x:Name="lblAsentamiento" Text="{Binding asentamiento}" Grid.Row ="4" Grid.Column="1"/>                   
+                    
+                   <Label x:Name="lblNumDir" Text="{Binding NumerodeDireccion}" FontAttributes="Bold" Grid.Row ="0" Grid.Column="0"/>                     
+                   <Label Text="Calle:" Grid.Row ="1" Grid.Column="0"/>
+                   <Label x:Name="lblCalle" Text="{Binding calle}" Grid.Row ="1" Grid.Column="1"/>                     
+                     <Label Text="Número:" Grid.Row ="2" Grid.Column="0"/>
+                      <Label x:Name="lblNumero" Text="{Binding numero}" Grid.Row ="2" Grid.Column="1"/>                  
+                     <Label Text="Número Interior" Grid.Row ="3" Grid.Column="0"/>
+                     <Label x:Name="lblNumeroInterior" Text="{Binding numeroInterior}" Grid.Row ="3" Grid.Column="1"/>                   
+                     <Label Text="Codigo postal:" Grid.Row ="4" Grid.Column="0"/>
+                      <Label x:Name="lblCP" Text="{Binding cp}" Grid.Row ="4" Grid.Column="1"/>                  
+                     <Label Text="Asentamiento:"  Grid.Row ="5" Grid.Column="0"/>
+                     <Label x:Name="lblAsentamiento" Text="{Binding asentamiento}" Grid.Row ="5" Grid.Column="1"/>                   
                 </Grid>
             </Frame>
                 </ViewCell>
@@ -45,7 +47,7 @@
     </ScrollView>   
 
 
-             <controls:FloatingActionButton x:Name="FAB" HorizontalOptions="End" WidthRequest="50" HeightRequest="50" Image="ic_add_white.png" VerticalOptions="End"  ButtonColor="#5CB85C" />
+             <controls:FloatingActionButton x:Name="FAB" HorizontalOptions="EndAndExpand" WidthRequest="50" HeightRequest="50" Image="ic_add_white.png" VerticalOptions="EndAndExpand"  ButtonColor="#5CB85C" Clicked="Handle_Clicked" />
 
         </StackLayout>
 	</ContentPage.Content>

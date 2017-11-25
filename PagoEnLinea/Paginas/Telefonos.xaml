@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Telefonos" Icon="telephonew.png">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.Paginas.Telefonos" xmlns:controls="clr-namespace:SuaveControls.Views;assembly=SuaveControls.FloatingActionButton" Icon="telephonew.png">
 	<ContentPage.Content>
-         <StackLayout Padding="20,20,20,10">
+         <StackLayout Padding="20,20,20,5">
             <ScrollView>
            <ListView x:Name="listView" RowHeight="70" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
         <ListView.ItemTemplate>
@@ -31,7 +31,7 @@
         </ListView.ItemTemplate>
     </ListView>
     </ScrollView>            
-         
+         <controls:FloatingActionButton x:Name="FAB" HorizontalOptions="EndAndExpand" WidthRequest="50" HeightRequest="50" Image="ic_add_white.png" VerticalOptions="EndAndExpand"  ButtonColor="#5CB85C" Clicked="Handle_Clicked" />    
 
         </StackLayout>
 	</ContentPage.Content>

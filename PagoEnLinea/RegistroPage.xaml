@@ -77,7 +77,7 @@
              <xfx:XfxEntry x:Name="enCorreo" Grid.Row="8"
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
-                          Placeholder="*Correo electrónico"
+                          Placeholder="*Correo electrónico(Para iniciar sesión)"
                           Keyboard="Email"
                           />
                <Image Source="calendar.png" Grid.Row="6" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>

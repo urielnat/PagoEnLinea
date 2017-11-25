@@ -83,6 +83,58 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="PaginasPago\PredialPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasPago\LiquidacionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasPago\CarritoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasPago\DetallesLiquidacionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TutorialPopUp.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RecuperarPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RecuperarContraseñaPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasMisPagos\TabPagos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasMisPagos\PrediosPagadosPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasMisPagos\TabPredios.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasMisPagos\Datos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasMisPagos\Predios.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PaginasMisPagos\LiquidacionesPagadasPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -152,6 +204,45 @@
     <Compile Include="MenuMaster.xaml.cs">
       <DependentUpon>MenuMaster.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PaginasPago\PredialPage.xaml.cs">
+      <DependentUpon>PredialPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasPago\LiquidacionPage.xaml.cs">
+      <DependentUpon>LiquidacionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasPago\CarritoPage.xaml.cs">
+      <DependentUpon>CarritoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasPago\DetallesLiquidacionPage.xaml.cs">
+      <DependentUpon>DetallesLiquidacionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TutorialPopUp.xaml.cs">
+      <DependentUpon>TutorialPopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RecuperarPage.xaml.cs">
+      <DependentUpon>RecuperarPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RecuperarContraseñaPage.xaml.cs">
+      <DependentUpon>RecuperarContraseñaPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasMisPagos\TabPagos.xaml.cs">
+      <DependentUpon>TabPagos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasMisPagos\PrediosPagadosPage.xaml.cs">
+      <DependentUpon>PrediosPagadosPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasMisPagos\TabPredios.xaml.cs">
+      <DependentUpon>TabPredios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasMisPagos\Datos.xaml.cs">
+      <DependentUpon>Datos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasMisPagos\Predios.xaml.cs">
+      <DependentUpon>Predios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasMisPagos\LiquidacionesPagadasPage.xaml.cs">
+      <DependentUpon>LiquidacionesPagadasPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xfx.Controls">
@@ -202,6 +293,8 @@
     <Folder Include="servicios\" />
     <Folder Include="Paginas\" />
     <Folder Include="camara\" />
+    <Folder Include="PaginasPago\" />
+    <Folder Include="PaginasMisPagos\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.4.0.18342\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.18342\build\portable-win+net45+wp80+win81+wpa81\Xamarin.Forms.targets')" />

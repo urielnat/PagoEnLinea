@@ -37,7 +37,7 @@
                               />
 
               <Label Text="*Num." x:Name="lblnum" Grid.Row="2" Grid.Column="0" XAlign="Center" YAlign="Center" Font="bold"/>
-                <Entry x:Name="enNumero" Placeholder="No." Grid.Row="2" Grid.Column="1" Keyboard="Numeric"/>
+                <Entry x:Name="enNumero" Placeholder="No." Grid.Row="2" Grid.Column="1"/>
 
                  <Label x:Name="lblNumInt" Text="Número interior" XAlign="Center" Grid.Row="2" Grid.Column="2" YAlign="Center" Font="bold"/>
                 <Entry x:Name="enNumInt" Placeholder="No." Grid.Row="2" Grid.Column="3" Keyboard="Numeric" />     
@@ -122,12 +122,21 @@
                               />
 
               <Image Source="city.png" Grid.Row="9" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-            <xfx:XfxEntry x:Name="enPais" Grid.Row="9"
+              <!--
+                    <xfx:XfxEntry x:Name="enPais" Grid.Row="9"
                           Grid.Column="1"
                           Grid.ColumnSpan="3"
                           VerticalOptions="End"
                           Placeholder="*Ingresa tu País"
                               />      
+                  -->
+             <Picker x:Name="pkpais" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" Title="*Selecciona tu país" HorizontalOptions="FillAndExpand" IsEnabled="false">
+                             <Picker.Items>
+                                 <x:String>MEXICO</x:String> 
+                                
+
+                              </Picker.Items>
+                              </Picker>   
                     
             <Image Source="telephone.png" Grid.Row="10" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
             <xfx:XfxEntry x:Name="enTelefono" Grid.Row="10"

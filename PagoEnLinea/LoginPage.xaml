@@ -22,7 +22,7 @@
 
                  <xfx:XfxEntry x:Name="enUsuario" Grid.Row="1"
                           Grid.Column="0"
-                          Placeholder="Usuario"
+                          Placeholder="Correo electrónico"
                            Keyboard="Email"
                           />
                 

@@ -18,15 +18,21 @@
                    <ColumnDefinition Width="*" /> 
                     <ColumnDefinition Width="*" /> 
                 </Grid.ColumnDefinitions>
-                <Entry  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Picker x:Name="pkTipo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Title="Selecciona un tipo">
+                     <Picker.Items>
+                                 <x:String>MOVIL</x:String> 
+                                 <x:String>FIJO</x:String>
+                              </Picker.Items>
+                              </Picker>  
                 <Label Text = "Tipo" Grid.Row="1" Grid.Column="0" YAlign="Center"/>
-                <Entry  Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Entry x:Name="enLada" Text= "{Binding lada}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Keyboard="Telephone"/>
                 <Label Text = "LADA" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
-                <Entry  Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Telefono" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
+                <Entry  x:Name="enTelefono" Grid.Row="3" Text= "{Binding telefono}" Grid.Column="1" Grid.ColumnSpan="2" Keyboard="Telephone"/>
+                <Label  Text = "Telefono" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
                
                
-                <Button Text="Guardar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White"/>
+               <Button x:Name="btnModificar" Text="Modificar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" IsVisible="false" Clicked="Handle_Clicked"/>
+                <Button x:Name="btnAgregar" Text="Agregar" Grid.Row ="8" Grid.Column="0" Grid.ColumnSpan="3" BackgroundColor="#5CB85C" TextColor="White" IsVisible="false" Clicked="Agregar_Clicked"/>
               
             </Grid>  
         </StackLayout>

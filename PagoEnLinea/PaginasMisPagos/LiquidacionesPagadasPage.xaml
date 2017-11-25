@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasMisPagos.LiquidacionesPagadasPage" Title="Liquidaciones">
+	<ContentPage.Content>
+         <StackLayout Padding="20,20,20,20">
+             <SearchBar x:Name="buscar" Text="Buscar por clave castral, propietario o domicilio" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
+                <ScrollView>
+           <ListView x:Name="listView" RowHeight="110" >
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell >
+                    <Frame HasShadow="true" Margin="5">
+                      
+                            
+               
+                  <Grid ColumnSpacing="0" RowSpacing="0">
+                  <Grid.RowDefinitions>
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" /> 
+                  <RowDefinition Height="auto" />
+                  <RowDefinition Height="auto" />                           
+                
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+
+                  <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="*" /> 
+                    
+
+                </Grid.ColumnDefinitions>
+                   
+                   <Label Text="No. Liquidación" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
+                      <Label x:Name="lblNoLiquidacion"  Grid.Row ="0" Grid.Column="1"/>               
+                     <Label Text="Concepto" Grid.Row ="1" Grid.Column="0"/>
+                     <Label x:Name="lblConcepto"  Grid.Row ="1" Grid.Column="1"/>  
+                     <Label Text="Total:" Grid.Row ="2" Grid.Column="0"/>
+                     <Label x:Name="lblTotal"  Grid.Row ="2" Grid.Column="1"/>                     
+                     <Label Text="Fecha de pago: " Grid.Row ="3" Grid.Column="0"/>
+                     <Label x:Name="lblFechaPago"  Grid.Row ="3" Grid.Column="1"/> 
+                                      
+                </Grid>                 
+                    
+                
+                    </Frame>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+    </ScrollView>            
+         
+          
+        </StackLayout>
+	</ContentPage.Content>
+</ContentPage>

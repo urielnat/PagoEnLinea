@@ -18,17 +18,17 @@ namespace PagoEnLinea.Paginas
 
         async void Handle_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
         {
-            await Navigation.PushAsync(new ModificarTelefono());
+            await Navigation.PushAsync(new ModificarTelefono((e.SelectedItem as Telefono).id,(e.SelectedItem as Telefono).tipo,0){ BindingContext = (Telefono)e.SelectedItem });
         }
 
         async void conectar()
         {
-            if (Application.Current.Properties.ContainsKey("user"))
+            if (Application.Current.Properties.ContainsKey("token"))
             {
 
 
                 ClienteRest cliente = new ClienteRest();
-                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["user"] as string);
+                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["token"] as string);
                 list = new List<Telefono>();
                 if (inf != null)
                 {
@@ -38,7 +38,7 @@ namespace PagoEnLinea.Paginas
                         list.Add(new Telefono
                         {
 
-
+                            id =dato.id,
                             telefono = dato.telefono,
                             lada = dato.lada,
                             tipo =dato.tipo
@@ -59,6 +59,11 @@ namespace PagoEnLinea.Paginas
         protected override void OnAppearing()
         {
             conectar();
+        }
+
+        void Handle_Clicked(object sender, System.EventArgs e)
+        {
+            Navigation.PushAsync(new ModificarTelefono(null,null,1));
         }
     }
 }

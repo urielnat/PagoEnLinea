@@ -16,14 +16,14 @@ namespace PagoEnLinea
          void Init()
         {
             List<MenuItem> menu = new List<MenuItem> {
-                new MenuItem{ Page = new HomePage(""),MenuTitle="Inicio",MenuDetail="Pagina de inicio"},
+                new MenuItem{ Page = new HomePage(),MenuTitle="Inicio",MenuDetail="Pagina de inicio"},
                 new MenuItem{ Page = new TabPage(),MenuTitle="Editar Perfil",MenuDetail="Edite propiedades"}
 
             };
 
             ListMenu.ItemsSource = menu;
             ListMenu.Margin = new Thickness(0, 20, 0, 0);
-            Detail = new HomePage("");
+            Detail = new HomePage();
         }
 
 
