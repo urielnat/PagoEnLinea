@@ -74,10 +74,11 @@ namespace PagoEnLinea.Paginas
 
             btnGuardar.IsEnabled = true;
             btnModificar.IsEnabled = false;
+            btnContraseña.IsEnabled = false;
 
             btnGuardar.BackgroundColor = Color.FromHex("#5CB85C");
             btnModificar.BackgroundColor = Color.Silver;
-
+            btnContraseña.BackgroundColor = Color.Silver;
         }
 
         async void contraseña_Clicked(object sender, System.EventArgs e)
@@ -93,9 +94,9 @@ namespace PagoEnLinea.Paginas
 
             Boolean a1 = false, a2 = false, a3 = false;
 
-            if (string.IsNullOrEmpty(enCurp.Text))
+            if (string.IsNullOrEmpty(enCurp.Text)|| !Regex.Match(enCurp.Text, "[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]").Success)
             {
-                DisplayAlert("Campo incorrecto", "Introduzca un CURP válido", "ok");
+                DisplayAlert("Campo incorrecto", "Introduzca un CURP valido", "ok");
                 a1 = false;
             }
             else
@@ -107,7 +108,7 @@ namespace PagoEnLinea.Paginas
 
             if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
             {
-                DisplayAlert("Campo incorrecto","Introduzca un nombre válido","ok");
+                DisplayAlert("Campo incorrecto","Introduzca un nombre valido","ok");
                 a2 = false;
             }
             else
@@ -117,7 +118,7 @@ namespace PagoEnLinea.Paginas
             }
             if (string.IsNullOrEmpty(enPaterno.Text) || !Regex.Match(enPaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
             {
-                DisplayAlert("Campo incorrecto", "Introduzca un apellido válido", "ok");
+                DisplayAlert("Campo incorrecto", "Introduzca un apellido valido", "ok");
                 a3 = false;
 
             }
@@ -155,25 +156,30 @@ namespace PagoEnLinea.Paginas
 
                 client.PUT(Constantes.URL+"/personas/actualizar", persona);
 
-            MessagingCenter.Subscribe<ClienteRest>(this, "putpersona", (send) =>
+            MessagingCenter.Subscribe<ClienteRest>(this, "OK", (send) =>
             {
                 DisplayAlert("Guardado", "¡Datos Modificados con Exito!", "OK");
-                MessagingCenter.Unsubscribe<ClienteRest>(this,"putpersona");
+                MessagingCenter.Unsubscribe<ClienteRest>(this,"OK");
                     btnGuardar.IsEnabled = false;
                 btnModificar.IsEnabled = true;
-                btnModificar.BackgroundColor = Color.FromHex("#5CB85C");
+                    btnModificar.BackgroundColor = Color.FromHex("#5CB85C");
+                    btnContraseña.IsEnabled = true;
+                    btnContraseña.BackgroundColor = Color.FromHex("#3f85bd");                                         
+
                 btnGuardar.BackgroundColor = Color.Silver;
 
             });
 
-            MessagingCenter.Subscribe<ClienteRest>(this, "errorPersona", (Sender) => {
+            MessagingCenter.Subscribe<ClienteRest>(this, "error", (Sender) => {
                     
                 DisplayAlert("Error", "¡No fue posible modifcar los datos!", "OK");
-                    MessagingCenter.Unsubscribe<ClienteRest>(this, "errorPersona");
+                    MessagingCenter.Unsubscribe<ClienteRest>(this, "error");
                     btnGuardar.IsEnabled = false;
                 btnModificar.IsEnabled = true;
                 btnModificar.BackgroundColor = Color.FromHex("#5CB85C");
                 btnGuardar.BackgroundColor = Color.Silver;
+                    btnContraseña.IsEnabled = true;
+                    btnContraseña.BackgroundColor = Color.FromHex("#3f85bd");    
 
             });
 
@@ -183,6 +189,8 @@ namespace PagoEnLinea.Paginas
                 btnModificar.IsEnabled = false;
                 btnGuardar.BackgroundColor = Color.FromHex("#5CB85C");
                 btnModificar.BackgroundColor = Color.Silver;
+                btnContraseña.IsEnabled = true;
+                    btnContraseña.BackgroundColor = Color.FromHex("#3f85bd");    
             }
            
         }
@@ -194,3 +202,4 @@ namespace PagoEnLinea.Paginas
         }
     }
 }
+ 

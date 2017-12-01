@@ -24,9 +24,15 @@ namespace PagoEnLinea
             };
             //algo asj
 
-            MessagingCenter.Subscribe<PopupCarga>(this, "noAuth", (Sender) => { enUsuario.ErrorText = "Correo electronico"; enContraseña.ErrorText = "contraseña"; });
+            MessagingCenter.Subscribe<PopupCarga,string>(this, "noAuth", (Sender,value) => { enUsuario.ErrorText = "Correo electronico"; enContraseña.ErrorText = "contraseña";
+            
+              DisplayAlert("Error",value,"ok");
+                MessagingCenter.Unsubscribe<PopupCarga>(this,"noAuth");
+            });
 
-            MessagingCenter.Subscribe<PopupCarga>(this, "errorServidor", (Sender) => { DisplayAlert("Error","No fué posible conectarse al servidor intente mas tarde","OK"); });
+            MessagingCenter.Subscribe<PopupCarga>(this, "errorServidor", (Sender) => { DisplayAlert("Error","No fué posible conectarse al servidor intente mas tarde","OK");
+                MessagingCenter.Unsubscribe<PopupCarga>(this, "errorServidor");
+            });
 
             MessagingCenter.Subscribe<PopupCarga>(this, "Auth", (Sender) => {
                 Application.Current.Properties["user"] = enUsuario.Text;
@@ -34,7 +40,7 @@ namespace PagoEnLinea
                 System.Diagnostics.Debug.WriteLine(Application.Current.Properties["user"] as string);
 
                 Application.Current.SavePropertiesAsync();
-
+                MessagingCenter.Unsubscribe<PopupCarga>(this, "Auth");
                 fpm = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage()) };
             
                 Navigation.PushModalAsync(fpm);

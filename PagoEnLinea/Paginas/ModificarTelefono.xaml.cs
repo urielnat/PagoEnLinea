@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
 using Xamarin.Forms;
@@ -20,6 +21,10 @@ namespace PagoEnLinea.Paginas
                     pkTipo.SelectedIndex = i;
                 }
             }
+
+            enTelefono.TextChanged += OnTelefonoChanged;
+            enLada.TextChanged += OnLadaChanged;
+
 
             if (tipo == 0)
             {
@@ -59,7 +64,7 @@ namespace PagoEnLinea.Paginas
                     };
                          
                     ClienteRest client = new ClienteRest();
-                    if (!String.IsNullOrEmpty(enTelefono.Text) && !(enTelefono.Text.Length < 7))
+                    if (!String.IsNullOrEmpty(enTelefono.Text) && !(enTelefono.Text.Length < 7)&& !(enTelefono.Text.Length > 10))
                     {
 
                         auth = true;
@@ -72,7 +77,7 @@ namespace PagoEnLinea.Paginas
                     }
                   
 
-                    if (!String.IsNullOrEmpty(enLada.Text) && !(enTelefono.Text.Length < 3))
+                    if (!String.IsNullOrEmpty(enLada.Text) && !(enLada.Text.Length < 2))
                     {
 
                         auth2 = true;
@@ -87,15 +92,15 @@ namespace PagoEnLinea.Paginas
                     if(auth&&auth2){
 
                         client.PUT(Constantes.URL+"/telefonos/modificar", modtel);
-                        MessagingCenter.Subscribe<ClienteRest>(this, "puttelefono", (Sender) => {
+                        MessagingCenter.Subscribe<ClienteRest>(this, "OK", (Sender) => {
                             DisplayAlert("Guardado", "¡Teléfono Modificado con Exito!", "OK");
-                            MessagingCenter.Unsubscribe<ClienteRest>(this,"puttelefono");
+                            MessagingCenter.Unsubscribe<ClienteRest>(this,"OK");
                             Navigation.PopAsync();
                         });
 
-                        MessagingCenter.Subscribe<ClienteRest>(this, "errorTelefono", (Sender) => {
+                        MessagingCenter.Subscribe<ClienteRest>(this, "error", (Sender) => {
                             DisplayAlert("Error", "¡No fué posible Modificar el Teléfono!", "OK");
-                            MessagingCenter.Unsubscribe<ClienteRest>(this, "errorTelefono");
+                            MessagingCenter.Unsubscribe<ClienteRest>(this, "error");
 
                         });
                     }
@@ -133,7 +138,7 @@ namespace PagoEnLinea.Paginas
                 };
 
                 ClienteRest client = new ClienteRest();
-                if (!String.IsNullOrEmpty(enTelefono.Text) && !(enTelefono.Text.Length < 7))
+                if (!String.IsNullOrEmpty(enTelefono.Text) && !(enTelefono.Text.Length < 7)&&!(enTelefono.Text.Length >10))
                 {
 
                     auth = true;
@@ -146,7 +151,7 @@ namespace PagoEnLinea.Paginas
                 }
 
 
-                if (!String.IsNullOrEmpty(enLada.Text) && !(enTelefono.Text.Length < 3))
+                if (!String.IsNullOrEmpty(enLada.Text) && !(enTelefono.Text.Length < 2))
                 {
 
                     auth2 = true;
@@ -190,6 +195,35 @@ namespace PagoEnLinea.Paginas
 
             }
 
+        }
+
+        public void OnLadaChanged(object sender, TextChangedEventArgs args)
+        {
+            if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
+                (sender as Entry).Text = Regex.Replace(args.NewTextValue, "[^0-9]", string.Empty);
+            Entry entry = sender as Entry;
+
+            String val = entry.Text;
+
+            if (val.Length > 3)
+            {
+                val = val.Remove(val.Length - 1);
+                entry.Text = val;
+            }
+        }
+
+        public void OnTelefonoChanged(object sender, TextChangedEventArgs args)
+        {
+            if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
+                (sender as Entry).Text = Regex.Replace(args.NewTextValue, "[^0-9]", string.Empty);
+            Entry entry = sender as Entry;
+            String val = entry.Text;
+
+            if (val.Length > 10)
+            {
+                val = val.Remove(val.Length - 1);
+                entry.Text = val;
+            }
         }
         }
          

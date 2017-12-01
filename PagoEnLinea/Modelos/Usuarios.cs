@@ -113,7 +113,8 @@ namespace PagoEnLinea.Modelos
 
     public class contraseña
     {
-        public string contrasena { get; set; }
+        public string contrasenaActual { get; set; }
+        public string contrasenaNueva { get; set; }
         public Persona persona { get; set; }
        
     }
@@ -162,6 +163,7 @@ namespace PagoEnLinea.Modelos
         public string rfc { get; set; }
         public string idDireccion { get; set; }
         public string idCatDir { get; set; }
+        public string calle { get; set; }
 
     }
 

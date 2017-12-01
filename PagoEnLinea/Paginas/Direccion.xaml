@@ -4,7 +4,7 @@
         <StackLayout Padding="20,20,20,5">
 
           <ScrollView>
-           <ListView x:Name="listView" RowHeight="180" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
+           <ListView x:Name="listView" RowHeight="180"  SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >

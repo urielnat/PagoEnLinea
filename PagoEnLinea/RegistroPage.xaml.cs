@@ -94,10 +94,11 @@ namespace PagoEnLinea
                 enCorreo.ErrorText = "";
                 a4 = true;
             }
-            if (string.IsNullOrEmpty(enCURP.Text))
+            if (string.IsNullOrEmpty(enCURP.Text)||!Regex.Match(enCURP.Text, "[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]").Success)
             {
-                enCURP.ErrorText = "Introduzca su CURP";
+                enCURP.ErrorText = "Introduzca un valido CURP";
                 a5 = false;
+
             }
             else
             {
@@ -377,7 +378,8 @@ namespace PagoEnLinea
          
                     dire.calle = callex[0] + "\t" + callex[1];
                         dire.numero = callex[callex.Length - 2];
-                        for (int i = 0; i < domiciliox.Length - 2; i++)
+                    //cambie el inicio del vector para que omita el tipo de asentamineto
+                        for (int i = 1; i < domiciliox.Length - 2; i++)
                         {
                         catDir.asentamiento = catDir.asentamiento + domiciliox[i] + "\t";
                         }

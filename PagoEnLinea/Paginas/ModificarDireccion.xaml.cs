@@ -11,13 +11,15 @@ namespace PagoEnLinea.Paginas
     public partial class ModificarDireccion : ContentPage
     {
         
-        string ID,catID;
-        public static int tipo;
+        string ID,catID,tipoAsenta;
+        public static int tipos;
         public static List<string> tipoas;
-        public ModificarDireccion(string id, string idcat, int tipo)
+        public ModificarDireccion(string id, string idcat, int tipo,string estado, string tipoAsentamiento)
         {
             ID = id;
             catID = idcat;
+            tipos = tipo;
+            tipoAsenta = tipoAsentamiento;
             InitializeComponent();
 
             enCP.TextChanged += OnTextChanged;
@@ -25,8 +27,19 @@ namespace PagoEnLinea.Paginas
             llenarPicker();
 
             if(tipo==0){
+                llenarPicker();
                 btnModificar.IsVisible = true;
                 btnAgregar.IsVisible = false;
+
+                for (var i = 0; i < pkEstado.Items.Count; i++)
+                {
+                    if (pkEstado.Items[i].Equals(estado))
+                    {
+                        pkEstado.SelectedIndex = i;
+                    }
+                }
+               
+               
             }
             if(tipo==1){
                 btnAgregar.IsVisible = true;
@@ -317,16 +330,16 @@ namespace PagoEnLinea.Paginas
 
                 client.PUT(Constantes.URL+"/direccion/actualizar", dir);
 
-                MessagingCenter.Subscribe<ClienteRest>(this, "putDireccion", (Sender) => {
-                    MessagingCenter.Unsubscribe<ClienteRest>(this, "putDireccion");
+                MessagingCenter.Subscribe<ClienteRest>(this, "OK", (Sender) => {
+                    MessagingCenter.Unsubscribe<ClienteRest>(this, "OK");
                     DisplayAlert("Guardado", "¡Direccion Modificada con Exito!", "OK");
                     Navigation.PopAsync();
 
                 });
 
 
-                MessagingCenter.Subscribe<ClienteRest>(this, "errorDireccion", (Sender) => {
-                    MessagingCenter.Unsubscribe<ClienteRest>(this, "errorDireccion");
+                MessagingCenter.Subscribe<ClienteRest>(this, "error", (Sender) => {
+                    MessagingCenter.Unsubscribe<ClienteRest>(this, "error");
                     DisplayAlert("Advertencia", "¡No fue posible modificar la dirección actual!", "OK");
                     Navigation.PopAsync();
 
@@ -362,15 +375,18 @@ namespace PagoEnLinea.Paginas
 
                         }
 
-
-
-                        foreach (var nom in tipoas)
-                        {
-
-
-
-
+                        if(tipos==0){
+                            for (var i = 0; i < pkTipoAsentamiento.Items.Count; i++)
+                            {
+                                if (pkTipoAsentamiento.Items[i].Equals(tipoAsenta))
+                                {
+                                    pkTipoAsentamiento.SelectedIndex = i;
+                                }
+                            }
                         }
+                       
+
+
                     }
 
 

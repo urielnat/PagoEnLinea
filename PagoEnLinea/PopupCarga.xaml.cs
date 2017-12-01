@@ -55,8 +55,13 @@ namespace PagoEnLinea
                         await PopupNavigation.PopAsync();
 
                     }else{
-                        MessagingCenter.Send(this, "noAuth"); 
+                        
+                        var resp = JsonConvert.DeserializeObject<Respuesta>(y);
+                        MessagingCenter.Send(this, "noAuth",resp.respuesta); 
                         await PopupNavigation.PopAsync();
+
+                        System.Diagnostics.Debug.WriteLine(response);
+
                     }
                        
                         

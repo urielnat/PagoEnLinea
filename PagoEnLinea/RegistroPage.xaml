@@ -119,8 +119,9 @@
         
        </ScrollView>  
        
-     
-       <Grid RowSpacing="0" ColumnSpacing="0" VerticalOptions="End">
+   
+   <StackLayout Padding="10,10,0,0" VerticalOptions="EndAndExpand"  >   
+       <Grid VerticalOptions="EndAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -134,7 +135,7 @@
              <Button Text="capturar" Grid.Row="0" Grid.Column="1"  BackgroundColor="Red" TextColor="White" Clicked="OCR_Clicked" />         
              <ActivityIndicator x:Name="indicador"  Grid.Row="0" Grid.Column="0" Color="Teal" IsRunning="false" ></ActivityIndicator>   
             </Grid>
-
-      </StackLayout>
+                  </StackLayout>
+             </StackLayout>
     </ContentPage.Content>
 </ContentPage>

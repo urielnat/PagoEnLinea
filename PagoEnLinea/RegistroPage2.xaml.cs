@@ -42,7 +42,7 @@ namespace PagoEnLinea
             enLADA.TextChanged += OnLadaChanged;
             enLADA2.TextChanged += OnLadaChanged;
             var jsonstring = JsonConvert.SerializeObject(u);
-            System.Diagnostics.Debug.WriteLine(jsonstring);
+            //System.Diagnostics.Debug.WriteLine(jsonstring);
             jsonstring = jsonstring.Substring(1, jsonstring.Length - 2);
 
             pkpais.SelectedIndex = 0; 
@@ -61,7 +61,7 @@ namespace PagoEnLinea
         async void registrar_Clicked(object sender, System.EventArgs e)
         {
             bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = false, a9 = false, a10 = false, a11 = false, a12 = false;
-            bool comodin = true, comodin2=true;
+            bool comodin = true, comodin2=true,com=true,com2=true;
 
             if(!string.IsNullOrEmpty(enCiudad.Text)){
                 if(!Regex.Match(enCiudad.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success){
@@ -90,9 +90,54 @@ namespace PagoEnLinea
                 comodin2 = true;
             }
 
-            if (ValidarVacio(enColonia.Text)&& !Regex.Match(enDomicilio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
+
+
+
+
+            if (!string.IsNullOrEmpty(enLADA2.Text))
             {
-                enDomicilio.ErrorText = "Introduzca un asentamiento válido";
+                if (enLADA2.Text.Length!=3)
+                {
+                    com = false;
+                    enLADA2.ErrorText = "LADA incorrecta";
+                }
+                else
+                {
+                    com = true;
+                    enLADA2.ErrorText = "";
+                }
+            }
+            else
+            {
+                com = true;
+                enLADA2.ErrorText = "";
+            }
+
+
+            if (!string.IsNullOrEmpty(enCelular.Text))
+            {
+                if (enCelular.Text.Length < 7 || enCelular.Text.Length>10)
+                {
+                    com2 = false;
+                    enCelular.ErrorText= "Celular incorrecto";
+
+                }
+                else
+                {
+                    com2 = true;
+                    enCelular.ErrorText = "";
+                }
+            }
+            else
+            {
+                com2 = true;
+                enCelular.ErrorText = "";
+            }
+
+
+            if (string.IsNullOrEmpty(enColonia.Text)|| !Regex.Match(enColonia.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
+            {
+                enColonia.ErrorText = "Introduzca un asentamiento válido";
                 a1 = false;
 
             }
@@ -102,7 +147,7 @@ namespace PagoEnLinea
                 a1 = true;
             }
 
-            if (ValidarVacio(enDomicilio.Text)&&!Regex.Match(enDomicilio.Text,@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
+            if (ValidarVacio(enDomicilio.Text)||!Regex.Match(enDomicilio.Text,@"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
             {
                 enDomicilio.ErrorText = "Introduzca una calle válida";
                 a2 = false;
@@ -113,7 +158,7 @@ namespace PagoEnLinea
                 enDomicilio.ErrorText = "";
                 a2 = true;
             }
-            if (ValidarVacio(enNumero.Text)&&!Regex.Match(enNumero.Text,"^[a-zA-Z0-9]*$").Success)
+            if (ValidarVacio(enNumero.Text)||!Regex.Match(enNumero.Text,"^[a-zA-Z0-9]*$").Success)
             {
                 lblnum.TextColor = Xamarin.Forms.Color.Red;
                 a3 = false;
@@ -170,9 +215,9 @@ namespace PagoEnLinea
                 enCiudad.ErrorText = "";
                 a7 = true;
             }*/
-            if (ValidarVacio(enTelefono.Text))
-            {  await DisplayAlert("Sin número telefónico","Deslice la pantalla para ver todas las opciones","ok");
-                enTelefono.ErrorText = "Introduzca su teléfono";
+            if (ValidarVacio(enTelefono.Text)|| enTelefono.Text.Length <7|| enTelefono.Text.Length > 10)
+            {  await DisplayAlert("Sin número telefónico valido","Deslice la pantalla para ver todas las opciones","ok");
+                enTelefono.ErrorText = "Introduzca un teléfono valido";
                 a8 = false;
 
             }
@@ -182,7 +227,7 @@ namespace PagoEnLinea
                 a8 = true;
             }
 
-            if (ValidarVacio(enMunicipio.Text)&& !Regex.Match(enMunicipio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
+            if (ValidarVacio(enMunicipio.Text)|| !Regex.Match(enMunicipio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
             {
                 enMunicipio.ErrorText = "Introduzca un municipio válido";
                 a9 = false;
@@ -194,7 +239,7 @@ namespace PagoEnLinea
                 a9 = true;
             }
 
-            if (ValidarVacio(enLADA.Text)&&enLADA.Text.Length<3)
+            if (ValidarVacio(enLADA.Text)||enLADA.Text.Length<3)
             {
                 enLADA.ErrorText = "LADA";
                 a10 = false;
@@ -206,33 +251,12 @@ namespace PagoEnLinea
                 a10 = true;
             }
 
-            if (ValidarVacio(enLADA2.Text))
-            {
-                
-                a12 = false;
-
-            }
-            else
-            {
-               
-                a12 = true;
-            }
-
-            if (ValidarVacio(enCelular.Text))
-            {
-                
-                a11 = false;
-
-            }
-            else
-            {
-                
-                a11 = true;
-            }
-            if ( a1 && a2 && a3 && a4 && a5 && a6 && a8 && a9 && a10 &&comodin&&comodin2)
+          
+            if ( a1 && a2 && a3 && a4 && a5 && a6 && a8 && a9 && a10 &&comodin&&comodin2&&com&&com2)
             {
                 user.direccion = new Direccion { calle = enDomicilio.Text,
                         numero = enNumero.Text,
+                    numeroInterior = enNumInt.Text,
                         tipo = "DOMICILIO",
                         catalogoDir = new CatalogoDir{
                             asentamiento = enColonia.Text,
@@ -255,7 +279,7 @@ namespace PagoEnLinea
                     lada = enLADA.Text,
                     tipo = "FIJO"});
 
-                if(a11){
+                if(com&&com2){
                     user.telefono.Add(new Telefono
                     {
                         telefono = enCelular.Text,
@@ -267,7 +291,7 @@ namespace PagoEnLinea
 
 
 
-                System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(user));
+                //System.Diagnostics.Debug.WriteLine(JsonConvert.SerializeObject(user));
 
                 ClienteRest cliente = new ClienteRest();
 
@@ -290,6 +314,7 @@ namespace PagoEnLinea
                  **/
                 MessagingCenter.Subscribe<ClienteRest>(this, "OK", async (Sender) => {
                     await DisplayAlert("Guardado", "Usuario registrado con exito", "Ok");
+                    await DisplayAlert("Información", "Verifique su correo electrónico para iniciar sesión", "Ok");
                     await Navigation.PopToRootAsync(); });
                 MessagingCenter.Subscribe<ClienteRest>(this, "error", async (Sender) => {
                     MessagingCenter.Unsubscribe<ClienteRest>(this,"error");
@@ -329,8 +354,9 @@ namespace PagoEnLinea
         public void OnLadaChanged(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
-                (sender as Entry).Text = Regex.Replace(args.NewTextValue, "[^0-9]", string.Empty);
-            Entry entry = sender as Entry;
+                (sender as Xfx.XfxEntry).Text = Regex.Replace(args.NewTextValue, "[^0-9]", string.Empty);
+            Xfx.XfxEntry entry = sender as Xfx.XfxEntry;
+            entry.ErrorText = "";
             String val = entry.Text;
 
             if (val.Length > 3)

@@ -8,6 +8,8 @@ namespace PagoEnLinea
         public App()
         {
             InitializeComponent();
+
+
            
             //MessagingCenter.Subscribe<PopupCarga>(this, "login", (Sender) => { MainPage = new NavigationPage(new Menu()); });
             if (Current.Properties.ContainsKey("token"))

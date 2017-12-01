@@ -21,10 +21,10 @@ namespace PagoEnLinea.PaginasPago
         {
             if (e.Item == null) return;
             // do something with e.SelectedItem
-            var resp = await DisplayAlert("Liquidacion", "¿Qué desea hacer?", "Agregar al carrito", "ver detalles");
+            var resp = await DisplayAlert("Predial", "¿Qué desea hacer?", "Agregar al carrito", "ver detalles");
             if (!resp)
             {
-                await Navigation.PushAsync(new DetallesLiquidacionPage());
+                //await Navigation.PushAsync(new DetallesLiquidacionPage());
             }
 
            ((ListView)sender).SelectedItem = null; // de-select

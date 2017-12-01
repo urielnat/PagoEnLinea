@@ -3,7 +3,7 @@
 	<ContentPage.Content>
         <StackLayout Padding="20,20,20,5">
           <ScrollView>
-           <ListView x:Name="listView" RowHeight="70" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
+           <ListView x:Name="listView" RowHeight="70"  SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >

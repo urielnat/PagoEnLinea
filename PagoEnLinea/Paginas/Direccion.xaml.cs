@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
 using Xamarin.Forms;
@@ -15,17 +18,74 @@ namespace PagoEnLinea.Paginas
         {
           
             InitializeComponent();
-          
+            listView.ItemTapped+= ListView_ItemTapped;
         }
 
-
-        //cambiar por tabbed item
-        async void Handle_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
+      async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var info = (infodir)e.SelectedItem;
-            //var catinfo = (CatalogoDir)e.SelectedItem;
-            await Navigation.PushAsync(new ModificarDireccion(info.id,info.idCat,0){BindingContext = (infodir)e.SelectedItem});
+            var info = (infodir)e.Item;
+
+            var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Eliminar", "Modificar");
+            if (action.Equals("Modificar"))
+            {
+                await Navigation.PushAsync(new ModificarDireccion(info.id, info.idCat, 0, info.estado, info.tipoasentamiento) { BindingContext = (infodir)e.Item });
+            }
+            if(action.Equals("Eliminar")){
+                var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar esta dirección?", "Si", "Cancelar");{
+                    if(respuesta){
+
+
+
+                    HttpResponseMessage response;
+
+                     
+                        try
+                        {
+                            HttpClient cliente = new HttpClient();
+                            //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
+                            if (Application.Current.Properties.ContainsKey("token"))
+                            {
+
+                                cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                            }
+
+                            var uri = new Uri(string.Format(Constantes.URL+"/direccion/eliminar/{0}", info.id));
+                            response = await cliente.DeleteAsync(uri);
+                            var y = await response.Content.ReadAsStringAsync();
+                            System.Diagnostics.Debug.WriteLine(y);
+
+
+                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                            {
+
+                                System.Diagnostics.Debug.WriteLine("Se eliminó con exito");
+                                await  DisplayAlert("Eliminado","Dirección eliminada con exito","OK");
+                                conectar();
+                            }
+
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine(response);
+                                var resp = JsonConvert.DeserializeObject<Respuesta>(y);
+
+                                await DisplayAlert("Error", resp.respuesta, "OK");
+
+                            }
+                        }
+                        catch (HttpRequestException ex)
+                        {
+                            System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
+                            await DisplayAlert("Error", "No fué posible intente mas tarde", "OK");
+                        }
+
+
+                    }
+                }
+            }
+            ((ListView)sender).SelectedItem = null;
         }
+
+     
 
         async void conectar()
         {
@@ -82,7 +142,7 @@ namespace PagoEnLinea.Paginas
 
         void Handle_Clicked(object sender, System.EventArgs e)
         {
-            Navigation.PushAsync(new ModificarDireccion(null, null, 1));
+            Navigation.PushAsync(new ModificarDireccion(null, null, 1,null,null));
         }
     }
 }

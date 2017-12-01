@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
 using Xamarin.Forms;
@@ -8,19 +9,26 @@ namespace PagoEnLinea.Paginas
 {
     public partial class Modificarfacturacion : ContentPage
     {
-        public static List<Modelos.infodir> listDir = new List<infodir>();
+        public static List<Modelos.infodir> listDir;
         public static List<Modelos.Telefono> listTel = new List<Telefono>();
-        public static List<Email> listEmail = new List<Email>();
-        public static DatosFacturacion facturacion = new DatosFacturacion();
+        public static List<Email> listEmail;
+        public static DatosFacturacion facturacion;
 
-        string ID, IDDIR, IDCATDIR;
+        string ID, IDDIR, IDCATDIR,email,direccion;
+        int tipos;
 
-        public Modificarfacturacion(string id,string idDir, string idcat,int tipo)
+        public Modificarfacturacion(string id,string idDir, string idcat,int tipo,string correo,string dir)
         {
+            facturacion = new DatosFacturacion();
             ID = id;
             IDDIR = idDir;
             IDCATDIR = idcat;
+            tipos = tipo;
+            email = correo;
+            direccion = dir;
+
             InitializeComponent();
+            enRFC.TextChanged += OnRFCChanged;
             if (tipo == 0)
             {
                 btnModificar.IsVisible = true;
@@ -45,7 +53,7 @@ namespace PagoEnLinea.Paginas
                 ClienteRest cliente = new ClienteRest();
                 var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["token"] as string);
                 listDir = new List<Modelos.infodir>();
-
+                listEmail = new List<Email>();
 
 
                 if (inf != null)
@@ -77,62 +85,73 @@ namespace PagoEnLinea.Paginas
                         });
 
                         cont++;
-                        System.Diagnostics.Debug.WriteLine(dato.catalogoDir.municipio);
+                       
                     }
 
-                    foreach (var dato in inf.telefonos)
-                    {
-                        //catdir.cp = dato.catalogoDir.cp;
-                        listTel.Add(new Telefono
-                        {
+                   
 
+
+
+                    foreach (var dato in inf.email)
+                    {
+
+                        listEmail.Add(new Email
+                        {
                             id = dato.id,
-                            telefono = dato.telefono,
-                            lada = dato.lada,
-                            tipo = dato.tipo
+                            correoe = dato.correoe,
+                            tipo = dato.tipo,
 
 
 
                         });
-                        //pkTelefono.Items.Add(dato.telefono);
+
                     }
 
+                    System.Diagnostics.Debug.WriteLine(listEmail.Count);
+                    foreach (var corr in listEmail){
 
-                   
-                        foreach (var dato in inf.email)
-                        {
-                            
-                            listEmail.Add(new Email
-                            {
-                                id = dato.id,
-                                correoe = dato.correoe,
-                                tipo = dato.tipo,
+                        pkCorreo.Items.Add(corr.correoe);
+                    }
 
-
-
-                            });
-                        pkCorreo.Items.Add(dato.correoe);
-                        }
-
-
+                    //System.Diagnostics.Debug.WriteLine(listEmail[3].id);
                        
                     
 
-                    foreach (var email in listEmail)
-                    {
-                        
+                    foreach(var dir in listDir){
+                        pkDireccion.Items.Add(dir.asentamiento + " " + dir.calle + " " + dir.numero);
                     }
 
-                    foreach(var direccion in listDir){
-                        pkDireccion.Items.Add(direccion.asentamiento + " " + direccion.calle + " " + direccion.numero);
-                    }
-
-                    foreach (var telefono in listTel )
-                    {
-                     
-                    }
+                  
                     facturacion.id = ID;
                     facturacion.persona = inf.persona;
+
+
+                    if (tipos == 0)
+                    {
+                        for (var i = 0; i < pkCorreo.Items.Count; i++)
+                        {
+                            
+                                if (pkCorreo.Items[i].Equals(email))
+                                {
+                                    pkCorreo.SelectedIndex = i;
+                                }
+
+
+                        }
+
+
+                        for (var i = 0; i < pkDireccion.Items.Count; i++)
+                        {
+                            
+                                if (pkDireccion.Items[i].Contains(direccion))
+                                {
+                                    pkDireccion.SelectedIndex = i;
+                                }
+                            
+
+                        }
+                    }
+                
                 }
 
             }
@@ -141,33 +160,29 @@ namespace PagoEnLinea.Paginas
         {
             conectar();
         }
-        /**
-        async void telefono_Clicked(object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new ModificarTelefono(""));
-        }
-
-        async void correo_Clicked(object sender, System.EventArgs e)
-        {
-            await Navigation.PushAsync(new ModificarCorreo(null));
-        }**/
+      
 
         void Direccion_SelectedIndexChanged(object sender, System.EventArgs e)
         {
+            int position = pkDireccion.SelectedIndex;
             if(pkDireccion.SelectedIndex>-1){
-                facturacion.direccion = new Modelos.Direccion()
+
+                IDDIR = listDir[position].id;
+                facturacion.direccion = new Modelos.Direccion
                 {
-                    id = listDir[pkDireccion.SelectedIndex].id
+                    id = IDDIR
                 };
+               
             }  
         }
 
         void Correo_SelectedIndexChanged(object sender, System.EventArgs e)
         {
+            int position = pkCorreo.SelectedIndex;
             if(pkCorreo.SelectedIndex>-1){
                 facturacion.email = new Email()
                 {
-                    id = listEmail[pkCorreo.SelectedIndex].id
+                    id = listEmail[position].id
                 };
             }
         }
@@ -177,12 +192,23 @@ namespace PagoEnLinea.Paginas
             facturacion.rfc = enRFC.Text;
             facturacion.nomrazonSocial = enRazon.Text;
 
+
+
             ClienteRest client = new ClienteRest();
 
             if(!(string.IsNullOrEmpty(enRFC.Text))&&!(string.IsNullOrEmpty(enRazon.Text))&&pkCorreo.SelectedIndex > -1&&pkDireccion.SelectedIndex > -1){
-                client.POST(Constantes.URL+"/datos-facturacion/agregar", facturacion, 1); 
+                
+
+                if (!Regex.Match(enRFC.Text, "[A-Z,Ñ,&]{3,4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?").Success||enRFC.Text.Length<12||enRFC.Text.Length>13)
+                {
+                    DisplayAlert("Advertencia", "Introduzca un RFC valido", "OK");
+                }else{
+                    client.POST(Constantes.URL+"/datos-facturacion/agregar", facturacion, 1); 
+                }
+
             }else{
                 DisplayAlert("Advertencia","Llene y/o seleccione todos los campos","OK");
+
             }
 
 
@@ -217,23 +243,30 @@ namespace PagoEnLinea.Paginas
             ClienteRest client = new ClienteRest();
 
 
-            if(pkCorreo.SelectedIndex>-1&&pkDireccion.SelectedIndex > -1){
-                client.PUT(Constantes.URL+"/datos-facturacion/actualizar", facturacion);
+            if(!(string.IsNullOrEmpty(enRFC.Text)) && !(string.IsNullOrEmpty(enRazon.Text))&&pkCorreo.SelectedIndex>-1&&pkDireccion.SelectedIndex > -1){
+              
+                if (!Regex.Match(enRFC.Text, "[A-Z,Ñ,&]{3,4}[0-9]{2}[0-1][0-9][0-3][0-9][A-Z,0-9]?[A-Z,0-9]?[0-9,A-Z]?").Success|| enRFC.Text.Length < 12 || enRFC.Text.Length > 13)
+                {
+                    DisplayAlert("Advertencia", "Introduzca un RFC valido", "OK");
+                }else{
+                    client.PUT(Constantes.URL + "/datos-facturacion/actualizar", facturacion);
+                }
+
             }else{
                 DisplayAlert("Advertencia", "¡Seleccione el resto de campos!", "OK");
             }
 
           
 
-            MessagingCenter.Subscribe<ClienteRest>(this, "putfacturacion", (Sender) => {
-                MessagingCenter.Unsubscribe<ClienteRest>(this, "putfacturacion");
+            MessagingCenter.Subscribe<ClienteRest>(this, "OK", (Sender) => {
+                MessagingCenter.Unsubscribe<ClienteRest>(this, "OK");
                 DisplayAlert("Modificado", "¡Información de facturación modificada con exito!", "OK");
                 Navigation.PopAsync();
 
             });
 
-            MessagingCenter.Subscribe<ClienteRest>(this, "errorfacturacion", (Sender) => {
-                MessagingCenter.Unsubscribe<ClienteRest>(this, "errorfacturacion");
+            MessagingCenter.Subscribe<ClienteRest>(this, "error", (Sender) => {
+                MessagingCenter.Unsubscribe<ClienteRest>(this, "error");
                 DisplayAlert("Error", "¡No fue posible modificar la información actual!", "OK");
                 Navigation.PopAsync();
 
@@ -243,6 +276,15 @@ namespace PagoEnLinea.Paginas
 
 
             
+        }
+
+
+        public void OnRFCChanged(object sender, TextChangedEventArgs args)
+        {
+           
+            (sender as Entry).Text = args.NewTextValue.ToUpper();
+
+           
         }
     }
 }

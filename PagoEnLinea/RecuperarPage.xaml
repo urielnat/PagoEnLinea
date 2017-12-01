@@ -18,7 +18,7 @@
                    
                 </Grid.ColumnDefinitions>
                 <Entry x:Name="enCorreo" Grid.Row="5" Grid.Column="0" Grid.RowSpan="2" />
-                <Label Text = "Ingrese su correo electrónico" Grid.Row="4" Grid.Column="0" YAlign="Center"  />
+                <Label Text = "Ingresa tu correo electrónico" Grid.Row="4" Grid.Column="0" YAlign="Center"  />
 
 
                

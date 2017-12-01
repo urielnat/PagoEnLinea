@@ -18,6 +18,13 @@ namespace PagoEnLinea.servicios
             try
             {
                 HttpClient client = new HttpClient();
+
+
+                if (Application.Current.Properties.ContainsKey("token"))
+                {
+
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                }
                 var response = await client.GetAsync(url);
                 System.Diagnostics.Debug.WriteLine(response);
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
@@ -53,6 +60,12 @@ namespace PagoEnLinea.servicios
             System.Diagnostics.Debug.WriteLine(jsonstring);
             try{
                 HttpClient cliente = new HttpClient();
+
+                if (Application.Current.Properties.ContainsKey("token"))
+                {
+
+                    cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                }
 
                 response = await cliente.PostAsync(url, new StringContent(jsonstring, Encoding.UTF8, ContentType));
                 var y = await response.Content.ReadAsStringAsync();
@@ -100,25 +113,33 @@ namespace PagoEnLinea.servicios
             try
             {
                 HttpClient cliente = new HttpClient();
+
+
+                if(Application.Current.Properties.ContainsKey("token")){
+
+                    cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer",Application.Current.Properties["token"]as string);
+                }
+
+
                 response = await cliente.PutAsync(url, new StringContent(jsonstring, Encoding.UTF8, ContentType));
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     
                     System.Diagnostics.Debug.WriteLine("SE GUARDO POR PUT");
-                    MessagingCenter.Send(this, "putcontraseña");
-                    MessagingCenter.Send(this, "putDireccion");
-                    MessagingCenter.Send(this, "putcorreo");
-                    MessagingCenter.Send(this, "putpersona");
+
+                  
+             
+                    MessagingCenter.Send(this, "OK");
                     MessagingCenter.Send(this, "puttelefono");
                     MessagingCenter.Send(this, "putfacturacion");
 
                 }else{
-                    MessagingCenter.Send(this, "errorContraseña");
-                    MessagingCenter.Send(this, "errorDireccion");
-                    MessagingCenter.Send(this, "errorCorreo");
-                    MessagingCenter.Send(this, "errorPersona");
-                    MessagingCenter.Send(this, "errortelefono");
+                    
+                  
+
+                    MessagingCenter.Send(this, "error");
+                   
                     MessagingCenter.Send(this, "errorfacturacion");
                     System.Diagnostics.Debug.WriteLine(response);}
             }
