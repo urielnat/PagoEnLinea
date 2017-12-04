@@ -472,9 +472,9 @@ namespace PagoEnLinea
                     System.Diagnostics.Debug.WriteLine(callex[callex.Length - 2] + " " + callex[1] + " " + callex[2] + " #" + callex.Length);
                     System.Diagnostics.Debug.WriteLine(domicilio);
                     System.Diagnostics.Debug.WriteLine(texto);
-                    enDomicilio.Text = callex[0] + "\t" + callex[1];
+                    enDomicilio.Text =  callex[1];
                     enNumero.Text = callex[callex.Length - 2];
-                    for (int i = 0; i < domiciliox.Length - 2; i++)
+                    for (int i = 1; i < domiciliox.Length - 2; i++)
                     {
                         enColonia.Text = enColonia.Text + domiciliox[i] + "\t";
                     }
@@ -485,7 +485,7 @@ namespace PagoEnLinea
                 }
                 catch (IndexOutOfRangeException)
                 {
-                    await DisplayAlert("Error", "No Fue posible capturar los campos", "OK");
+                    await DisplayAlert("Error", "No Fué posible capturar los campos", "OK");
                 }
 
             }

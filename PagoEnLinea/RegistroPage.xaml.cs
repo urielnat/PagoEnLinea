@@ -375,8 +375,8 @@ namespace PagoEnLinea
 
                         String[] domiciliox = domicilio.Split('#');
                  
-         
-                    dire.calle = callex[0] + "\t" + callex[1];
+                      //quite la abreviatura del inicio
+                    dire.calle = callex[1];
                         dire.numero = callex[callex.Length - 2];
                     //cambie el inicio del vector para que omita el tipo de asentamineto
                         for (int i = 1; i < domiciliox.Length - 2; i++)

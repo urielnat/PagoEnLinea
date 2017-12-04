@@ -120,7 +120,7 @@
        </ScrollView>  
        
    
-   <StackLayout Padding="10,10,0,0" VerticalOptions="EndAndExpand"  >   
+   <StackLayout Padding="10,10,0,10" VerticalOptions="EndAndExpand"  >   
        <Grid VerticalOptions="EndAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
