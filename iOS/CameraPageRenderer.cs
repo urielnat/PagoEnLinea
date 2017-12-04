@@ -21,7 +21,10 @@ namespace FullCameraPage.iOS
 
         UIPaintCodeButton takePhotoButton;
         UIPaintCodeButton cancelPhotoButton;
-        UIView liveCameraStream,rectangle;
+        UIPaintCodeButton rectangleLT, rectangleLB, rectangleRT, rectangleRB;
+
+
+        UIView liveCameraStream;
 
 
         public override async void ViewDidLoad()
@@ -48,7 +51,31 @@ namespace FullCameraPage.iOS
                 Frame = new CGRect(0f, 0f, View.Bounds.Width, View.Bounds.Height)
             };
 
-            rectangle = new UIPaintRect();
+            rectangleLT = new UIPaintCodeButton(DrawRectLT){
+                Frame = new CGRect(View.Bounds.GetMidX()-200,View.Bounds.GetMaxY() / 3,60,60)
+                    
+            };
+
+            rectangleLB = new UIPaintCodeButton(DrawRectLB)
+            {
+                Frame = new CGRect(View.Bounds.GetMidX() - 200, View.Bounds.GetMidY()+50, 60, 60)
+
+            };
+
+
+            rectangleRT = new UIPaintCodeButton(DrawRectRT)
+            {
+                Frame = new CGRect(View.Bounds.GetMidX() + 140, View.Bounds.GetMaxY() / 3, 60, 60)
+
+            };
+
+
+
+            rectangleRB = new UIPaintCodeButton(DrawRectRB)
+            {
+                Frame = new CGRect(View.Bounds.GetMidX() + 140, View.Bounds.GetMidY() + 50, 60, 60)
+
+            };
 
             takePhotoButton = new UIPaintCodeButton(DrawTakePhotoButton)
             {
@@ -60,8 +87,14 @@ namespace FullCameraPage.iOS
                 Frame = new CGRect(topLeftX, topButtonY, 37, 37)
             };
 
+           
             View.Add(liveCameraStream);
+            View.Add(rectangleLT);
+            View.Add(rectangleLB);
+            View.Add(rectangleRT);
+            View.Add(rectangleRB);
             View.Add(takePhotoButton);
+
             View.Add(cancelPhotoButton);
         }
 
@@ -233,9 +266,115 @@ namespace FullCameraPage.iOS
 
         private void DrawRectLT(CGRect frame)
         {
-            
+            UIColor.Red.SetStroke();
+            var context = UIGraphics.GetCurrentContext();
+            context.BeginPath();
+            context.MoveTo(0, 0);
+            context.AddLineToPoint(60, 0);
+            context.AddLineToPoint(60, 20);
+            context.AddLineToPoint(0, 20);
+            context.ClosePath();
+            UIColor.Red.SetFill();
+            context.DrawPath(CGPathDrawingMode.FillStroke);
+
+            context.BeginPath();
+            context.MoveTo(0, 0);
+            context.AddLineToPoint(20, 0);
+            context.AddLineToPoint(20, 60);
+            context.AddLineToPoint(0, 60);
+            context.ClosePath();
+            UIColor.Red.SetFill();
+            context.DrawPath(CGPathDrawingMode.FillStroke);
+
 
         }
+
+
+
+        private void DrawRectLB(CGRect frame)
+        {
+            UIColor.Red.SetStroke();
+            var context = UIGraphics.GetCurrentContext();
+            context.BeginPath();
+            context.MoveTo(0, 0);
+            context.AddLineToPoint(20, 0);
+            context.AddLineToPoint(20, 60);
+            context.AddLineToPoint(0, 60);
+            context.ClosePath();
+            UIColor.Red.SetFill();
+            context.DrawPath(CGPathDrawingMode.FillStroke);
+
+           
+
+            context.BeginPath();
+            context.MoveTo(0, 40);
+            context.AddLineToPoint(60, 40);
+            context.AddLineToPoint(60, 60);
+            context.AddLineToPoint(0, 60);
+            context.ClosePath();
+            UIColor.Red.SetFill();
+            context.DrawPath(CGPathDrawingMode.FillStroke);
+
+
+        }
+
+        private void DrawRectRT(CGRect frame)
+        {
+            UIColor.Red.SetStroke();
+            var context = UIGraphics.GetCurrentContext();
+             
+           
+            context.BeginPath();
+            context.MoveTo(0, 0);
+            context.AddLineToPoint(60, 0);
+            context.AddLineToPoint(60, 20);
+            context.AddLineToPoint(0, 20);
+            context.ClosePath();
+            UIColor.Red.SetFill();
+            context.DrawPath(CGPathDrawingMode.FillStroke);
+
+
+
+            context.BeginPath();
+            context.MoveTo(40, 0);
+            context.AddLineToPoint(60, 0);
+            context.AddLineToPoint(60, 60);
+            context.AddLineToPoint(40, 60);
+            context.ClosePath();
+            UIColor.Red.SetFill();
+            context.DrawPath(CGPathDrawingMode.FillStroke);
+
+
+        }
+
+
+        private void DrawRectRB(CGRect frame)
+        {
+            UIColor.Red.SetStroke();
+            var context = UIGraphics.GetCurrentContext();
+            context.BeginPath();
+            context.MoveTo(40, 0);
+            context.AddLineToPoint(60, 0);
+            context.AddLineToPoint(60, 60);
+            context.AddLineToPoint(40, 60);
+            context.ClosePath();
+            UIColor.Red.SetFill();
+            context.DrawPath(CGPathDrawingMode.FillStroke);
+
+
+
+            context.BeginPath();
+            context.MoveTo(0, 40);
+            context.AddLineToPoint(60, 40);
+            context.AddLineToPoint(60, 60);
+            context.AddLineToPoint(0, 60);
+            context.ClosePath();
+            UIColor.Red.SetFill();
+            context.DrawPath(CGPathDrawingMode.FillStroke);
+
+
+        }
+
         #endregion
 
     }
@@ -256,16 +395,21 @@ namespace FullCameraPage.iOS
 
     }
 
-    internal class UIPaintRect : UIView
+    internal class UIPaintRect : UIButton
     {
        
+        Action<CGRect> _drawing;
+        public UIPaintRect(Action<CGRect> drawing)
+        {
+            _drawing = drawing;
+        }
 
         public override void Draw(CGRect rect)
         {
-            var color2 = UIColor.Red;
-            rect = new CGRect(10, 10, 200, 100);
-            base.Draw(rect);
+            
            
+            base.Draw(rect);
+            _drawing(rect);
         }
 
     }
