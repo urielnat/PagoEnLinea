@@ -1,5 +1,11 @@
-﻿using PagoEnLinea.Paginas;
+﻿using CarritoBD.Data;
+using CarritoBD.Interface;
+
+using PagoEnLinea.Paginas;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 
 namespace PagoEnLinea
 {
@@ -22,11 +28,29 @@ namespace PagoEnLinea
                 MainPage = new NavigationPage(new LoginPage());
             }
 
+
+
+        }
+        static TodoItemDatabase database;
+
+   
+
+        public static TodoItemDatabase Database
+        {
+            get
+            {
+                if (database == null)
+                {
+                    database = new TodoItemDatabase(DependencyService.Get<IFileHelper>().GetLocalFilePath("TodoSQLite.db3"));
+                }
+                return database;
+            }
         }
     
-   
+        public int ResumeAtTodoId { get; set; }
         protected override void OnStart()
         {
+           
             // Handle when your app starts
         }
 

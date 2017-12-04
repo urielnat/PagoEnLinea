@@ -4,7 +4,7 @@
         <StackLayout Padding="20,20,20,20">
   
                 <ScrollView>
-           <ListView x:Name="listView" RowHeight="100" >
+           <ListView x:Name="listView" RowHeight="100" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >

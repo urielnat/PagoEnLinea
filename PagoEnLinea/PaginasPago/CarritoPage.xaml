@@ -4,7 +4,7 @@
         <StackLayout Padding="20,20,20,20">
             
                 <ScrollView>
-           <ListView x:Name="listView" RowHeight="150" ItemSelected="Handle_ItemSelected">
+           <ListView x:Name="listView" RowHeight="150" SeparatorVisibility="None" >
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
@@ -28,12 +28,12 @@
 
                 </Grid.ColumnDefinitions>
                    
-                   <Label Text="Nombre: " Font="Bold" Grid.Row ="0" Grid.Column="0"/>
+                   <Label Text="{Binding Name}" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
                                       
                      <Label Text="Descripción:" Grid.Row ="1" Grid.Column="0"/>
-                      <Label x:Name="lblDescripción" Text="" Grid.Row ="1" Grid.Column="1"/>                  
+                      <Label x:Name="lblDescripción" Grid.Row ="1" Grid.Column="1"/>                  
                      <Label Text="Total a Pagar: $" Grid.Row ="2" Grid.Column="0"/>
-                     <Label x:Name="lblPago"  Grid.Row ="2" Grid.Column="1"/>                   
+                     <Label x:Name="lblPago" Text="{Binding price}"  Grid.Row ="2" Grid.Column="1"/>                   
                   
                 </Grid>                 
                     
@@ -54,14 +54,29 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />    
+                 
             </Grid.ColumnDefinitions>
-            <Label Text="Total a pagar: $" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
-             <Label x:Name="lblPago" Grid.Row="0" Grid.Column="2"  />   
-            <Button Text="Pagar" Grid.Row="1" Grid.Column="1"  BackgroundColor="#5CB85C" TextColor="White"  />     
+            <Label Text="Total a pagar: $" Grid.Row="0" Grid.Column="0" />
+             <Label x:Name="Total" Grid.Row="0" Grid.Column="1"  />   
+                
              
             </Grid>
-          
+              <Grid RowSpacing="10" ColumnSpacing="0" VerticalOptions="End">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                 
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />    
+                 
+            </Grid.ColumnDefinitions>
+             
+                <Button Text="Pagar" Grid.Row="0" Grid.Column="1" BackgroundColor="#5CB85C" TextColor="White"  />
+             
+            </Grid>
+           
         </StackLayout>
 	</ContentPage.Content>
 </ContentPage>

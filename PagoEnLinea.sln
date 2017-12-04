@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PagoEnLinea.iOS", "iOS\Pago
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PagoEnLinea.Droid", "Droid\PagoEnLinea.Droid.csproj", "{F12CFA7B-64F2-440E-AC35-C2C6F9522A75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarritoBD", "CarritoBD\CarritoBD.csproj", "{22997E39-E579-4491-86A2-D5BCE80A0ABE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,5 +55,17 @@ Global
 		{F12CFA7B-64F2-440E-AC35-C2C6F9522A75}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{F12CFA7B-64F2-440E-AC35-C2C6F9522A75}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{F12CFA7B-64F2-440E-AC35-C2C6F9522A75}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Release|iPhone.Build.0 = Release|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{22997E39-E579-4491-86A2-D5BCE80A0ABE}.Debug|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

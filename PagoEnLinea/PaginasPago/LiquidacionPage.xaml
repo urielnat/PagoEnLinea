@@ -4,7 +4,7 @@
          <StackLayout Padding="20,20,20,20">
              <SearchBar x:Name="buscar" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
                 <ScrollView>
-           <ListView x:Name="listView" RowHeight="150" ItemSelected="Handle_ItemSelected">
+           <ListView x:Name="listView" RowHeight="150" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
@@ -31,9 +31,9 @@
                    <Label Text="Liquidacíon" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
                                       
                      <Label Text="Descripción:" Grid.Row ="1" Grid.Column="0"/>
-                      <Label x:Name="lblDescripción" Text="" Grid.Row ="1" Grid.Column="1"/>                  
+                      <Label Text="{Binding Notes}" Grid.Row ="1" Grid.Column="1"/>                  
                      <Label Text="Total a Pagar: $" Grid.Row ="2" Grid.Column="0"/>
-                     <Label x:Name="lblPago"  Grid.Row ="2" Grid.Column="1"/>                   
+                     <Label Text="{Binding price}"  Grid.Row ="2" Grid.Column="1"/>                   
                   
                 </Grid>                 
                     

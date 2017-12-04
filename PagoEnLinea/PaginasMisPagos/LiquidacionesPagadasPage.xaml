@@ -4,7 +4,7 @@
          <StackLayout Padding="20,20,20,20">
              <SearchBar x:Name="buscar" Text="Buscar por clave castral, propietario o domicilio" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
                 <ScrollView>
-           <ListView x:Name="listView" RowHeight="110" >
+           <ListView x:Name="listView" RowHeight="110" SeparatorVisibility="None" >
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >

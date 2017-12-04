@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using CarritoBD;
+using PagoEnLinea.Modelos;
 using Xamarin.Forms;
 
 namespace PagoEnLinea.PaginasPago
@@ -8,6 +9,7 @@ namespace PagoEnLinea.PaginasPago
     public partial class LiquidacionPage : ContentPage
     {
         public static List<string> list;
+        public static List<Carrito> lista;
         public LiquidacionPage()
         {
            
@@ -30,14 +32,49 @@ namespace PagoEnLinea.PaginasPago
             var resp= await DisplayAlert("Liquidacion", "¿Qué desea hacer?", "Agregar al carrito", "ver detalles");
             if(!resp){
                 await Navigation.PushAsync(new DetallesLiquidacionPage());
+            }else{
+                var todoItem = (Carrito)e.Item;
+                await App.Database.SaveItemAsync(todoItem);
+                await Navigation.PopAsync();
+
+               
             }
 
-            ((ListView)sender).SelectedItem = null; // de-select
+           ((ListView)sender).SelectedItem = null; // de-select
         }
        
-        void Handle_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
+
+        async void conectar()
         {
 
+
+
+
+
+
+
+
+            lista = new List<Carrito>
+            {
+                new Carrito
+                {
+                    Name = "Liquidacion",
+                    Notes = "ejemplo",
+                    price = 2000
+
+
+
+
+                }
+            };
+            BindingContext = lista;
+                    listView.ItemsSource = lista;
+                
+
+        }
+        protected override void OnAppearing()
+        {
+            conectar();
         }
     }
 }
