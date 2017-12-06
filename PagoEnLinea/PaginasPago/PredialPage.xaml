@@ -4,7 +4,7 @@
         <StackLayout Padding="20,20,20,20">
              <SearchBar x:Name="buscar" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
                 <ScrollView>
-           <ListView x:Name="listView" RowHeight="150" ItemSelected="Handle_ItemSelected">
+           <ListView x:Name="listView" RowHeight="400" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
@@ -28,12 +28,12 @@
 
                 </Grid.ColumnDefinitions>
                    
-                   <Label Text="Predial" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
+                   <Label Text="{Binding Name}" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
                                       
                      <Label Text="Descripción:" Grid.Row ="1" Grid.Column="0"/>
-                      <Label x:Name="lblDescripción" Text="" Grid.Row ="1" Grid.Column="1"/>                  
-                     <Label Text="Total a Pagar" Grid.Row ="2" Grid.Column="0"/>
-                     <Label x:Name="lblPago"  Grid.Row ="2" Grid.Column="1"/>                   
+                      <Label x:Name="lblDescripción" Text="{Binding Description}" Grid.Row ="1" Grid.Column="1"/>                  
+                     <Label Text="Total a Pagar" Grid.Row ="4" Grid.Column="0"/>
+                     <Label Text="{Binding price}" Grid.Row ="4" Grid.Column="1"/>                   
                   
                 </Grid>                 
                     
