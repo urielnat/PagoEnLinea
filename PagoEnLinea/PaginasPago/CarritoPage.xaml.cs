@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using CarritoBD;
@@ -114,10 +115,20 @@ namespace PagoEnLinea.PaginasPago
                 {
                     if (respuesta)
                     {
+                            ((App)Application.Current).ResumeAtTodoId = -1;
+                            var carrito = await App.Database.GetItemsAsync();
+                            var todoItem = (Carrito)e.Item;
 
-                        var todoItem = (Carrito)e.Item;
-                        await App.Database.DeleteItemAsync(todoItem);
-                        total();
+                            IEnumerable<Carrito> resultado = carrito.Where(clav => clav.ClaveCastrasl.Contains(todoItem.ClaveCastrasl));
+
+                            if(resultado.Count()>1&&!(todoItem.NoLiquidacion.Equals(resultado.Last().NoLiquidacion))){
+                                await DisplayAlert("Advertencia","Se eliminará tambien la liquidación comprendida al año actual debibo a que no es posible pagarla sin pagar las liqudaciones anteriores","OK");
+                                await App.Database.DeleteItemAsync(resultado.Last());
+                            }
+                       
+
+                            await App.Database.DeleteItemAsync(todoItem);
+                            total();
 
 
                     }
