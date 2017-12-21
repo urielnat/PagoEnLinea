@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasMisPagos.LiquidacionesPagadasPage" Title="Liquidaciones">
 	<ContentPage.Content>
          <StackLayout Padding="20,20,20,20">
-             <SearchBar x:Name="buscar" Text="Buscar por clave castral, propietario o domicilio" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
+             <SearchBar x:Name="buscar" Text="Buscar por clave castral, propietario o domicilio" SearchButtonPressed="Handle_SearchButtonPressed" HeightRequest="30" ></SearchBar>
                 <ScrollView>
            <ListView x:Name="listView" RowHeight="110" SeparatorVisibility="None" >
         <ListView.ItemTemplate>

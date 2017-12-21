@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasPago.PredialPage" Title="Pago de Impusto Predial">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasPago.PredialPage" Title="Pago de Impuesto Predial">
 	<ContentPage.Content>
         <StackLayout Padding="20,20,20,20">
-             <SearchBar x:Name="buscar" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
-                <ScrollView>
+
+
+            <StackLayout Orientation="Horizontal">
+               <Image Source="search.png"/>
+               <Entry x:Name="enBuscar" Placeholder="Ingrese su clave catastral" HorizontalOptions="FillAndExpand" Keyboard="Numeric" HeightRequest="50"/> 
+            </StackLayout>
+            <!--
+             <SearchBar x:Name="buscar" SearchButtonPressed="Handle_SearchButtonPressed" Placeholder="Ingrese su clave catastral" HeightRequest="50" ></SearchBar>
+             -->
+            <ScrollView>
            <ListView x:Name="listView" RowHeight="400" ItemSelected="Handle_ItemSelected" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -28,12 +36,12 @@
 
                 </Grid.ColumnDefinitions>
                    
-                   <Label Text="{Binding Name}" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
-                                      
-                     <Label Text="Descripción:" Grid.Row ="1" Grid.Column="0"/>
-                      <Label x:Name="lblDescripción" Text="{Binding Description}" Grid.Row ="1" Grid.Column="1"/>                  
-                     <Label Text="Total a Pagar" Grid.Row ="4" Grid.Column="0"/>
-                     <Label Text="{Binding price}" Grid.Row ="4" Grid.Column="1"/>                   
+                   <Label Text="{Binding Name}" Font="Bold" TextColor="#3A718C" Grid.Row ="0" Grid.Column="0"/>
+                     <Label Text="{Binding owner}" Font="Bold" Grid.Row ="1" Grid.Column="0" Grid.ColumnSpan="2"/>                 
+                     <Label Text="Descripción:" Grid.Row ="2" Grid.Column="0"/>
+                      <Label x:Name="lblDescripción" Text="{Binding Description}" Grid.Row ="3" Grid.ColumnSpan="2"/>                  
+                     <Label Text="Total a Pagar: $" Grid.Row ="5" Grid.Column="0"/>
+                     <Label Text="{Binding price}" Grid.Row ="5" Grid.Column="1"/>                   
                   
                 </Grid>                 
                     

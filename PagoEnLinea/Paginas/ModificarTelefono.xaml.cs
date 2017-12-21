@@ -209,6 +209,7 @@ namespace PagoEnLinea.Paginas
             {
                 val = val.Remove(val.Length - 1);
                 entry.Text = val;
+                enTelefono.Focus();
             }
         }
 

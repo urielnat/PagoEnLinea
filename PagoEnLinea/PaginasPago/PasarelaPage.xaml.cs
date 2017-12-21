@@ -9,7 +9,27 @@ namespace PagoEnLinea.PaginasPago
     {
         public PasarelaPage()
         {
-            InitializeComponent();
+            Title = "BBVABancomer";
+
+            WebView webView = new WebView
+            {
+                Source = new UrlWebViewSource
+                {
+                    Url = "https://www.bancomer.com/impuestos/index.jsp",
+                },
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
+
+      
+          
+            this.Content = new StackLayout
+            {
+                Children =
+                {
+                   
+                    webView
+                }
+            };
         }
     }
 }

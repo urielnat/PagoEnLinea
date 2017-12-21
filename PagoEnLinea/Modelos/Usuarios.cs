@@ -184,6 +184,28 @@ namespace PagoEnLinea.Modelos
     public class Respuesta
     {
         public string respuesta { get; set; }
+        public int id { get; set; }
+        public string cp { get; set; }
+        public string asentamiento { get; set; }
+        public string tipoasentamiento { get; set; }
+        public string municipio { get; set; }
+        public string estado { get; set; }
+        public string ciudad { get; set; }
+        public string pais { get; set; }
+        
+    }
+
+    public class CodigoPostal
+    {
+        public IList<Respuesta> respuesta { get; set; }
+    }
+
+    public class CargaCP
+    {
+        public string asentamiento { get; set; }
+        public string tipo { get; set; }
+        public int catID { get; set; }
+
     }
 }
 

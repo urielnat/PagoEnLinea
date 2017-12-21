@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasPago.LiquidacionPage">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasPago.LiquidacionPage" Title="Liquidaciones generales">
 	<ContentPage.Content>
-         <StackLayout Padding="20,20,20,20">
-             <SearchBar x:Name="buscar" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
+         <StackLayout Padding="30,20,20,20">
+            
+             <StackLayout Orientation="Horizontal">
+               <Image Source="search.png"/>
+               <Entry x:Name="enBuscar" Placeholder="Ingrese el número de liquidación" HorizontalOptions="FillAndExpand" Keyboard="Numeric" HeightRequest="50"/> 
+            </StackLayout>
+            <!--
+             <SearchBar x:Name="buscar" SearchButtonPressed="Handle_SearchButtonPressed" Placeholder="Ingrese el número de liquidación" HeightRequest="50"></SearchBar>-->
                 <ScrollView>
            <ListView x:Name="listView" RowHeight="150" SeparatorVisibility="None">
         <ListView.ItemTemplate>
@@ -27,11 +33,10 @@
                     
 
                 </Grid.ColumnDefinitions>
-                   
-                   <Label Text="Liquidacíon" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
-                                      
+
+                     <Label Text="{Binding Name}" Font="Bold" Grid.Row ="0" Grid.Column="0"/>                 
                      <Label Text="Descripción:" Grid.Row ="1" Grid.Column="0"/>
-                      <Label Text="{Binding Notes}" Grid.Row ="1" Grid.Column="1"/>                  
+                      <Label Text="{Binding Description}" Grid.Row ="1" Grid.Column="1"/>                  
                      <Label Text="Total a Pagar: $" Grid.Row ="2" Grid.Column="0"/>
                      <Label Text="{Binding price}"  Grid.Row ="2" Grid.Column="1"/>                   
                   

@@ -1,7 +1,12 @@
 ﻿using System;
 using System.IO;
-using PagoEnLinea.Interface;
+using CarritoBD.Interface;
+using PagoEnLinea.Droid;
+using Xamarin.Forms;
 
+
+
+[assembly: Dependency(typeof(FileHelper))]
 namespace PagoEnLinea.Droid
 {
  

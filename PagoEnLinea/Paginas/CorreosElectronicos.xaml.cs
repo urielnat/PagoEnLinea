@@ -20,11 +20,12 @@ namespace PagoEnLinea.Paginas
            
         }
 
-       async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var info = (Email)e.Item;
 
             var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Eliminar", "Modificar");
+            if (!string.IsNullOrEmpty(action)) { 
             if (action.Equals("Modificar"))
             {
                 await Navigation.PushAsync(new ModificarCorreo((e.Item as Email).id, 0) { BindingContext = (Email)e.Item });
@@ -32,6 +33,7 @@ namespace PagoEnLinea.Paginas
             if (action.Equals("Eliminar"))
             {
                 var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar este correo?", "Si", "Cancelar");
+
                 {
                     if (respuesta)
                     {
@@ -86,6 +88,7 @@ namespace PagoEnLinea.Paginas
                     }
                 }
             }
+        }
             ((ListView)sender).SelectedItem = null;
 
         }

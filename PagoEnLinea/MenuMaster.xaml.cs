@@ -36,10 +36,10 @@ namespace PagoEnLinea
             ListMenu.ItemsSource = new MenuItem2[] {
                 
                 new MenuItem2{ Page = new HomePage(),MenuTitle2="Inicio",MenuDetail2="Pagina de inicio"},
-                new MenuItem2{ Page = new TabPagos(),MenuTitle2="Mis pagos",MenuDetail2="Vea sus pagos"},
+                new MenuItem2{ Page = new PrediosPagadosPage(),MenuTitle2="Mis pagos",MenuDetail2="Vea sus pagos"},
                 new MenuItem2{ Page = new PredialPage(),MenuTitle2="Predial en línea",MenuDetail2="Busqueda de predial"},
                 new MenuItem2{ Page = new LiquidacionPage(),MenuTitle2="Liquidación en línea",MenuDetail2="Busqueda de liquidacíon"},
-                new MenuItem2{ Page = new CarritoPage(),MenuTitle2="Carrito de compras",MenuDetail2="Liquidaciones y predios añadidos"},
+                new MenuItem2{ Page = new CarritoPage(),MenuTitle2="Carrito de compras",MenuDetail2="Elementos añadidos al carrito"},
                 new MenuItem2{ Page = new TabPage(),MenuTitle2="Editar Perfil",MenuDetail2="Edite propiedades"},
                 new MenuItem2{ MenuTitle2="Cerrar sesión",MenuDetail2="Cierre su sesión actual",Tipo=1}
             };
@@ -116,8 +116,14 @@ namespace PagoEnLinea
 
                     }
 
+                    ((App)Application.Current).ResumeAtTodoId = -1;
+                  var  list = await App.Database.GetItemsAsync();
+                    foreach(var item in list){
+                        await App.Database.DeleteItemAsync(item);
+                    }
+
                     Application.Current.Properties.Clear();
-                    Application.Current.Properties.Clear();
+                   
                     Application.Current.MainPage = new NavigationPage(new LoginPage());
 
                 }

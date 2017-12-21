@@ -135,6 +135,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="PaginasPago\PasarelaPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -242,6 +246,13 @@
     </Compile>
     <Compile Include="PaginasMisPagos\LiquidacionesPagadasPage.xaml.cs">
       <DependentUpon>LiquidacionesPagadasPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PaginasPago\CheckItem.cs" />
+    <Compile Include="PaginasPago\DesglosePredios.cs" />
+    <Compile Include="Modelos\Predio.cs" />
+    <Compile Include="Modelos\Liquidacion.cs" />
+    <Compile Include="PaginasPago\PasarelaPage.xaml.cs">
+      <DependentUpon>PasarelaPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

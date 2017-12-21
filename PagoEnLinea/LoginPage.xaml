@@ -24,6 +24,7 @@
                           Grid.Column="0"
                           Placeholder="Correo electrónico"
                            Keyboard="Email"
+                           Completed="Handle_Completed"
                           />
                 
                
@@ -36,7 +37,7 @@
                           />
               
             <Button Text="Ingresar" Grid.Column="0" Grid.Row="3" BackgroundColor="#59b853" TextColor="White" Clicked="Handle_Clicked" /> 
-            <Button Text="Registrar" Grid.Column="0" Grid.Row="4" BackgroundColor="#999999" TextColor="White"  Clicked="Registrar_Clicked"/>    
+            <Button Text="Registrar" Grid.Column="0" Grid.Row="4" BackgroundColor="#2c86ca" TextColor="White"  Clicked="Registrar_Clicked"/>    
             <Label x:Name="olvido" Text="¿Haz olvidado tu contraseña?" Grid.Row="5" HorizontalTextAlignment="Center" TextColor="#4b3aff">
                  
                 </Label>    

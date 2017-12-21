@@ -54,13 +54,14 @@ namespace PagoEnLinea.Paginas
                         {
                             auth2 = true;
                         }
+                        else
+                        {
+                            auth2 = false;
+                            await DisplayAlert("Error", "Las Contraseñas No Concuerdan", "OK");
+                        }
 
                     }
-                    else
-                    {
-                        auth2 = false;
-                        await DisplayAlert("Error", "Las Contraseñas No Concuerdan", "OK");
-                    }
+                   
 
                     if (!(String.IsNullOrEmpty(enPsw0.Text)))
                     {
@@ -139,7 +140,7 @@ namespace PagoEnLinea.Paginas
 
         void BtnAñadir_Clicked(object sender, EventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("algoaaaa");
+            
             conectar();
         }
     }

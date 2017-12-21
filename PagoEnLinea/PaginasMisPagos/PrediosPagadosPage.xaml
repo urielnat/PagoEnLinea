@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasMisPagos.PrediosPagadosPage" Title="Predios">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasMisPagos.PrediosPagadosPage" Title="Pagos">
 	<ContentPage.Content>
           <StackLayout Padding="20,20,20,20">
-             <SearchBar x:Name="buscar" Text="Buscar por clave castral, predio o domicilio" SearchButtonPressed="Handle_SearchButtonPressed" ></SearchBar>
-                <ScrollView>
+              <StackLayout Orientation="Horizontal">
+               <Image Source="search.png"/>
+               <Entry x:Name="enBuscar" Placeholder="Ingrese su clave catastral" HorizontalOptions="FillAndExpand" Keyboard="Numeric" HeightRequest="50"/> 
+            </StackLayout>
+            <!--
+             <SearchBar x:Name="buscar" Placeholder="Ingrese su clave catastral" SearchButtonPressed="Handle_SearchButtonPressed" HeightRequest="50" ></SearchBar>
+             -->
+            <ScrollView>
            <ListView x:Name="listView" RowHeight="200" ItemTapped="Handle_ItemTapped" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -27,25 +33,23 @@
                 <Grid.ColumnDefinitions>
 
                   <ColumnDefinition Width="*" />
-                   <ColumnDefinition Width="*" /> 
+                
                     
 
                 </Grid.ColumnDefinitions>
                    
-                   <Label Text="Predial" Font="Bold" Grid.Row ="0" Grid.Column="0"/>
+                  
                                       
-                     <Label Text="Clave Castastral:" Grid.Row ="1" Grid.Column="0"/>
-                      <Label x:Name="lblClave" Text="" Grid.Row ="1" Grid.Column="1"/>                  
-                     <Label Text="Propietario" Grid.Row ="2" Grid.Column="0"/>
-                     <Label x:Name="lblPropietario"  Grid.Row ="2" Grid.Column="1"/>  
-                     <Label Text="Domicilio:" Grid.Row ="3" Grid.Column="0"/>
-                     <Label x:Name="lblDomiciolio"  Grid.Row ="3" Grid.Column="1"/>                     
-                     <Label Text="Fecha de pago: " Grid.Row ="4" Grid.Column="0"/>
-                     <Label x:Name="lblFechaPago"  Grid.Row ="4" Grid.Column="1"/> 
-                     <Label Text="Importe de impuesto" Grid.Row ="5" Grid.Column="0"/>
-                     <Label x:Name="lblImporteImpuesto"  Grid.Row ="5" Grid.Column="1"/> 
-                     <Label Text="Total Pagado" Grid.Row ="6" Grid.Column="0"/>
-                     <Label x:Name="lblTotal"  Grid.Row ="6" Grid.Column="1"/>                    
+                     <Label Text="{Binding Clave}" Grid.Row ="1" Grid.Column="0"/>
+                                        
+                     <Label Text="{Binding fechaPago}" Grid.Row ="2" Grid.Column="0"/>
+                     <Label Text="{Binding liquidacion}" Grid.Row ="3" Grid.Column="0"/>
+                                        
+                     <Label Text="{Binding liquidacionDesc}" Grid.Row ="4" Grid.Column="0"/>
+                                       
+                     <Label Text="{Binding total}" Grid.Row ="5" Grid.Column="0"/>
+
+                                       
                 </Grid>                 
                     
                 

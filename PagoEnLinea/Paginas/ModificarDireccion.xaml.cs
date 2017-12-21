@@ -14,6 +14,9 @@ namespace PagoEnLinea.Paginas
         string ID,catID,tipoAsenta;
         public static int tipos;
         public static List<string> tipoas;
+        public static List<CargaCP> asentmientos;
+        public static bool cargaCP;
+        public static int cargaID;
         public ModificarDireccion(string id, string idcat, int tipo,string estado, string tipoAsentamiento)
         {
             ID = id;
@@ -21,36 +24,54 @@ namespace PagoEnLinea.Paginas
             tipos = tipo;
             tipoAsenta = tipoAsentamiento;
             InitializeComponent();
+            cargaCP = false;
 
             enCP.TextChanged += OnTextChanged;
             pkpais.SelectedIndex = 0;
             llenarPicker();
 
-            if(tipo==0){
-                llenarPicker();
-                btnModificar.IsVisible = true;
-                btnAgregar.IsVisible = false;
-
-                for (var i = 0; i < pkEstado.Items.Count; i++)
-                {
-                    if (pkEstado.Items[i].Equals(estado))
-                    {
-                        pkEstado.SelectedIndex = i;
-                    }
-                }
-               
-               
-            }
             if(tipo==1){
                 btnAgregar.IsVisible = true;
                 btnModificar.IsVisible = false;
+
+
             }
+
+            if (tipo == 0)
+            {
+                llenarPicker();
+                btnAgregar.IsVisible = false;
+                btnModificar.IsVisible = true;
+               
+               
+            }
+
+            enCP.Completed += algo_Completed;
+            pkAsentamiento.SelectedIndexChanged += onIndexChange;
+        }
+
+        private void onIndexChange(object sender, EventArgs e)
+        {
+            int position = pkAsentamiento.SelectedIndex;
+            if(pkAsentamiento.SelectedIndex>-1){
+                for (var i = 0; i < pkTipoAsentamiento.Items.Count; i++)
+                {
+                  
+                    if (pkTipoAsentamiento.Items[i].Equals(asentmientos[position].tipo))
+                    {
+                        pkTipoAsentamiento.SelectedIndex = i;
+                        break;
+                    }
+                }
+                cargaID = asentmientos[position].catID;
+            }
+
         }
 
         async void Añadir()
         {
 
-            bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false;
+            bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false,a7=false;
 
 
             if (ValidarVacio(enCalle.Text))
@@ -113,9 +134,9 @@ namespace PagoEnLinea.Paginas
                 a5 = true;
             }
 
-            if (!(pkEstado.SelectedIndex > -1))
+            if (ValidarVacio(enEstado.Text))
             {
-                await DisplayAlert("Campo vacio", "selecciona tu estado", "ok");
+                await DisplayAlert("Campo vacio", "Introduzca un estado valido", "ok");
                 a6 = false;
 
             }
@@ -124,9 +145,16 @@ namespace PagoEnLinea.Paginas
 
                 a6 = true;
             }
+            if (!(pkAsentamiento.SelectedIndex > -1))
+            {
+                await DisplayAlert("Campo vacio", "seleccione su asentamiento", "ok");
+                a7 = false;
 
+            }else{
+                a7 = true;
+            }
 
-            if(a1&&a2&&a3&&a4&&a5&&a6){
+            if(a1&&a2&&a3&&a4&&a5&&a6&&a7){
 
                 ClienteRest cliente = new ClienteRest();
                 Modelos.AgregarDireccion agredire = new Modelos.AgregarDireccion();
@@ -155,13 +183,13 @@ namespace PagoEnLinea.Paginas
                         numeroInterior = enNumeroInterior.Text,
                         catalogoDir = new CatalogoDir()
                         {
-
-                            asentamiento = enAsentamiento.Text,
+                            id= (cargaCP)?cargaID.ToString():null,
+                            asentamiento = pkAsentamiento.Items[pkAsentamiento.SelectedIndex],
                             tipoasentamiento = pkTipoAsentamiento.Items[pkTipoAsentamiento.SelectedIndex],
                             cp = enCP.Text,
                             ciudad = enCiudad.Text,
                             municipio = enMunicipio.Text,
-                            estado = pkEstado.Items[pkEstado.SelectedIndex],
+                            estado = enEstado.Text,
                             pais = pkpais.Items[pkpais.SelectedIndex]
 
                         }
@@ -184,11 +212,12 @@ namespace PagoEnLinea.Paginas
                 {
                     DisplayAlert("Guardado", "¡Direccion Añadida con Exito!", "OK");
                     Navigation.PopAsync();
-
+                    MessagingCenter.Unsubscribe<ClienteRest>(this, "OK");
                 });
                 MessagingCenter.Subscribe<ClienteRest>(this, "error", (Sender) => {
                     DisplayAlert("Advertencia", "¡No fué posible añadir la dirección actual!", "error");
                     Navigation.PopAsync();
+                    MessagingCenter.Unsubscribe<ClienteRest>(this, "error");
 
                 });
 
@@ -227,7 +256,8 @@ namespace PagoEnLinea.Paginas
 
 
         void Modificar(){
-            bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false;
+            System.Diagnostics.Debug.WriteLine("dlansdlansdpñ");
+            bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false,a7=false,a8=true;
 
 
             if (ValidarVacio(enCalle.Text))
@@ -244,7 +274,7 @@ namespace PagoEnLinea.Paginas
 
             if (ValidarVacio(enNumero.Text))
             {
-                DisplayAlert("Campo no valido", "Introduza una número válido", "Ok");
+                DisplayAlert("Campo no valido", "Introduza una número valido", "Ok");
                 a2 = false;
 
             }
@@ -257,7 +287,7 @@ namespace PagoEnLinea.Paginas
 
             if (ValidarVacio(enCP.Text) || enCP.Text.Length < 5)
             {
-                DisplayAlert("Campo no valido", "Introduza una código postal válido", "Ok");
+                DisplayAlert("Campo no valido", "Introduza una código postal valido", "Ok");
                 a3 = false;
             }
             else
@@ -270,7 +300,6 @@ namespace PagoEnLinea.Paginas
             if (!(pkTipoAsentamiento.SelectedIndex > -1))
             {
                  DisplayAlert("Campo vacio", "selecciona un tipo de asentamiento", "ok");
-
                 a4 = false;
 
             }
@@ -281,7 +310,7 @@ namespace PagoEnLinea.Paginas
 
             if (ValidarVacio(enMunicipio.Text))
             {
-                DisplayAlert("Campo vacio", "Introduzca un municipio válido", "ok");
+                DisplayAlert("Campo vacio", "Introduzca un municipio valido", "ok");
                 a5 = false;
 
             }
@@ -291,9 +320,9 @@ namespace PagoEnLinea.Paginas
                 a5 = true;
             }
 
-            if (!(pkEstado.SelectedIndex > -1))
+            if (ValidarVacio(enEstado.Text))
             {
-                 DisplayAlert("Campo vacio", "selecciona tu estado", "ok");
+                 DisplayAlert("Campo vacio", "Introduzaca un estado", "ok");
                 a6 = false;
 
             }
@@ -303,8 +332,32 @@ namespace PagoEnLinea.Paginas
                 a6 = true;
             }
 
+            if (ValidarVacio(enAsentamiento.Text))
+            {
+                DisplayAlert("Campo vacio", "Introduzaca un asentamiento", "ok");
+                a7 = false;
 
-            if (a1 && a2 && a3 && a4 && a5 && a6)
+            }
+            else
+            {
+
+                a7 = true;
+            }
+
+            if(cargaCP){
+                if (!(pkAsentamiento.SelectedIndex > -1))
+                {
+                    DisplayAlert("Campo vacio", "seleccione su asentamiento", "ok");
+                    a8 = false;
+
+                }
+                else
+                {
+                    a8 = true;
+                }
+            }
+
+            if (a1 && a2 && a3 && a4 && a5 && a6 &&a7&&a8)
             {
                 ClienteRest client = new ClienteRest();
 
@@ -317,12 +370,12 @@ namespace PagoEnLinea.Paginas
                 dir.catalogoDir = new CatalogoDir()
                 {
                     id = catID,
-                    asentamiento = enAsentamiento.Text,
-                    tipoasentamiento = pkTipoAsentamiento.Items[pkTipoAsentamiento.SelectedIndex],
+                    asentamiento = (cargaCP)?pkAsentamiento.Items[pkAsentamiento.SelectedIndex]:enAsentamiento.Text,
+                    tipoasentamiento =pkTipoAsentamiento.Items[pkTipoAsentamiento.SelectedIndex] ,
                     cp = enCP.Text,
                     ciudad = enCiudad.Text,
                     municipio = enMunicipio.Text,
-                    estado = pkEstado.Items[pkEstado.SelectedIndex],
+                    estado = enEstado.Text,
                     pais = pkpais.Items[pkpais.SelectedIndex]
 
                 };
@@ -352,6 +405,7 @@ namespace PagoEnLinea.Paginas
         {
             Añadir();
         }
+
 
         void llenarPicker()
         {
@@ -391,9 +445,79 @@ namespace PagoEnLinea.Paginas
 
 
                 }
-                else { await DisplayAlert("Error de conexion", "No hay coneccion a internet", "ok"); }
+                else { await DisplayAlert("Error de conexion", "No hay conexión a internet", "ok"); }
 
             });
+        }
+
+
+        async void algo_Completed(object sender, System.EventArgs e)
+        {
+
+           
+            var cp = ((Entry)sender).Text;
+
+            if (CrossConnectivity.Current.IsConnected)
+            {
+                enAsentamiento.IsVisible = false;
+                pkAsentamiento.IsVisible = true;
+
+                cargaCP = true;
+                ClienteRest cliente = new ClienteRest();
+                var resp = await cliente.GET<CodigoPostal>(Constantes.URL + "/catalogo-dirs/mostrarCatalogo/" + cp);
+
+                if (resp != null)
+                {
+                    pkAsentamiento.Items.Clear();
+
+                    asentmientos = new List<CargaCP>();
+                    foreach (var item in resp.respuesta)
+                    {
+                        asentmientos.Add(new CargaCP
+                        {
+
+                               tipo = item.tipoasentamiento,
+                            asentamiento = item.asentamiento,
+                            catID = item.id
+                        });
+
+                    }
+
+                 
+                    foreach(var asent in asentmientos){
+                        pkAsentamiento.Items.Add(asent.asentamiento);
+                    }
+
+
+                 
+                    enCiudad.Text = resp.respuesta[0].ciudad;
+                    enAsentamiento.Text = resp.respuesta[0].asentamiento;
+                    enMunicipio.Text = resp.respuesta[0].municipio;
+                    enEstado.Text = resp.respuesta[0].estado;
+                    //enTipoAsentamiento.Text = resp.respuesta[0].tipoasentamiento;
+                    //enPais.Text = resp.respuesta[0].pais;
+
+
+
+
+                }
+            }
+            else { await DisplayAlert("Error de conexion", "No hay conexión a internet", "ok"); }
+        }
+
+        void Handle_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            for (var i = 0; i < pkTipoAsentamiento.Items.Count; i++)
+            {
+                int position = pkAsentamiento.SelectedIndex;
+                if (pkTipoAsentamiento.Items[i].Equals(asentmientos[position]))
+                {
+                    pkTipoAsentamiento.SelectedIndex = i;
+                    break;
+                }
+            }
+
+
         }
     }
 }

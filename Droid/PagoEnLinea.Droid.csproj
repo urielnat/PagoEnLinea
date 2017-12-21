@@ -153,11 +153,33 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="mscorlib" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="SQLite-net">
+      <HintPath>..\packages\sqlite-net-pcl.1.4.118\lib\netstandard1.1\SQLite-net.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.core">
+      <HintPath>..\packages\SQLitePCLRaw.core.1.1.9\lib\MonoAndroid\SQLitePCLRaw.core.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.lib.e_sqlite3">
+      <HintPath>..\packages\SQLitePCLRaw.lib.e_sqlite3.android.1.1.9\lib\MonoAndroid\SQLitePCLRaw.lib.e_sqlite3.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.provider.e_sqlite3">
+      <HintPath>..\packages\SQLitePCLRaw.provider.e_sqlite3.android.1.1.9\lib\MonoAndroid\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_green">
+      <HintPath>..\packages\SQLitePCLRaw.bundle_green.1.1.9\lib\MonoAndroid\SQLitePCLRaw.batteries_green.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2">
+      <HintPath>..\packages\SQLitePCLRaw.bundle_green.1.1.9\lib\MonoAndroid\SQLitePCLRaw.batteries_v2.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PagoEnLinea\PagoEnLinea.csproj">
       <Project>{B39430AD-1419-4E41-A715-7CBC8F5DBC7D}</Project>
       <Name>PagoEnLinea</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CarritoBD\CarritoBD.csproj">
+      <Project>{22997E39-E579-4491-86A2-D5BCE80A0ABE}</Project>
+      <Name>CarritoBD</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -201,6 +223,16 @@
     <AndroidResource Include="Resources\drawable\logout.png" />
     <AndroidResource Include="Resources\drawable\ic_add_white.png" />
     <AndroidResource Include="Resources\drawable\arrow.png" />
+    <AndroidResource Include="Resources\raw\TodoSQLite.db3" />
+    <AndroidResource Include="Resources\drawable\CarritoButton.png" />
+    <AndroidResource Include="Resources\drawable\HistorialButton.png" />
+    <AndroidResource Include="Resources\drawable\LiquidacionButton.png" />
+    <AndroidResource Include="Resources\drawable\PredialButton.png" />
+    <AndroidResource Include="Resources\drawable\profileButton.png" />
+    <AndroidResource Include="Resources\drawable\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\raw\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Build.Download.0.4.7\build\Xamarin.Build.Download.targets" Condition="Exists('..\packages\Xamarin.Build.Download.0.4.7\build\Xamarin.Build.Download.targets')" />

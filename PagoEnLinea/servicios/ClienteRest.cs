@@ -31,9 +31,10 @@ namespace PagoEnLinea.servicios
                 {
                     System.Diagnostics.Debug.WriteLine("SE HIZO LA CONEXION");
                     var jsonString = await response.Content.ReadAsStringAsync();
-                  
                     System.Diagnostics.Debug.WriteLine(jsonString);
-                    return JsonConvert.DeserializeObject<T>(jsonString); 
+                    var x=JsonConvert.DeserializeObject<T>(jsonString);
+                    return x;
+
 
                 }
                 else

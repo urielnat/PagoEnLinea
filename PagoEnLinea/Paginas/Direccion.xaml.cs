@@ -26,12 +26,14 @@ namespace PagoEnLinea.Paginas
             var info = (infodir)e.Item;
 
             var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Eliminar", "Modificar");
+            if(!string.IsNullOrEmpty(action)){
             if (action.Equals("Modificar"))
             {
                 await Navigation.PushAsync(new ModificarDireccion(info.id, info.idCat, 0, info.estado, info.tipoasentamiento) { BindingContext = (infodir)e.Item });
             }
             if(action.Equals("Eliminar")){
                 var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar esta dirección?", "Si", "Cancelar");{
+                    
                     if(respuesta){
 
 
@@ -81,6 +83,7 @@ namespace PagoEnLinea.Paginas
 
                     }
                 }
+            }
             }
             ((ListView)sender).SelectedItem = null;
         }

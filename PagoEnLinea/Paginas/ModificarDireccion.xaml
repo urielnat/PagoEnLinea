@@ -32,17 +32,23 @@
                 <Label Text = "Número" Grid.Row="2" Grid.Column="0" YAlign="Center"/>
                 <Entry x:Name="enNumeroInterior" Text="{Binding numeroInterior}" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Número Interior:" Grid.Row="3" Grid.Column="0" YAlign="Center"/>
-                <Entry x:Name="enCP" Text="{Binding cp}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Entry x:Name="enCP" Text="{Binding cp}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Keyboard="Numeric"/>
                 <Label Text = "Código postal:" Grid.Row="4" Grid.Column="0" YAlign="Center"/>
                 <Entry x:Name="enAsentamiento" Text="{Binding asentamiento}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Asentamiento:" Grid.Row="5" Grid.Column="0" YAlign="Center"/>
-                <Picker x:Name="pkTipoAsentamiento"  Title="*Selecciona un tipo de asentamiento" HorizontalOptions="FillAndExpand" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"/>
-                <Label Text = "Tipo:" Grid.Row="6" Grid.Column="0" YAlign="Center"/>
+                <Picker x:Name="pkAsentamiento" Title="Seleccione un asentamiento"  Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" IsVisible="false" />
+               
+                    <Label Text = "Asentamiento:" Grid.Row="5" Grid.Column="0" YAlign="Center"/>
+                <Entry  x:Name="enTipoAsentamiento" Text="{Binding tipoasentamiento}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" IsVisible="false" />
+                <Picker x:Name="pkTipoAsentamiento" Title="Seleccione un tipo asentamiento"  Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" IsVisible="true"/>
+                    <Label Text = "Tipo:" Grid.Row="6" Grid.Column="0" YAlign="Center"/>
                 <Entry x:Name="enCiudad" Text="{Binding ciudad}" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Ciudad:" Grid.Row="7" Grid.Column="0" YAlign="Center"/>
                 <Entry x:Name="enMunicipio" Text="{Binding municipio}" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2"/>
                 <Label Text = "Municipio:" Grid.Row="8" Grid.Column="0" YAlign="Center"/>
-                <Picker x:Name="pkEstado"  Title="*Selecciona un estado" HorizontalOptions="FillAndExpand"  Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2">
+                <Entry x:Name="enEstado" Text="{Binding estado}" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2"/>
+                <Label Text = "Estado:" Grid.Row="9" Grid.Column="0" YAlign="Center"/>
+                <!--
+                    <Picker x:Name="pkEstado"  Title="*Selecciona un estado" HorizontalOptions="FillAndExpand"  Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2">
                          <Picker.Items>
                                  <x:String>Aguascalientes</x:String> 
                                  <x:String>Baja California</x:String>
@@ -78,8 +84,8 @@
                                  <x:String>Zacatecas</x:String>
 
                               </Picker.Items>
-                              </Picker>
-                <Label Text = "Estado:" Grid.Row="9" Grid.Column="0" YAlign="Center"/>
+                              </Picker>-->
+                
                
                 <Picker x:Name="pkpais" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2" Title="*Selecciona tu país" HorizontalOptions="FillAndExpand" IsEnabled="false">
                              <Picker.Items>

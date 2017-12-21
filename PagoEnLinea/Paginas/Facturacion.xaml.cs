@@ -74,10 +74,10 @@ namespace PagoEnLinea.Paginas
         {
             conectar();
         }
-       
+
         async void OnitemTapped(object sender, ItemTappedEventArgs e)
         {
-            
+
 
 
 
@@ -86,13 +86,14 @@ namespace PagoEnLinea.Paginas
             var info = (MostrarDatosFacturacion)e.Item;
 
             var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Eliminar", "Modificar");
+            if (!string.IsNullOrEmpty(action)) { 
             if (action.Equals("Modificar"))
             {
-                await Navigation.PushAsync(new Modificarfacturacion(((MostrarDatosFacturacion)e.Item).id, ((MostrarDatosFacturacion)e.Item).idDireccion, ((MostrarDatosFacturacion)e.Item).idCatDir, 0,((MostrarDatosFacturacion)e.Item).email,((MostrarDatosFacturacion)e.Item).calle) { BindingContext = (MostrarDatosFacturacion)e.Item });
+                await Navigation.PushAsync(new Modificarfacturacion(((MostrarDatosFacturacion)e.Item).id, ((MostrarDatosFacturacion)e.Item).idDireccion, ((MostrarDatosFacturacion)e.Item).idCatDir, 0, ((MostrarDatosFacturacion)e.Item).email, ((MostrarDatosFacturacion)e.Item).calle) { BindingContext = (MostrarDatosFacturacion)e.Item });
             }
             if (action.Equals("Eliminar"))
             {
-                var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar esta información de facturacón?", "Si", "Cancelar");
+                var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar esta información de facturación?", "Si", "Cancelar");
                 {
                     if (respuesta)
                     {
@@ -144,6 +145,7 @@ namespace PagoEnLinea.Paginas
                     }
                 }
             }
+        }
             ((ListView)sender).SelectedItem = null;
 
 

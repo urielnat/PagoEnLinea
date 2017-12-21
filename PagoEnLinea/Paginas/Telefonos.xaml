@@ -20,10 +20,12 @@
 
                   <ColumnDefinition Width="*" />
                    <ColumnDefinition Width="*" /> 
+                    <ColumnDefinition Width="*" />                          
 
                 </Grid.ColumnDefinitions>
-                   <Label Text="Teléfono" Grid.Row ="0" Grid.Column="0"/>
-                     <Label Text="{Binding telefono}" Grid.Row ="0" Grid.Column="1"/>
+                   <Label Text="{Binding tipo}" Grid.Row ="0" Grid.Column="0"/>
+                     <Label Text="{Binding lada}" Grid.Row ="0" Grid.Column="1" HorizontalTextAlignment="End"/>                     
+                     <Label Text="{Binding telefono}" Grid.Row ="0" Grid.Column="2" Grid.ColumnSpan="2" HorizontalTextAlignment="Start"/>
                 </Grid>
                     </Frame>
                 </ViewCell>

@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.HomePage" Title="Bienvenido">
 	<ContentPage.Content>
-        <Label x:Name="nombre" Text="Bienvenido"></Label>
+       <!-- <Label x:Name="nombre" Text="Bienvenido"></Label>-->
+        <StackLayout Padding="30,30,30,0"  >
+          <ScrollView >
+        <Grid ColumnSpacing="10" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />   
+                <RowDefinition Height="auto" /> 
+                <RowDefinition Height="auto" /> 
+                <RowDefinition Height="auto" /> 
+                <RowDefinition Height="auto" />  
+                <RowDefinition Height="*" /> 
+                <RowDefinition Height="*" />  
+                 <RowDefinition Height="*" /> 
+                  <RowDefinition Height="*" /> 
+                <RowDefinition Height="*" />  
+                 <RowDefinition Height="*" />  
+                 <RowDefinition Height="*" /> 
+                <RowDefinition Height="*" />  
+                 <RowDefinition Height="*" />         
+                       
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                 <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="*" />
+                         
+            </Grid.ColumnDefinitions>
+
+            <Label Font="Bold" x:Name="Nombre" Grid.ColumnSpan="3" Grid.Row="0" FontSize="20" HorizontalTextAlignment="Center" />
+            
+              
+            <Image x:Name="perfil" Source= "profileButton.png" BackgroundColor="Transparent" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2"  /> 
+            <Image  x:Name="liquidacion"  BackgroundColor="Transparent" Source = "LiquidacionButton.png" Grid.Column="1" Grid.Row="2"   />   
+            <Image x:Name="predio" Source="PredialButton.png" Grid.Column="2" Grid.Row="2" BackgroundColor="Transparent" /> 
+            <Label TextColor="#3A718C" Font="Bold" Text="Perfil" HorizontalTextAlignment="Center" Grid.Row="4" Grid.Column="0" />
+            <Label TextColor="#3A718C" Font="Bold" Text="Liquidación" HorizontalTextAlignment="Center" Grid.Row="4" Grid.Column="1" />
+            <Label TextColor="#3A718C" Font="Bold" Text="Predial" HorizontalTextAlignment="Center" Grid.Row="4" Grid.Column="2" />       
+
+            <Image  x:Name="carrit"  Source= "CarritoButton.png" Grid.Column="0" Grid.Row="5"  BackgroundColor="Transparent"  />
+            <Label x:Name="itemsCarrito" TextColor="White"  Font="Bold" FontSize="25" Text="0" HorizontalTextAlignment="Center" Grid.Row="5" Grid.Column="0" VerticalTextAlignment="Center" />          
+            <Image  x:Name="historil" Source= "HistorialButton.png" Grid.Column="1" Grid.Row="5"  BackgroundColor="Transparent" /> 
+            <Button  Grid.Column="2" Grid.Row="5"  BackgroundColor="#2c86ca" TextColor="White" IsVisible="false" />   
+            <Label TextColor="#3A718C"  Font="Bold" Text="Carrito" HorizontalTextAlignment="Center" Grid.Row="7" Grid.Column="0" />           
+            <Label TextColor="#3A718C" Font="Bold" Text="Historial" HorizontalTextAlignment="Center" Grid.Row="7" Grid.Column="1" />  
+        </Grid>
+                 
+       </ScrollView>   
+        
+    </StackLayout>
+
+        
 	</ContentPage.Content>
 </ContentPage>

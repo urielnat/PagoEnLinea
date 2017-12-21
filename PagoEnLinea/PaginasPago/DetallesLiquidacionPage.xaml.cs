@@ -7,9 +7,14 @@ namespace PagoEnLinea.PaginasPago
 {
     public partial class DetallesLiquidacionPage : ContentPage
     {
-        public DetallesLiquidacionPage()
+        public DetallesLiquidacionPage(IList<Modelos.LiquidacionDesConcepto> liqdesconcep)
         {
             InitializeComponent();
+
+
+            BindingContext = liqdesconcep;
+            listView.ItemsSource = liqdesconcep;
+
         }
     }
 }

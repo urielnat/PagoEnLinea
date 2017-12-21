@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using CarritoBD;
 using Xamarin.Forms;
 
@@ -23,7 +25,7 @@ namespace PagoEnLinea.PaginasPago
         }
 
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
             total();
@@ -31,17 +33,66 @@ namespace PagoEnLinea.PaginasPago
         }
 
         async void total(){
-            int total = 0;
+            HttpResponseMessage response;
+
+
+
+            double tot = 0;
             // Reset the 'resume' id, since we just want to re-start here
+          
+            /*
+            ((App)Application.Current).ResumeAtTodoId = -1;
+            list = await App.Database.GetItemsAsync();
+            HttpClient cliente = new HttpClient();
+            cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJDQUpBX0NBSkVSTyxST0xFX0FETUlOLFJPTEVfVVNFUiIsInBzdG8iOiJbXSIsIm5tIjoiSVNBQUMiLCJhcDEiOiJCQVVUSVNUQSIsImFwMiI6IkNBTUlOTyIsImV4cCI6MTUxMjY1NzA3Mn0.kpf3hvgb7FPj0sHqdOhlYEvpNPOJxd569RVpr8JKchTMqQuLnVMuFujJEqaSXULi58e6kuaLDBANf2bTcDJAtw");
+
+
+            try
+            {
+                foreach (var item in list) { 
+                    
+                    response = await cliente.GetAsync("http://192.168.0.18:8081/api/liquidacions/numero/" + item.Name.Replace("Liquidacion: ",""));
+                    var y = await response.Content.ReadAsStringAsync();
+
+
+
+                  if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+
+                        tot += item.price;
+                    }
+
+
+
+
+                  else
+                    {
+                      
+                        await App.Database.DeleteItemAsync(item);
+                        await DisplayAlert("Advertencia", "Se eliminó un item del carrito debido a que la liquidación fué actualizada", "OK");
+                    }
+                
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
+
+            }**/
+
             ((App)Application.Current).ResumeAtTodoId = -1;
             list = await App.Database.GetItemsAsync();
             listView.ItemsSource = list;
-            foreach (var pago in list)
-            {
 
-                total += pago.price;
+            foreach(var item in list){
+                tot += item.price;
             }
-            Total.Text = total.ToString();
+
+
+            Total.Text = tot.ToString();
+
+
+         
         }
 
 
@@ -56,9 +107,10 @@ namespace PagoEnLinea.PaginasPago
 
             var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Quitar del carrito");
 
+            if (!string.IsNullOrEmpty(action)) { 
             if (action.Equals("Quitar del carrito"))
             {
-                var respuesta = await DisplayAlert("Quitar", "¿Esta seguro que desea quitar este elémento del carrito?", "Si", "Cancelar");
+                var respuesta = await DisplayAlert("Quitar", "¿Esta seguro que desea quitar este elemento del carrito?", "Si", "Cancelar");
                 {
                     if (respuesta)
                     {
@@ -71,6 +123,7 @@ namespace PagoEnLinea.PaginasPago
                     }
                 }
             }
+        }
            ((ListView)sender).SelectedItem = null;
 
 
@@ -80,11 +133,15 @@ namespace PagoEnLinea.PaginasPago
 
         }
 
-        async void OnItemAdded(object sender, EventArgs e)
+         void OnItemAdded(object sender, EventArgs e)
         {
             
         }
 
 
+        void Handle_Clicked(object sender, System.EventArgs e)
+        {
+            Navigation.PushAsync(new PasarelaPage());
+        }
     }
 }

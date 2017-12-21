@@ -40,9 +40,9 @@
                 <Entry x:Name="enNumero" Placeholder="No." Grid.Row="2" Grid.Column="1"/>
 
                  <Label x:Name="lblNumInt" Text="Número interior" XAlign="Center" Grid.Row="2" Grid.Column="2" YAlign="Center" Font="bold"/>
-                <Entry x:Name="enNumInt" Placeholder="No." Grid.Row="2" Grid.Column="3" Keyboard="Numeric" />     
+                <Entry x:Name="enNumInt" Placeholder="No." Grid.Row="2" Grid.Column="3" Keyboard="Numeric"  />     
                     <Label x:Name="lblCod" Text="*Código postal" XAlign="Center" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" YAlign="Center" Font="bold"/>
-                <Entry x:Name="enCod" Placeholder="00000" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Keyboard="Numeric" />  
+                <Entry x:Name="enCod" Placeholder="00000" Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Keyboard="Numeric" Completed="algo_Completed"/>  
 
                 <Image Source="map.png" Grid.Row="4" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
             <xfx:XfxEntry x:Name="enColonia" Grid.Row="4"
@@ -51,19 +51,43 @@
                           Placeholder="*Ingresa tu asentamiento"
                           VerticalOptions="End"
                               />
+                    <Picker x:Name="pkAsentamiento"  IsVisible="false" HorizontalOptions="FillAndExpand" 
+                           Grid.Row="4"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="3"
+                         Title="*Selecciona un asentamiento"
+                          >
+                         
+                              </Picker>
 
                   <Image Source="map.png" Grid.Row="5" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-                            <Picker x:Name="pkTipoAsentamiento"  Title="*Selecciona un tipo de asentamiento" HorizontalOptions="FillAndExpand" 
+                  <xfx:XfxEntry x:Name="enTipoAsentamiento"
+                         Grid.Row="5"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="3"
+                          Placeholder="*Ingresa tu tipo de asentamiento"
+                          VerticalOptions="End"/>
+                    <!--
+                    <Picker x:Name="pkTipoAsentamiento"  Title="*Selecciona un tipo de asentamiento" HorizontalOptions="FillAndExpand" 
                            Grid.Row="5"
                           Grid.Column="1"
                           Grid.ColumnSpan="3"
                           >
                          
-                              </Picker>
+                              </Picker>-->
 
                     
                 <Image Source="city.png" Grid.Row="6" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-                            <Picker x:Name="pkEstado"  Title="*Selecciona un estado" HorizontalOptions="FillAndExpand" 
+                <xfx:XfxEntry  x:Name="enEstado"  
+                           Grid.Row="6"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="3"
+                          Placeholder="*Ingresa tu estado"
+                          VerticalOptions="End"
+                          />
+
+                <!--
+                    <Picker x:Name="pkEstado"  Title="*Selecciona un estado" HorizontalOptions="FillAndExpand" 
                            Grid.Row="6"
                           Grid.Column="1"
                           Grid.ColumnSpan="3"
@@ -104,7 +128,7 @@
 
                               </Picker.Items>
                               </Picker>
-
+                              -->
 
              <Image Source="map.png" Grid.Row="7" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
             <xfx:XfxEntry x:Name="enMunicipio" Grid.Row="7"
@@ -122,21 +146,21 @@
                               />
 
               <Image Source="city.png" Grid.Row="9" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
-              <!--
-                    <xfx:XfxEntry x:Name="enPais" Grid.Row="9"
+                   <xfx:XfxEntry x:Name="enPais" Grid.Row="9"
                           Grid.Column="1"
                           Grid.ColumnSpan="3"
                           VerticalOptions="End"
                           Placeholder="*Ingresa tu País"
                               />      
-                  -->
+                 
+               <!--     
              <Picker x:Name="pkpais" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3" Title="*Selecciona tu país" HorizontalOptions="FillAndExpand" IsEnabled="false">
                              <Picker.Items>
                                  <x:String>MEXICO</x:String> 
                                 
 
                               </Picker.Items>
-                              </Picker>   
+                              </Picker>  --> 
                     
             <Image Source="telephone.png" Grid.Row="10" Grid.Column="0" HorizontalOptions="CenterAndExpand"/>
             <xfx:XfxEntry x:Name="enTelefono" Grid.Row="10"

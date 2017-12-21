@@ -15,9 +15,9 @@ namespace PagoEnLinea
         {
             InitializeComponent();
 
-
-           
+            //Properties.Clear();
             //MessagingCenter.Subscribe<PopupCarga>(this, "login", (Sender) => { MainPage = new NavigationPage(new Menu()); });
+
             if (Current.Properties.ContainsKey("token"))
             {
                 MainPage = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage()) };
@@ -27,7 +27,7 @@ namespace PagoEnLinea
                 Current.Properties.Clear();
                 MainPage = new NavigationPage(new LoginPage());
             }
-
+          //  MainPage = new RegistroPage2(null, null, null);
 
 
         }

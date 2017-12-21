@@ -69,6 +69,12 @@ namespace PagoEnLinea
             await PopupNavigation.PushAsync(new PopupCarga(enUsuario.Text, enContraseña.Text), false);
             //viewModel.SignIn();
         }
+
+        void Handle_Completed(object sender, System.EventArgs e)
+        {
+            var text = ((Entry)sender).Text; 
+            System.Diagnostics.Debug.WriteLine("se completó");
+        }
     }
 }
 

@@ -19,11 +19,12 @@ namespace PagoEnLinea.Paginas
           
         }
 
-       async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var info = (Telefono)e.Item;
 
             var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Eliminar", "Modificar");
+            if (!string.IsNullOrEmpty(action)) { 
             if (action.Equals("Modificar"))
             {
                 await Navigation.PushAsync(new ModificarTelefono((e.Item as Telefono).id, (e.Item as Telefono).tipo, 0) { BindingContext = (Telefono)e.Item });
@@ -37,7 +38,7 @@ namespace PagoEnLinea.Paginas
 
                         HttpResponseMessage response;
 
-                     
+
                         try
                         {
                             HttpClient cliente = new HttpClient();
@@ -48,7 +49,7 @@ namespace PagoEnLinea.Paginas
 
                                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                             }
-                           
+
                             var uri = new Uri(string.Format(Constantes.URL + "/telefono/eliminar/{0}", info.id));
                             response = await cliente.DeleteAsync(uri);
                             var y = await response.Content.ReadAsStringAsync();
@@ -82,6 +83,7 @@ namespace PagoEnLinea.Paginas
                     }
                 }
             }
+        }
             ((ListView)sender).SelectedItem = null;
 
         }
