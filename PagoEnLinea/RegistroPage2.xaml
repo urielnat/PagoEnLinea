@@ -2,10 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.RegistroPage2" xmlns:xfx="clr-namespace:Xfx;assembly=Xfx.Controls" Title="Datos complementarios">
 	<ContentPage.Content>
        
-    <StackLayout Padding="30,0,30,0">
-        <ScrollView>
+    <StackLayout Padding="30,20,30,0">
+        <ScrollView x:Name="scroll2" VerticalOptions="FillAndExpand" HeightRequest="2000">
              
-        <Grid RowSpacing="0" ColumnSpacing="0"  >
+        <Grid RowSpacing="0" ColumnSpacing="0"   >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition Height="auto" />
@@ -194,7 +194,24 @@
                           Keyboard="Telephone"
                               />  
            
-                    
+                    <xfx:XfxEntry x:Name="eninvisible" Grid.Row="12"
+                          Grid.Column="2"
+                          Grid.ColumnSpan="2"
+                          VerticalOptions="End"
+                          Placeholder="Ingresa tu Celular"
+                          Keyboard="Telephone"
+                          IsVisible="false"
+                              />  
+                    <xfx:XfxEntry x:Name="eninvisible2" Grid.Row="13"
+                          Grid.Column="2"
+                          Grid.ColumnSpan="2"
+                          VerticalOptions="End"
+                          Placeholder="Ingresa tu Celular"
+                          Keyboard="Telephone"
+                          IsVisible="false"
+                              />  
+                   
+           
            
              </Grid>
          </ScrollView>  

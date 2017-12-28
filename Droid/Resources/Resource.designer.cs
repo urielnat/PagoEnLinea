@@ -6374,6 +6374,9 @@ namespace PagoEnLinea.Droid
 			// aapt resource value: 0x7f0c000e
 			public const int CardView_Light = 2131492878;
 			
+			// aapt resource value: 0x7f0c019c
+			public const int MyDatePicker = 2131493276;
+			
 			// aapt resource value: 0x7f0c0199
 			public const int MyTheme = 2131493273;
 			
@@ -6688,6 +6691,9 @@ namespace PagoEnLinea.Droid
 			
 			// aapt resource value: 0x7f0c0181
 			public const int TextAppearance_Design_Tab = 2131493249;
+			
+			// aapt resource value: 0x7f0c019d
+			public const int TextAppearance_Material_DatePicker_YearLabel = 2131493277;
 			
 			// aapt resource value: 0x7f0c0000
 			public const int TextAppearance_MediaRouter_PrimaryText = 2131492864;

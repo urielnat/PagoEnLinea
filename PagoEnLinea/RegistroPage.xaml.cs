@@ -33,14 +33,244 @@ namespace PagoEnLinea
             enCorreo.TextChanged += borrarError;
             enPassword.TextChanged += borrarError;
             enPassword2.TextChanged += borrarError;
+            enCURP.TextChanged += borrarError;
             enCURP.TextChanged += MayusChanged;
 
+            enCURP.Completed += VerificarError;
+            enCURP.Unfocused += errorUnfocus;
+
+            enNombre.Completed += VerificarError;
+            enPaterno.Completed += VerificarError;
+            enMaterno.Completed += VerificarError;
+            enCorreo.Completed += VerificarError;
+            enPassword.Completed += VerificarError;
+            enPassword2.Completed += VerificarError;
+
+
+            enNombre.Unfocused += errorUnfocus;
+            enPaterno.Unfocused += errorUnfocus;
+            enMaterno.Unfocused += errorUnfocus;
+            enCorreo.Unfocused += errorUnfocus;
+            enPassword.Unfocused += errorUnfocus;
+            enPassword2.Unfocused += errorUnfocus;
+
+            dtFecha.MaximumDate = DateTime.Now;
+            dtFecha.Date = DateTime.Now;
             PopupNavigation.PushAsync(new TutorialPopUp(), false);
+            enPassword.Focused += OnFocus;
+
         }
 
 
 
+        private async void OnFocus(object sender, FocusEventArgs e)
+        {
 
+
+            if (sender == enPassword)
+            {
+
+                await Task.Yield();
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var heightContentScroll = scroll2.ContentSize.Height;
+                    await Task.Yield();
+                    await scroll2.ScrollToAsync(enPassword2, ScrollToPosition.Start, true);
+                });
+
+
+            }
+
+
+
+
+        }
+
+        async private void errorUnfocus(object sender, FocusEventArgs e)
+        {
+
+
+            if (sender == enCURP)
+            {
+                if (string.IsNullOrEmpty(enCURP.Text) || !Regex.Match(enCURP.Text, "[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]").Success)
+                    enCURP.ErrorText = "Introduzca un CURP valido";
+                else enCURP.ErrorText = "";
+            }
+            else if (sender == enNombre)
+            {
+                if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
+                {
+                    enNombre.ErrorText = "Introduzca un nombre válido";
+                }
+                else
+                {
+                    enNombre.ErrorText = "";
+                }
+            }
+            else if (sender == enPaterno)
+            {
+                if (string.IsNullOrEmpty(enPaterno.Text) || !Regex.Match(enPaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
+                {
+                    enPaterno.ErrorText = "Introduzca un apellido válido";
+
+
+                }
+                else
+                {
+                    enPaterno.ErrorText = "";
+
+                }
+            }
+            else if (sender == enMaterno)
+            {
+                if (!string.IsNullOrEmpty(enMaterno.Text))
+                {
+                    if (!Regex.Match(enMaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
+                    {
+                        enMaterno.ErrorText = "Introduzca un apellido válido";
+
+
+                    }
+                    else
+                    {
+                        enMaterno.ErrorText = "";
+                    }
+                }
+            }
+            else if (sender == enPassword)
+            {
+               
+                if (string.IsNullOrEmpty(enPassword.Text) || enPassword.Text.Length < 8 || enPassword.Text.Length > 16)
+                {
+                    enPassword.ErrorText = "contraseña inválida (mínimo 8 caracteres)";
+
+                }
+            }
+            else if (sender == enPassword2)
+            {
+               
+                if (!(string.IsNullOrEmpty(enPassword.Text) && string.IsNullOrEmpty(enPassword2.Text)))
+                {
+                    if (enPassword.Text.Equals(enPassword2.Text))
+                    {
+                        enPassword2.ErrorText = "";
+
+                    }
+                    else
+                    {
+                        enPassword2.ErrorText = "Las contraseñas no concuerdan";
+                    }
+
+                }
+            }
+            else if (sender == enCorreo)
+            {
+                if (string.IsNullOrEmpty(enCorreo.Text) || !Regex.Match(enCorreo.Text, "^(?(\")(\".+?(?<!\\\\)\"@)|(([0-9A-Za-z]((\\.(?!\\.))|[-!#\\$%&'\\*\\+/=\\?\\^`\\{\\}\\|~\\w])*)(?<=[0-9A-Za-z])@))(?(\\[)(\\[(\\d{1,3}\\.){3}\\d{1,3}\\])|(([0-9a-z][-\\w]*[0-9a-z]*\\.)+[a-z0-9][\\-a-z0-9]{0,22}[a-z0-9]))$").Success)
+                {
+                    enCorreo.ErrorText = "Introduzca un correo electrónico válido";
+
+                }
+                else
+                {
+                    enCorreo.ErrorText = "";
+
+                }
+            }
+        }
+
+        private async void VerificarError(object sender, EventArgs e)
+        {
+
+
+            if (sender == enCURP)
+            {
+                if (string.IsNullOrEmpty(enCURP.Text) || !Regex.Match(enCURP.Text, "[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]").Success)
+                    enCURP.ErrorText = "Introduzca un CURP valido";
+                else enCURP.ErrorText = "";
+            }
+            else if (sender == enNombre)
+            {
+                if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
+                {
+                    enNombre.ErrorText = "Introduzca un nombre válido";
+                }
+                else
+                {
+                    enNombre.ErrorText = "";
+                }
+            }
+            else if (sender == enPaterno)
+            {
+                if (string.IsNullOrEmpty(enPaterno.Text) || !Regex.Match(enPaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
+                {
+                    enPaterno.ErrorText = "Introduzca un apellido válido";
+
+
+                }
+                else
+                {
+                    enPaterno.ErrorText = "";
+
+                }
+            }
+            else if (sender == enMaterno)
+            {
+                if (!string.IsNullOrEmpty(enMaterno.Text))
+                {
+                    if (!Regex.Match(enMaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
+                    {
+                        enMaterno.ErrorText = "Introduzca un apellido válido";
+
+
+                    }
+                    else
+                    {
+                        enMaterno.ErrorText = "";
+                    }
+                }
+            }
+            else if (sender == enPassword)
+            {
+                await Task.Yield();
+                await scroll2.ScrollToAsync(enPassword2, ScrollToPosition.End, true);
+                if (string.IsNullOrEmpty(enPassword.Text) || enPassword.Text.Length < 8 || enPassword.Text.Length > 16)
+                {
+                    enPassword.ErrorText = "contraseña inválida (mínimo 8 caracteres)";
+
+                }
+            }
+            else if (sender == enPassword2)
+            {
+                await Task.Yield();
+                await scroll2.ScrollToAsync(enPassword2, ScrollToPosition.End, true);
+                if (!(string.IsNullOrEmpty(enPassword.Text) && string.IsNullOrEmpty(enPassword2.Text)))
+                {
+                    if (enPassword.Text.Equals(enPassword2.Text))
+                    {
+                        enPassword2.ErrorText = "";
+
+                    }
+                    else
+                    {
+                        enPassword2.ErrorText = "Las contraseñas no concuerdan";
+                    }
+
+                }
+            }else if (sender== enCorreo){
+                if (string.IsNullOrEmpty(enCorreo.Text) || !Regex.Match(enCorreo.Text, "^(?(\")(\".+?(?<!\\\\)\"@)|(([0-9A-Za-z]((\\.(?!\\.))|[-!#\\$%&'\\*\\+/=\\?\\^`\\{\\}\\|~\\w])*)(?<=[0-9A-Za-z])@))(?(\\[)(\\[(\\d{1,3}\\.){3}\\d{1,3}\\])|(([0-9a-z][-\\w]*[0-9a-z]*\\.)+[a-z0-9][\\-a-z0-9]{0,22}[a-z0-9]))$").Success)
+                {
+                    enCorreo.ErrorText = "Introduzca un correo electrónico válido";
+                 
+                }
+                else
+                {
+                    enCorreo.ErrorText = "";
+
+                }
+            }
+        }
+
+   
 
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
@@ -48,9 +278,10 @@ namespace PagoEnLinea
 
             Boolean a1 = false, a2 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = true,a9=true;
             Boolean comodin = true;
-            if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
+            if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
             {
-                enNombre.ErrorText = "Introduzca un nombre válido";
+                enNombre.ErrorText = "Introduzca un nombre valido";
+                await DisplayAlert("Advertencia","Introduzca un nombre válido","OK");
                 a1 = false;
             }
             else
@@ -58,9 +289,10 @@ namespace PagoEnLinea
                 enNombre.ErrorText = "";
                 a1 = true;
             }
-            if (string.IsNullOrEmpty(enPaterno.Text) || !Regex.Match(enPaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
+            if (string.IsNullOrEmpty(enPaterno.Text) || !Regex.Match(enPaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
             {
-                enPaterno.ErrorText = "Introduzca un apellido válido";
+                enPaterno.ErrorText = "Introduzca un apellido valido";
+                await DisplayAlert("Advertencia", "Introduzca un apellido válido", "OK");
                 a2 = false;
 
             }
@@ -71,9 +303,10 @@ namespace PagoEnLinea
             }
 
             if(!string.IsNullOrEmpty(enMaterno.Text)){
-                if (!Regex.Match(enMaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$").Success)
+                if (!Regex.Match(enMaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
                 {
-                    enMaterno.ErrorText = "Introduzca un apellido válido";
+                    enMaterno.ErrorText = "Introduzca un apellido valido";
+                    await DisplayAlert("Advertencia", "Introduzca un nombre válido", "OK");
                     comodin = false;
 
                 }else{
@@ -86,7 +319,8 @@ namespace PagoEnLinea
 
             if (string.IsNullOrEmpty(enCorreo.Text) || !Regex.Match(enCorreo.Text, "^(?(\")(\".+?(?<!\\\\)\"@)|(([0-9A-Za-z]((\\.(?!\\.))|[-!#\\$%&'\\*\\+/=\\?\\^`\\{\\}\\|~\\w])*)(?<=[0-9A-Za-z])@))(?(\\[)(\\[(\\d{1,3}\\.){3}\\d{1,3}\\])|(([0-9a-z][-\\w]*[0-9a-z]*\\.)+[a-z0-9][\\-a-z0-9]{0,22}[a-z0-9]))$").Success)
             {
-                enCorreo.ErrorText = "Introduzca un correo electrónico válido";
+                enCorreo.ErrorText = "Introduzca un correo electrónico valido";
+                await DisplayAlert("Advertencia", "Introduzca un correo electrónico valido", "OK");
                 a4 = false;
             }
             else
@@ -97,6 +331,7 @@ namespace PagoEnLinea
             if (string.IsNullOrEmpty(enCURP.Text)||!Regex.Match(enCURP.Text, "[A-Z][A,E,I,O,U,X][A-Z]{2}[0-9]{2}[0-1][0-9][0-3][0-9][M,H][A-Z]{2}[B,C,D,F,G,H,J,K,L,M,N,Ñ,P,Q,R,S,T,V,W,X,Y,Z]{3}[0-9,A-Z][0-9]").Success)
             {
                 enCURP.ErrorText = "Introduzca un CURP valido";
+                await DisplayAlert("Advertencia", "Introduzca un CURP valido", "OK");
                 a5 = false;
 
             }
@@ -119,6 +354,8 @@ namespace PagoEnLinea
             if (string.IsNullOrEmpty(enPassword.Text) || enPassword.Text.Length < 8 || enPassword.Text.Length > 16)
             {
                 enPassword.ErrorText = "contraseña inválida (mínimo 8 caracteres)";
+                await DisplayAlert("Advertencia", "contraseña inválida (mínimo 8 caracteres)", "OK");
+              
                 a8 = false;
             }
             else
@@ -137,6 +374,7 @@ namespace PagoEnLinea
                 {
 
                     enPassword2.ErrorText = "Las contraseñas no concuerdan";
+                    await DisplayAlert("Advertencia", "Las contraseñas no concuerdan", "OK");
                     a9 = false;
 
 

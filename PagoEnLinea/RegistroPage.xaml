@@ -3,7 +3,7 @@
 	   <ContentPage.Content>
 
         <StackLayout Padding="30,0,30,0">
-         <ScrollView> 
+         <ScrollView x:Name="scroll2"> 
         <Grid RowSpacing="10" ColumnSpacing="10"  >
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -113,8 +113,27 @@
                            IsPassword="true"
                           />   
                   
-                
+
+                 <xfx:XfxEntry x:Name="eninvisible" Grid.Row="11"
+                          Grid.Column="2"
+                          Grid.ColumnSpan="2"
+                          VerticalOptions="End"
+                          Placeholder="Ingresa tu Celular"
+                          Keyboard="Telephone"
+                          IsVisible="false"
+                              />  
+                    <xfx:XfxEntry x:Name="eninvisible2" Grid.Row="12"
+                          Grid.Column="2"
+                          Grid.ColumnSpan="2"
+                          VerticalOptions="End"
+                          Placeholder="Ingresa tu Celular"
+                          Keyboard="Telephone"
+                          IsVisible="false"
+                              />          
                 </Grid>   
+
+               
+                
       
         
        </ScrollView>  

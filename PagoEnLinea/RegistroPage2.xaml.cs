@@ -32,6 +32,7 @@ namespace PagoEnLinea
            catdire = cd;
 
             InitializeComponent();
+           
             enCod.TextChanged += OnTextChanged;
             enNumero.TextChanged += validarNumero;
 
@@ -77,8 +78,482 @@ namespace PagoEnLinea
 
             }
 
+            enDomicilio.Completed += verificarError;
+            enNumero.Completed += verificarError;
+            enNumInt.Completed += verificarError;
+            enCod.Completed += verificarError;
+            enPais.Completed += verificarError;
+            enCiudad.Completed += verificarError;
+            enEstado.Completed += verificarError;
+            enMunicipio.Completed += verificarError;
+            enTipoAsentamiento.Completed += verificarError;
+            enColonia.Completed += verificarError;
+            enLADA.Completed += verificarError;
+            enTelefono.Completed += verificarError;
+            enCelular.Completed += verificarError;
+            enLADA2.Completed += verificarError;
 
-          
+
+            enDomicilio.Unfocused += UnfocusError;
+            enNumero.Unfocused += UnfocusError;
+            enNumInt.Unfocused += UnfocusError;
+            enCod.Unfocused += UnfocusError;
+            enPais.Unfocused += UnfocusError;
+            enCiudad.Unfocused += UnfocusError;
+            enEstado.Unfocused += UnfocusError;
+            enMunicipio.Unfocused += UnfocusError;
+            enTipoAsentamiento.Unfocused += UnfocusError;
+            enColonia.Unfocused += UnfocusError;
+            enLADA.Unfocused += UnfocusError;
+            enTelefono.Unfocused += UnfocusError;
+            enCelular.Unfocused += UnfocusError;
+            enLADA2.Unfocused += UnfocusError;
+
+            enCelular.Focused += OnFocus;
+            enTelefono.Focused += OnFocus;
+
+            //scroll2.Scrolled += onScrolled;
+           
+        }
+
+       
+
+        private async void OnFocus(object sender, FocusEventArgs e)
+        {
+
+            string text = (sender as Entry).Text;
+            (sender as Entry).Text = "";
+            (sender as Entry).Text = text;
+            if(sender==enTelefono){
+
+                await Task.Yield();
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                    var heightContentScroll = scroll2.ContentSize.Height;
+                    await Task.Yield();
+                    await scroll2.ScrollToAsync(enLADA2, ScrollToPosition.Start, true);
+                    });
+                
+            
+            }
+
+           
+
+
+        }
+
+
+        /// <summary>
+        /// Unfocuses the error.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
+        private async void UnfocusError(object sender, FocusEventArgs e)
+        {
+            if (sender == enDomicilio)
+            {
+                if (ValidarVacio(enDomicilio.Text) || !Regex.Match(enDomicilio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s0-9]+$").Success)
+                {
+                    enDomicilio.ErrorText = "Introduzca una calle valida";
+
+                }
+                else
+                {
+                    enDomicilio.ErrorText = "";
+                }
+            }
+            else if (sender == enNumero)
+            {
+                if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9]*$").Success)
+                {
+                    lblnum.TextColor = Xamarin.Forms.Color.Red;
+
+                }
+                else
+                {
+                    lblnum.TextColor = Xamarin.Forms.Color.Black;
+                }
+            }
+            else if (sender == enCod)
+            {
+                if (ValidarVacio(enCod.Text) || enCod.Text.Length < 5)
+                {
+                    lblCod.TextColor = Xamarin.Forms.Color.Red;
+
+                }
+                else
+                {
+                    lblCod.TextColor = Xamarin.Forms.Color.Black;
+
+                }
+            }
+            else if (sender == enCiudad)
+            {
+                if (!string.IsNullOrEmpty(enCiudad.Text))
+                {
+                    if (!Regex.Match(enCiudad.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚúÜü\s0-9]+$").Success)
+                    {
+                        enCiudad.ErrorText = "Introduza una ciudad valida";
+
+                    }
+                    else
+                    {
+                        enCiudad.ErrorText = "";
+
+                    }
+                }
+            }
+            else if (sender == enEstado)
+            {
+                if (ValidarVacio(enEstado.Text) || !Regex.Match(enEstado.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚÜü\s0-9]+$").Success)
+                {
+                    enEstado.ErrorText = "Introduzca un estado valido";
+
+
+                }
+                else
+                {
+                    enEstado.ErrorText = "";
+
+                }
+            }
+            else if (sender == enMunicipio)
+            {
+                if (ValidarVacio(enMunicipio.Text) || !Regex.Match(enMunicipio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚÜü\s0-9]+$").Success)
+                {
+                    enMunicipio.ErrorText = "Introduzca un municipio valido";
+                }
+                else
+                {
+                    enMunicipio.ErrorText = "";
+
+                }
+
+            }
+            else if (sender == enNumInt)
+            {
+                if (!string.IsNullOrEmpty(enNumInt.Text))
+                {
+                    if (!Regex.Match(enNumInt.Text, "^[a-zA-Z0-9]*$").Success)
+                    {
+                        lblNumInt.TextColor = Xamarin.Forms.Color.Red;
+                    }
+                    else
+                    {
+                        lblNumInt.TextColor = Xamarin.Forms.Color.Black;
+                    }
+                }
+                else
+                {
+                    lblNumInt.TextColor = Xamarin.Forms.Color.Black;
+                }
+            }
+            else if (sender == enTipoAsentamiento)
+            {
+                if (ValidarVacio(enTipoAsentamiento.Text) || !Regex.Match(enTipoAsentamiento.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
+                {
+                    enTipoAsentamiento.ErrorText = "Introduzca un tipo valido";
+
+
+                }
+                else
+                {
+                    enTipoAsentamiento.ErrorText = "";
+
+                }
+            }
+            else if (sender == enPais)
+            {
+                if (ValidarVacio(enPais.Text))
+                {
+                    enPais.ErrorText = "Introduzca su país";
+
+
+                }
+                else
+                {
+                    enPais.ErrorText = "";
+
+                }
+            }
+            else if (sender == enTelefono)
+            {
+                
+               
+                if (ValidarVacio(enTelefono.Text) || enTelefono.Text.Length < 7 || enTelefono.Text.Length > 10)
+                {
+                    
+                    enTelefono.ErrorText = "Introduzca un teléfono valido";
+
+
+                }
+                else
+                {
+                    enTelefono.ErrorText = "";
+
+                }
+            }
+            else if (sender == enLADA)
+            {
+                if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 3)
+                {
+                    enLADA.ErrorText = "LADA";
+
+                }
+                else
+                {
+                    enLADA.ErrorText = "";
+
+                }
+            }
+            else if (sender == enCelular)
+            {
+                
+               
+                if (!string.IsNullOrEmpty(enCelular.Text))
+                {
+                    if (enCelular.Text.Length < 7 || enCelular.Text.Length > 10)
+                    {
+
+                        enCelular.ErrorText = "Celular incorrecto";
+
+                    }
+                    else
+                    {
+
+                        enCelular.ErrorText = "";
+                    }
+                }
+                else
+                {
+
+                    enCelular.ErrorText = "";
+                }
+            }
+            else if (sender == enLADA2)
+            {
+
+
+                if (!string.IsNullOrEmpty(enLADA2.Text))
+                {
+                    if (enLADA2.Text.Length != 3)
+                    {
+
+                        enLADA2.ErrorText = "LADA incorrecta";
+                    }
+                    else
+                    {
+
+                        enLADA2.ErrorText = "";
+                    }
+                }
+                else
+                {
+
+                    enLADA2.ErrorText = "";
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Validate the error.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
+        private async void verificarError(object sender, EventArgs e)
+        {
+            if (sender == enDomicilio)
+            {
+                
+                if (ValidarVacio(enDomicilio.Text) || !Regex.Match(enDomicilio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s0-9]+$").Success)
+                {
+                    enDomicilio.ErrorText = "Introduzca una calle valida";
+
+                }
+                else
+                {
+                    enDomicilio.ErrorText = "";
+                }
+
+            }
+            else if (sender == enNumero)
+            {
+                if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9]*$").Success)
+                {
+                    lblnum.TextColor = Xamarin.Forms.Color.Red;
+
+                }
+                else
+                {
+                    lblnum.TextColor = Xamarin.Forms.Color.Black;
+                }
+            }
+            else if (sender == enCod)
+            {
+                if (ValidarVacio(enCod.Text) || enCod.Text.Length < 5)
+                {
+                    lblCod.TextColor = Xamarin.Forms.Color.Red;
+
+                }
+                else
+                {
+                    lblCod.TextColor = Xamarin.Forms.Color.Black;
+
+                }
+            }
+            else if (sender == enCiudad)
+            {
+                if (!string.IsNullOrEmpty(enCiudad.Text))
+                {
+                    if (!Regex.Match(enCiudad.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚúÜü\s0-9]+$").Success)
+                    {
+                        enCiudad.ErrorText = "Introduza una ciudad valida";
+
+                    }
+                    else
+                    {
+                        enCiudad.ErrorText = "";
+
+                    }
+                }
+            }
+            else if (sender == enEstado)
+            {
+                if (ValidarVacio(enEstado.Text) || !Regex.Match(enEstado.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚÜü\s0-9]+$").Success)
+                {
+                    enEstado.ErrorText = "Introduzca un estado valido";
+
+
+                }
+                else
+                {
+                    enEstado.ErrorText = "";
+
+                }
+            }
+            else if (sender == enMunicipio)
+            {
+                if (ValidarVacio(enMunicipio.Text) || !Regex.Match(enMunicipio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚÜü\s0-9]+$").Success)
+                {
+                    enMunicipio.ErrorText = "Introduzca un municipio valido";
+                }
+                else
+                {
+                    enMunicipio.ErrorText = "";
+
+                }
+
+            }else if(sender==enNumInt){
+                if (!string.IsNullOrEmpty(enNumInt.Text))
+                {
+                    if (!Regex.Match(enNumInt.Text, "^[a-zA-Z0-9]*$").Success)
+                    {
+                        lblNumInt.TextColor = Xamarin.Forms.Color.Red;
+                    }
+                    else
+                    {
+                        lblNumInt.TextColor = Xamarin.Forms.Color.Black;
+                    }
+                }else{
+                    lblNumInt.TextColor = Xamarin.Forms.Color.Black;
+                }
+            }else if(sender==enTipoAsentamiento){
+                if (ValidarVacio(enTipoAsentamiento.Text) || !Regex.Match(enTipoAsentamiento.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
+                {
+                    enTipoAsentamiento.ErrorText = "Introduzca un tipo valido";
+                   
+
+                }
+                else
+                {
+                    enTipoAsentamiento.ErrorText = "";
+                   
+                }
+            }else if (sender==enPais){
+                if (ValidarVacio(enPais.Text))
+                {
+                    enPais.ErrorText = "Introduzca su país";
+
+
+                }
+                else
+                {
+                    enPais.ErrorText = "";
+                  
+                }
+            }else if(sender==enTelefono){
+                await Task.Yield();
+                await scroll2.ScrollToAsync(enCelular, ScrollToPosition.End, true);
+                if (ValidarVacio(enTelefono.Text) || enTelefono.Text.Length < 7 || enTelefono.Text.Length > 10)
+                {
+                    
+                    enTelefono.ErrorText = "Introduzca un teléfono valido";
+                   
+
+                }
+                else
+                {
+                    enTelefono.ErrorText = "";
+
+                }
+            }else if (sender==enLADA){
+                if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 3)
+                {
+                    enLADA.ErrorText = "LADA";
+                   
+                }
+                else
+                {
+                    enLADA.ErrorText = "";
+
+                }
+            }else if(sender==enCelular){
+                await Task.Yield();
+                await scroll2.ScrollToAsync(enCelular, ScrollToPosition.End, true);
+               
+                if (!string.IsNullOrEmpty(enCelular.Text))
+                {
+                    if (enCelular.Text.Length < 7 || enCelular.Text.Length > 10)
+                    {
+                       
+                        enCelular.ErrorText = "Celular incorrecto";
+
+                    }
+                    else
+                    {
+                        
+                        enCelular.ErrorText = "";
+                    }
+                }
+                else
+                {
+                    
+                    enCelular.ErrorText = "";
+                }
+            }else if(sender==enLADA2){
+
+
+            if (!string.IsNullOrEmpty(enLADA2.Text))
+                {
+                    if (enLADA2.Text.Length != 3)
+                    {
+                        
+                        enLADA2.ErrorText = "LADA incorrecta";
+                    }
+                    else
+                    {
+                     
+                        enLADA2.ErrorText = "";
+                    }
+                }
+                else
+                {
+                   
+                    enLADA2.ErrorText = "";
+                }
+
+            }
         }
 
         private void onCompleted(object sender, EventArgs e)
@@ -86,8 +561,13 @@ namespace PagoEnLinea
            //
         }
 
-        protected override void OnAppearing()
-        { if (Application.Current.Properties.ContainsKey("lada"))
+        protected override  void OnAppearing()
+        {   
+            base.OnAppearing();
+
+          
+
+            if (Application.Current.Properties.ContainsKey("lada"))
             { 
                 enDomicilio.Text = Application.Current.Properties["calle"] as string;
                 enNumero.Text = Application.Current.Properties["numero"] as string;
@@ -106,7 +586,8 @@ namespace PagoEnLinea
             
             
             }
-            
+            //scroll2.ScrollToAsync(enDomicilio, ScrollToPosition.MakeVisible, true);
+         
         }
 
         private void OnLada2Changed(object sender, TextChangedEventArgs args)
@@ -119,11 +600,18 @@ namespace PagoEnLinea
 
             if (val.Length > 3)
             {
+                var temp = val.Substring(3);
                 val = val.Remove(val.Length - 1);
                 entry.Text = val;
+
+
                 enCelular.Focus();
+                enCelular.Text = temp;
             }
+
         }
+
+
 
         async void registrar_Clicked(object sender, System.EventArgs e)
         {
@@ -134,10 +622,13 @@ namespace PagoEnLinea
             {
                 if (!Regex.Match(enCiudad.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
                 {
+                    enCiudad.ErrorText = "Introduza una ciudad valida";
+                    await DisplayAlert("Advertencia", "Introduza una ciudad valida", "OK");
                     comodin = false;
                 }
                 else
                 {
+                    enCiudad.ErrorText = "";
                     comodin = true;
                 }
             }
@@ -171,7 +662,8 @@ namespace PagoEnLinea
                 if (enLADA2.Text.Length != 3)
                 {
                     com = false;
-                    enLADA2.ErrorText = "LADA incorrecta";
+                    await DisplayAlert("Advertencia", "LADA incorrecta", "OK");
+                    enLADA2.ErrorText = "LADA";
                 }
                 else
                 {
@@ -192,6 +684,7 @@ namespace PagoEnLinea
                 {
                     com2 = false;
                     enCelular.ErrorText = "Celular incorrecto";
+                    await DisplayAlert("Advertencia", "Celular incorrecto", "OK");
 
                 }
                 else
@@ -209,19 +702,22 @@ namespace PagoEnLinea
 
             if (string.IsNullOrEmpty(enColonia.Text) || !Regex.Match(enColonia.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s0-9]+$").Success)
             {
-                enColonia.ErrorText = "Introduzca un asentamiento válido";
+                enColonia.ErrorText = "Introduzca un asentamiento valido";
+                await DisplayAlert("Advertencia", "Introduzca un asentamiento valido", "OK");
                 a1 = false;
 
             }
             else
             {
-                enDomicilio.ErrorText = "";
+                enColonia.ErrorText = "";
                 a1 = true;
             }
 
             if (ValidarVacio(enDomicilio.Text) || !Regex.Match(enDomicilio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s0-9]+$").Success)
             {
-                enDomicilio.ErrorText = "Introduzca una calle válida";
+                enDomicilio.ErrorText = "Introduzca una calle valida";
+                await DisplayAlert("Advertencia", "Introduzca una calle valida", "OK");
+
                 a2 = false;
 
             }
@@ -257,6 +753,8 @@ namespace PagoEnLinea
             if (ValidarVacio(enTipoAsentamiento.Text) || !Regex.Match(enTipoAsentamiento.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
             {
                 enTipoAsentamiento.ErrorText = "Introduzca un tipo valido";
+                await DisplayAlert("Advertencia", "Introduzca un tipo valido", "OK");
+
                 a5 = false;
 
             }
@@ -268,7 +766,10 @@ namespace PagoEnLinea
 
             if (ValidarVacio(enEstado.Text) || !Regex.Match(enEstado.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
             {
+                
                 enEstado.ErrorText = "Introduzca un estado valido";
+                await DisplayAlert("Advertencia","Introduzca un estado valido", "OK");
+
                 a6 = false;
 
             }
@@ -281,6 +782,8 @@ namespace PagoEnLinea
             if (ValidarVacio(enPais.Text))
             {
                 enPais.ErrorText = "Introduzca su país";
+                await DisplayAlert("Advertencia","Introduzca su país", "OK");
+
                 a7 = false;
 
             }
@@ -291,7 +794,7 @@ namespace PagoEnLinea
             }
             if (ValidarVacio(enTelefono.Text) || enTelefono.Text.Length < 7 || enTelefono.Text.Length > 10)
             {
-                await DisplayAlert("Sin número telefónico valido", "Deslice la pantalla para ver todas las opciones", "ok");
+                await DisplayAlert("Sin número telefónico valido", "Deslice la pantalla para ver todas las opciones", "OK");
                 enTelefono.ErrorText = "Introduzca un teléfono valido";
                 a8 = false;
 
@@ -304,6 +807,8 @@ namespace PagoEnLinea
 
             if (ValidarVacio(enMunicipio.Text) || !Regex.Match(enMunicipio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
             {
+                await DisplayAlert("Advertencia", "Introduzca un municipio valido", "OK");
+          
                 enMunicipio.ErrorText = "Introduzca un municipio valido";
                 a9 = false;
 
@@ -316,6 +821,7 @@ namespace PagoEnLinea
 
             if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 3)
             {
+                await DisplayAlert("Advertencia", "LADA incorrecta", "OK");
                 enLADA.ErrorText = "LADA";
                 a10 = false;
 
@@ -474,25 +980,32 @@ namespace PagoEnLinea
 
             if (val.Length > 3)
             {
+                var temp = val.Substring(3);
                 val = val.Remove(val.Length - 1);
                 entry.Text = val;
+
+
                 enTelefono.Focus();
+                enTelefono.Text = temp;
             }
         }
 
         public void OnTelefonoChanged(object sender, TextChangedEventArgs args)
         {
+            if(!string.IsNullOrEmpty((sender as Entry).Text)){
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
                 (sender as Entry).Text = Regex.Replace(args.NewTextValue, "[^0-9]", string.Empty);
             Entry entry = sender as Entry;
             String val = entry.Text;
 
-            if (val.Length > 7)
-            {
+               if (val.Length > 7)
+                {
                 val = val.Remove(val.Length - 1);
                 entry.Text = val;
                 enLADA2.Focus();
+                }
             }
+
         }
 
         public void borrarError(Object sender, TextChangedEventArgs args)

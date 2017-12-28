@@ -122,7 +122,7 @@ namespace PagoEnLinea.PaginasPago
                             IEnumerable<Carrito> resultado = carrito.Where(clav => clav.ClaveCastrasl.Contains(todoItem.ClaveCastrasl));
 
                             if(resultado.Count()>1&&!(todoItem.NoLiquidacion.Equals(resultado.Last().NoLiquidacion))){
-                                await DisplayAlert("Advertencia","Se eliminará tambien la liquidación comprendida al año actual debibo a que no es posible pagarla sin pagar las liqudaciones anteriores","OK");
+                                await DisplayAlert("Advertencia","Se eliminará tambien la liquidación comprendida al año actual debido a que no es posible pagarla sin pagar las liqudaciones anteriores","OK");
                                 await App.Database.DeleteItemAsync(resultado.Last());
                             }
                        

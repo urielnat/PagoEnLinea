@@ -19,6 +19,8 @@ namespace PagoEnLinea.Paginas
         {
             InitializeComponent();
             enCurp.TextChanged += MayusChanged;
+            dtFecha.MaximumDate = DateTime.Now;
+          
         }
 
         async void conectar()
