@@ -20,14 +20,28 @@ namespace PagoEnLinea.PaginasPago
         public static IList<LiquidacionDesConcepto> liqdesconcep;
         public LiquidacionPage()
         {
-           
+
             list = new List<Carrito>();
             InitializeComponent();
 
             listView.ItemTapped += OnitemTapped;
-            //buscar.TextChanged += onSearchChanged;
+            buscar.TextChanged += onSearchBarChanged;
             enBuscar.Completed += onSearchComp;
             enBuscar.TextChanged += onSearchChanged;
+            buscar.IsVisible = true;
+            if (Device.RuntimePlatform == Device.iOS){
+                buscar.IsVisible = true;
+                enBuscar.IsVisible = false;
+                imgBuscar.IsVisible = false;
+
+
+                
+            }else{
+                buscar.IsVisible = false;
+                enBuscar.IsVisible = true;
+                imgBuscar.IsVisible = true;
+            }
+       
         }
 
         async private void onSearchComp(object sender, EventArgs e)
@@ -114,8 +128,21 @@ namespace PagoEnLinea.PaginasPago
             }
         }
 
+        private void onSearchBarChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!Regex.IsMatch(e.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
+                (sender as SearchBar).Text = Regex.Replace(e.NewTextValue, "[^0-9]", string.Empty);
+            SearchBar entry = sender as SearchBar;
+            String val = entry.Text;
 
-        /**
+            if (val.Length > 13)
+            {
+                val = val.Remove(val.Length - 1);
+                entry.Text = val;
+            }
+        }
+
+
         async void Handle_SearchButtonPressed(object sender, System.EventArgs e)
         {
             HttpResponseMessage response;
@@ -188,7 +215,7 @@ namespace PagoEnLinea.PaginasPago
            
         }
 
-        **/
+
         async void OnitemTapped(object sender, ItemTappedEventArgs e)
         {
             var existe = false;

@@ -20,7 +20,22 @@ namespace PagoEnLinea.PaginasMisPagos
 
             enBuscar.Completed += onSearchComp;
             enBuscar.TextChanged += onSearchChanged;
+            buscar.TextChanged += onSearchBarChanged;
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                buscar.IsVisible = true;
+                enBuscar.IsVisible = false;
+                imgBuscar.IsVisible = false;
 
+
+
+            }
+            else
+            {
+                buscar.IsVisible = false;
+                enBuscar.IsVisible = true;
+                imgBuscar.IsVisible = true;
+            }
            
         }
 
@@ -119,7 +134,21 @@ namespace PagoEnLinea.PaginasMisPagos
                 entry.Text = val;
             }
         }
-        /**
+
+        private void onSearchBarChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!Regex.IsMatch(e.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
+                (sender as SearchBar).Text = Regex.Replace(e.NewTextValue, "[^0-9]", string.Empty);
+            SearchBar entry = sender as SearchBar;
+            String val = entry.Text;
+
+            if (val.Length > 13)
+            {
+                val = val.Remove(val.Length - 1);
+                entry.Text = val;
+            }
+        }
+
         async void Handle_SearchButtonPressed(object sender, System.EventArgs e)
         {
             HttpResponseMessage response;
@@ -196,7 +225,7 @@ namespace PagoEnLinea.PaginasMisPagos
                 System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
 
             }
-        }**/
+        }
 
         void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
         {

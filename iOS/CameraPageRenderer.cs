@@ -18,6 +18,7 @@ namespace FullCameraPage.iOS
         AVCaptureSession captureSession;
         AVCaptureDeviceInput captureDeviceInput;
         AVCaptureStillImageOutput stillImageOutput;
+        AVCapturePhotoSettings capturePhoto;
 
         UIPaintCodeButton takePhotoButton;
         UIPaintCodeButton cancelPhotoButton;
@@ -134,7 +135,10 @@ namespace FullCameraPage.iOS
 
         public async Task<NSData> CapturePhoto()
         {
+            //stillImageOutput.HighResolutionStillImageOutputEnabled = true;
+            
             var videoConnection = stillImageOutput.ConnectionFromMediaType(AVMediaType.Video);
+          
             var sampleBuffer = await stillImageOutput.CaptureStillImageTaskAsync(videoConnection);
             var jpegImageAsNsData = AVCaptureStillImageOutput.JpegStillToNSData(sampleBuffer);
             return jpegImageAsNsData;
@@ -150,8 +154,13 @@ namespace FullCameraPage.iOS
             };
             liveCameraStream.Layer.AddSublayer(videoPreviewLayer);
 
-            var captureDevice = AVCaptureDevice.DefaultDeviceWithMediaType(AVMediaType.Video);
+            var captureDevice = AVCaptureDevice.GetDefaultDevice(AVMediaType.Video);
+
+
+
             ConfigureCameraForDevice(captureDevice);
+           
+
             captureDeviceInput = AVCaptureDeviceInput.FromDevice(captureDevice);
 
             var dictionary = new NSMutableDictionary();
@@ -170,8 +179,13 @@ namespace FullCameraPage.iOS
         public void ConfigureCameraForDevice(AVCaptureDevice device)
         {
             var error = new NSError();
+            var photoSettings = AVCapturePhotoSettings.Create();
+            photoSettings.FlashMode = AVCaptureFlashMode.Auto;
+            photoSettings.IsHighResolutionPhotoEnabled = true;
+
             if (device.IsFocusModeSupported(AVCaptureFocusMode.ContinuousAutoFocus))
             {
+                
                 device.LockForConfiguration(out error);
                 device.FocusMode = AVCaptureFocusMode.ContinuousAutoFocus;
                 device.UnlockForConfiguration();
@@ -188,6 +202,14 @@ namespace FullCameraPage.iOS
                 device.WhiteBalanceMode = AVCaptureWhiteBalanceMode.ContinuousAutoWhiteBalance;
                 device.UnlockForConfiguration();
             }
+
+        }
+
+
+        public void CapturePhoto(AVCapturePhotoSettings settings)
+        {
+           
+
         }
 
         public async Task AuthorizeCameraUse()

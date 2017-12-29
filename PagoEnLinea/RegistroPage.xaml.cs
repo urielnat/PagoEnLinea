@@ -149,7 +149,7 @@ namespace PagoEnLinea
             else if (sender == enPassword2)
             {
                
-                if (!(string.IsNullOrEmpty(enPassword.Text) && string.IsNullOrEmpty(enPassword2.Text)))
+                if (!(string.IsNullOrEmpty(enPassword.Text)) && !(string.IsNullOrEmpty(enPassword2.Text)))
                 {
                     if (enPassword.Text.Equals(enPassword2.Text))
                     {
@@ -243,7 +243,7 @@ namespace PagoEnLinea
             {
                 await Task.Yield();
                 await scroll2.ScrollToAsync(enPassword2, ScrollToPosition.End, true);
-                if (!(string.IsNullOrEmpty(enPassword.Text) && string.IsNullOrEmpty(enPassword2.Text)))
+                if (!(string.IsNullOrEmpty(enPassword.Text)) && !(string.IsNullOrEmpty(enPassword2.Text)))
                 {
                     if (enPassword.Text.Equals(enPassword2.Text))
                     {
@@ -363,7 +363,7 @@ namespace PagoEnLinea
                 enPassword.ErrorText = "";
                 a8 = true;
             }
-            if(!(string.IsNullOrEmpty(enPassword.Text)&&string.IsNullOrEmpty(enPassword2.Text))){
+            if(!(string.IsNullOrEmpty(enPassword.Text))&&!(string.IsNullOrEmpty(enPassword2.Text))){
                 if (enPassword.Text.Equals(enPassword2.Text))
                 {   
                     enPassword2.ErrorText = "";

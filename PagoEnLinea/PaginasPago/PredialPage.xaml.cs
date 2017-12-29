@@ -31,6 +31,24 @@ namespace PagoEnLinea.PaginasPago
             listView.ItemTapped += OnitemTapped;
             enBuscar.Completed += onSearchComp;
             enBuscar.TextChanged += onSearchChanged;
+            buscar.TextChanged += onSearchBarChanged;
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                buscar.IsVisible = true;
+                enBuscar.IsVisible = false;
+                imgBuscar.IsVisible = false;
+
+
+
+            }
+            else
+            {
+                buscar.IsVisible = false;
+                enBuscar.IsVisible = true;
+                imgBuscar.IsVisible = true;
+            }
+
         }
 
         private void onSearchChanged(object sender, TextChangedEventArgs e)
@@ -38,6 +56,20 @@ namespace PagoEnLinea.PaginasPago
             if (!Regex.IsMatch(e.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
                 (sender as Entry).Text = Regex.Replace(e.NewTextValue, "[^0-9]", string.Empty);
             Entry entry = sender as Entry;
+            String val = entry.Text;
+
+            if (val.Length > 13)
+            {
+                val = val.Remove(val.Length - 1);
+                entry.Text = val;
+            }
+        }
+
+        private void onSearchBarChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!Regex.IsMatch(e.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
+                (sender as SearchBar).Text = Regex.Replace(e.NewTextValue, "[^0-9]", string.Empty);
+            SearchBar entry = sender as SearchBar;
             String val = entry.Text;
 
             if (val.Length > 13)
@@ -338,7 +370,7 @@ namespace PagoEnLinea.PaginasPago
 
         }
 
-        /**
+
         async void Handle_SearchButtonPressed(object sender, System.EventArgs e)
         {
             //throw new NotImplementedException();
@@ -445,7 +477,7 @@ namespace PagoEnLinea.PaginasPago
 
 
 
-        }**/
+        }
 
         void Handle_ItemSelected(object sender, Xamarin.Forms.SelectedItemChangedEventArgs e)
         {

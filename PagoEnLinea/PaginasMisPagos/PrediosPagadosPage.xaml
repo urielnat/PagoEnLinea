@@ -2,13 +2,21 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasMisPagos.PrediosPagadosPage" Title="Pagos">
 	<ContentPage.Content>
           <StackLayout Padding="20,20,20,20">
-              <StackLayout Orientation="Horizontal">
-               <Image Source="search.png"/>
-               <Entry x:Name="enBuscar" Placeholder="Ingrese su clave catastral" HorizontalOptions="FillAndExpand" Keyboard="Numeric" HeightRequest="50"/> 
-            </StackLayout>
-            <!--
-             <SearchBar x:Name="buscar" Placeholder="Ingrese su clave catastral" SearchButtonPressed="Handle_SearchButtonPressed" HeightRequest="50" ></SearchBar>
-             -->
+             <Grid>
+                  <Grid.ColumnDefinitions>
+
+                  <ColumnDefinition Width="*" />
+                   <ColumnDefinition Width="9*" /> 
+                     
+                </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                  <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
+                  <Image x:Name="imgBuscar" Grid.Row="0" Grid.Column="0" Source="search.png"/>
+               <Entry x:Name="enBuscar"  Grid.Row="0" Grid.Column="1" Placeholder="Ingrese el número de liquidación" HorizontalOptions="FillAndExpand" Keyboard="Numeric" HeightRequest="50"/> 
+                 <SearchBar x:Name="buscar"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" SearchButtonPressed="Handle_SearchButtonPressed" Placeholder="Ingrese el número de liquidación" HeightRequest="50" IsVisible="false"></SearchBar>
+                </Grid>
+            
             <ScrollView>
            <ListView x:Name="listView" RowHeight="200" ItemTapped="Handle_ItemTapped" SeparatorVisibility="None">
         <ListView.ItemTemplate>
