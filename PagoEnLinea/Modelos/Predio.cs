@@ -100,6 +100,7 @@ namespace PagoEnLinea.Modelos
         public int bimIni { get; set; }
         public double pago { get; set; }
         public int SinOrdenBiFin { get; set; }
+        public string Detalles { get; set; }
 
     }
 

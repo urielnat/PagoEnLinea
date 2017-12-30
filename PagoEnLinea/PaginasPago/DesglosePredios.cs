@@ -8,6 +8,7 @@ namespace PagoEnLinea.PaginasPago
 {
     public class DesglosePredios<T> : ContentPage
     {
+        public static string DETALLES;
         public class WrappedSelection<T> : INotifyPropertyChanged
         {
             public T Item { get; set; }
@@ -56,30 +57,77 @@ namespace PagoEnLinea.PaginasPago
             {
 
                 Label name = new Label();
+                Label info = new Label();
+
                 name.SetBinding(Label.TextProperty, new Binding("Item.Name"));
+                info.SetBinding(Label.TextProperty, new Binding("Item.sinOrdenbimFin"));
+                DETALLES = info.Text;
                 Switch mainSwitch = new Switch();
                 mainSwitch.SetBinding(Switch.IsToggledProperty, new Binding("IsSelected"));
                 mainSwitch.SetBinding(Switch.IsEnabledProperty, new Binding("IsEnabled"));
+                /**
+                Button invisible = new Button();
+                invisible.IsVisible = true;
+                invisible.Text = "##########";
+                var image = new Image();
+                image.Source = "user.png";
+                StackLayout stack = new StackLayout();
+                Grid grid = new Grid();
+                mainSwitch.BackgroundColor = Color.Green;
+                mainSwitch.WidthRequest= 20;
+                name.VerticalTextAlignment = TextAlignment.Center;
+                name.HorizontalTextAlignment = TextAlignment.Start;
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(0, GridUnitType.Auto) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1,GridUnitType.Star) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(9, GridUnitType.Star) });
+
+
+                grid.Children.Add(name,0,0,0,0);
+                grid.Children.Add(mainSwitch, 0, 1,0,0);
+                grid.Children.Add(image, 0, 1,0,0);
+
+                 **/
+
+
                 RelativeLayout layout = new RelativeLayout();
+
+
                 layout.Children.Add(name,
                     Constraint.Constant(5),
                     Constraint.Constant(5),
                     Constraint.RelativeToParent(p => p.Width - 60),
                     Constraint.RelativeToParent(p => p.Height - 10)
                 );
+                
                 layout.Children.Add(mainSwitch,
                     Constraint.RelativeToParent(p => p.Width - 55),
                     Constraint.Constant(5),
                     Constraint.Constant(50),
                     Constraint.RelativeToParent(p => p.Height - 10)
                 );
+               
                 View = layout;
             }
+
+            private void OnFocus(object sender, FocusEventArgs e)
+            {
+                (sender as Switch).IsToggled = ((sender as Switch).IsToggled) ? false : true;  
+                System.Diagnostics.Debug.WriteLine("Focus");
+            }
+                
+                
+         
+
+
         }
-        public List<WrappedSelection<T>> WrappedItems = new List<WrappedSelection<T>>();
+        public static List<WrappedSelection<T>> WrappedItems = new List<WrappedSelection<T>>();
         public DesglosePredios(List<T> items)
         {
-            WrappedItems = items.Select(item => new WrappedSelection<T>() { Item = item, IsSelected = true, IsEnabled = false }).ToList();
+            WrappedItems = items.Select(item => new WrappedSelection<T>() { Item = item, IsSelected = true, IsEnabled = true }).ToList();
+
+           
+
+
             ListView mainList = new ListView()
             {
                 ItemsSource = WrappedItems,
@@ -89,13 +137,20 @@ namespace PagoEnLinea.PaginasPago
             foreach (var item in WrappedItems)
             {
                 SelectAll();
+
             }
 
+            var stack = new StackLayout();
 
-            mainList.ItemSelected += (sender, e) =>
+
+            mainList.ItemSelected += async(sender, e) =>
             {
+                
 
                 if (e.SelectedItem == null) return;
+                var resp = await  DisplayAlert("Seleccion","Seleccione una opción","Seleccionar","Ver detalles");
+               
+                if(resp){
                 var o = (WrappedSelection<T>)e.SelectedItem;
                 o.IsSelected = !o.IsSelected;
                 if(o.IsSelected){
@@ -103,15 +158,27 @@ namespace PagoEnLinea.PaginasPago
                 }else{
                     SelectNone();
                 }
-              
+                }else{
+                   
+                    var seleccion =  mainList.SelectedItem as WrappedSelection<T>;
+                    var prop = seleccion.Item as CheckItem;
+                    //var index = (mainList.ItemsSource as WrappedItems).IndexOf(e.SelectedItem as CheckItem);
+                    await DisplayAlert("Detalles",prop.Details +"","OK");
+                }
                 ((ListView)sender).SelectedItem = null; //de-select
 
             };
-
-            mainList.SeparatorVisibility = SeparatorVisibility.None;
-            Content = mainList;
+            var button3 = new Button { Text = "agregar", VerticalOptions = LayoutOptions.End, HorizontalOptions = LayoutOptions.Center, TextColor= Color.White,BackgroundColor= Color.FromHex("#5CB85C") };
            
-
+            mainList.SeparatorVisibility = SeparatorVisibility.None;
+            stack.Children.Add(mainList);
+            stack.Children.Add(button3);
+           
+            Content = stack;
+           
+            button3.Clicked += (sender, e) => {
+                Navigation.PopAsync();
+            };
             
         }
         void SelectAll()
@@ -168,6 +235,13 @@ namespace PagoEnLinea.PaginasPago
         public List<T> GetSelection()
         {
             return WrappedItems.Where(item => item.IsSelected).Select(wrappedItem => wrappedItem.Item).ToList();
+
         }
+        public List<T> GetSelectionh()
+        {
+            return WrappedItems.Where(item => item.IsSelected).Select(wrappedItem => wrappedItem.Item).ToList();
+
+        }
+       
     }
 }

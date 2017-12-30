@@ -9,5 +9,6 @@ namespace PagoEnLinea.PaginasPago
         public int binIn { get; set; }
         public int binfin { get; set; }
         public int sinOrdenbimFin { get; set; }
+        public string Details { get; set; }
     }
 }

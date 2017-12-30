@@ -99,10 +99,10 @@ namespace PagoEnLinea.PaginasPago
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                 //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                response = await cliente.PostAsync("http://192.168.0.18:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                response = await cliente.PostAsync("http://192.168.0.100:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
                 var y = await response.Content.ReadAsStringAsync();
 
-
+                System.Diagnostics.Debug.WriteLine(y);
 
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
@@ -120,7 +120,13 @@ namespace PagoEnLinea.PaginasPago
                         {
                             bimIni = total.bimInicial,
                             bimFin = total.bimFinal,
-                            pago = total.total
+                            pago = total.total,
+                            Detalles = (total.detalle.Count()>0)?
+                                "$ "+total.detalle[0].importe + "\t" +total.detalle[0].conceptoDescripcion + "\n"+"\n"+
+                                          "$ " + total.detalle[1].importe + "\t" + total.detalle[1].conceptoDescripcion + "\n"+"\n"+
+                                          "$ " + total.detalle[2].importe + "\t" + total.detalle[2].conceptoDescripcion + "\n"+"\n"+
+                                          "$ " + total.detalle[3].importe + "\t" + total.detalle[3].conceptoDescripcion + "\n":"No hay detalles que mostrar"
+
                         });
                     }
 
@@ -154,7 +160,9 @@ namespace PagoEnLinea.PaginasPago
                             Pago = item.pago,
                             binIn = item.bimIni,
                             binfin = item.bimFin,
-                            sinOrdenbimFin = item.SinOrdenBiFin
+                            sinOrdenbimFin = item.SinOrdenBiFin,
+                            Details = item.Detalles
+                           
                         });
                     }
 
@@ -225,7 +233,7 @@ namespace PagoEnLinea.PaginasPago
                     HttpClient cliente = new HttpClient();
                     cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                     //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                    response = await cliente.PostAsync("http://192.168.0.18:8081/api/liquidacion-predials/genera", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                    response = await cliente.PostAsync("http://192.168.0.100:8081/api/liquidacion-predials/genera", new StringContent(jsonstring, Encoding.UTF8, ContentType));
                     var y = await response.Content.ReadAsStringAsync();
 
                     var x = "{\"data\":" + y + "}";
@@ -370,6 +378,11 @@ namespace PagoEnLinea.PaginasPago
 
         }
 
+        /// <summary>
+        /// solo ios
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
 
         async void Handle_SearchButtonPressed(object sender, System.EventArgs e)
         {
@@ -394,7 +407,7 @@ namespace PagoEnLinea.PaginasPago
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                 //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                response = await cliente.PostAsync("http://192.168.0.18:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                response = await cliente.PostAsync("http://192.168.0.100:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
                 var y = await response.Content.ReadAsStringAsync();
 
 
@@ -499,7 +512,8 @@ namespace PagoEnLinea.PaginasPago
                     bimFin = newBimFin,
                     bimIni = item.bimIni,
                     pago = item.pago,
-                    SinOrdenBiFin = item.bimFin
+                    SinOrdenBiFin = item.bimFin,
+                    Detalles = item.Detalles
 
                 });
             }

@@ -4657,11 +4657,11 @@ namespace PagoEnLinea.Droid
 			// aapt resource value: 0x7f02013a
 			public const int notification_icon_background = 2130837818;
 			
-			// aapt resource value: 0x7f020147
-			public const int notification_template_icon_bg = 2130837831;
-			
 			// aapt resource value: 0x7f020148
-			public const int notification_template_icon_low_bg = 2130837832;
+			public const int notification_template_icon_bg = 2130837832;
+			
+			// aapt resource value: 0x7f020149
+			public const int notification_template_icon_low_bg = 2130837833;
 			
 			// aapt resource value: 0x7f02013b
 			public const int notification_tile_bg = 2130837819;
@@ -4698,6 +4698,9 @@ namespace PagoEnLinea.Droid
 			
 			// aapt resource value: 0x7f020146
 			public const int userw = 2130837830;
+			
+			// aapt resource value: 0x7f020147
+			public const int vacia = 2130837831;
 			
 			static Drawable()
 			{

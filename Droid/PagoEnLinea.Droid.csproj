@@ -230,6 +230,7 @@
     <AndroidResource Include="Resources\drawable\PredialButton.png" />
     <AndroidResource Include="Resources\drawable\profileButton.png" />
     <AndroidResource Include="Resources\drawable\search.png" />
+    <AndroidResource Include="Resources\drawable\vacia.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\raw\" />

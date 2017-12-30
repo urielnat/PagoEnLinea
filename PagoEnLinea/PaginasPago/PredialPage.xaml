@@ -15,7 +15,7 @@
                   <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
                   <Image x:Name="imgBuscar" Grid.Row="0" Grid.Column="0" Source="search.png"/>
-               <Entry x:Name="enBuscar"  Grid.Row="0" Grid.Column="1" Placeholder="Ingrese el número de liquidación" HorizontalOptions="FillAndExpand" Keyboard="Numeric" HeightRequest="50"/> 
+               <Entry x:Name="enBuscar"  Grid.Row="0" Grid.Column="1" Placeholder="Ingrese su clave catastral" HorizontalOptions="FillAndExpand" Keyboard="Numeric" HeightRequest="50"/> 
                  <SearchBar x:Name="buscar"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" SearchButtonPressed="Handle_SearchButtonPressed" Placeholder="Ingrese el número de liquidación" HeightRequest="50" IsVisible="false"></SearchBar>
                 </Grid>
             
