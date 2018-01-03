@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PagoEnLinea.PaginasPago
@@ -120,7 +121,7 @@ namespace PagoEnLinea.PaginasPago
 
 
         }
-        public static List<WrappedSelection<T>> WrappedItems = new List<WrappedSelection<T>>();
+        public  List<WrappedSelection<T>> WrappedItems = new List<WrappedSelection<T>>();
         public DesglosePredios(List<T> items)
         {
             WrappedItems = items.Select(item => new WrappedSelection<T>() { Item = item, IsSelected = true, IsEnabled = true }).ToList();
@@ -134,34 +135,31 @@ namespace PagoEnLinea.PaginasPago
                 ItemTemplate = new DataTemplate(typeof(WrappedItemSelectionTemplate)),
             };
 
-            foreach (var item in WrappedItems)
-            {
-                SelectAll();
-
-            }
 
             var stack = new StackLayout();
-
+           
 
             mainList.ItemSelected += async(sender, e) =>
             {
-                
 
                 if (e.SelectedItem == null) return;
-                var resp = await  DisplayAlert("Seleccion","Seleccione una opción","Seleccionar","Ver detalles");
+                var item = (WrappedSelection<T>)e.SelectedItem;
+                var tipo = (item.IsSelected) ? "Deseleccionar" : "Seleccionar";
+                var resp = await  DisplayAlert("Seleccion","Seleccione una opción",tipo,"Ver detalles");
                
                 if(resp){
                 var o = (WrappedSelection<T>)e.SelectedItem;
                 o.IsSelected = !o.IsSelected;
                 if(o.IsSelected){
-                    SelectAll();
+                        await SelectAll();
                 }else{
                     SelectNone();
                 }
                 }else{
-                   
+                  
                     var seleccion =  mainList.SelectedItem as WrappedSelection<T>;
                     var prop = seleccion.Item as CheckItem;
+                    
                     //var index = (mainList.ItemsSource as WrappedItems).IndexOf(e.SelectedItem as CheckItem);
                     await DisplayAlert("Detalles",prop.Details +"","OK");
                 }
@@ -169,22 +167,24 @@ namespace PagoEnLinea.PaginasPago
 
             };
             var button3 = new Button { Text = "agregar", VerticalOptions = LayoutOptions.End, HorizontalOptions = LayoutOptions.Center, TextColor= Color.White,BackgroundColor= Color.FromHex("#5CB85C") };
-           
             mainList.SeparatorVisibility = SeparatorVisibility.None;
             stack.Children.Add(mainList);
             stack.Children.Add(button3);
            
             Content = stack;
            
-            button3.Clicked += (sender, e) => {
-                Navigation.PopAsync();
+            button3.Clicked += async(sender, e) => {
+               
+                 await SelectAll();
+                //await DisplayAlert("Información", "Algunos campos se seleccionaron automáticamente debido a que no es posible pagar una fecha con adeudos anteriores.", "OK");
+                await Navigation.PopModalAsync();
             };
             
         }
-        void SelectAll()
+        async Task SelectAll()
         {
             var x = 0;
-
+            var match = false;
 
             for (var i = 0; i < WrappedItems.Count(); i++)
             {
@@ -196,10 +196,17 @@ namespace PagoEnLinea.PaginasPago
 
             for (var i = 0; i < x; i++)
             {
-
+                if (!WrappedItems[i].IsSelected) { match = true; }
                 WrappedItems[i].IsSelected = true;
 
+
             }
+
+            if(match){
+                await DisplayAlert("Información", "Algunos campos se seleccionaron automáticamente debido a que no es posible pagar una fecha con adeudos anteriores.", "OK");
+  
+            }
+
             /**
               foreach (var wi in WrappedItems)
             {
@@ -232,6 +239,38 @@ namespace PagoEnLinea.PaginasPago
 
             }
         }
+
+        void Validar()
+        {
+            var x = 0;
+            bool match = false;
+
+
+            for (var i = 0; i < WrappedItems.Count(); i++)
+            {
+                
+                if (WrappedItems[i].IsSelected)
+                {
+                    match = true;
+                }
+
+            }
+
+          
+
+            /**
+              foreach (var wi in WrappedItems)
+            {
+                wi.IsSelected = true;
+            }
+             
+              
+            foreach (var w1 in WrappedItems){
+                WrappedItems.Count();
+            }**/
+        }
+
+
         public List<T> GetSelection()
         {
             return WrappedItems.Where(item => item.IsSelected).Select(wrappedItem => wrappedItem.Item).ToList();
@@ -242,6 +281,19 @@ namespace PagoEnLinea.PaginasPago
             return WrappedItems.Where(item => item.IsSelected).Select(wrappedItem => wrappedItem.Item).ToList();
 
         }
+        protected override  bool OnBackButtonPressed()
+        {
+            // If you want to continue going back
+            base.OnBackButtonPressed();
+            Device.BeginInvokeOnMainThread(async () => {
+                await  SelectAll();
+                await  DisplayAlert("Información", "Algunos campos se seleccionaron automáticamente debido a que no es posible pagar una fecha con adeudos anteriores.", "OK");
+            });
+          
+            return true;
+        }
        
     }
 }
+
+

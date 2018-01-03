@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using PagoEnLinea.Modales;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
     public partial class Direccion : ContentPage
     {
-        public static List<Modelos.infodir> list;
+        public static List<infodir> list;
         public infodir infdir { set; get; }
         public CatalogoDir catdir { set; get; }
+        public static infodir item;
         public Direccion()
         {
           
@@ -21,70 +24,83 @@ namespace PagoEnLinea.Paginas
             listView.ItemTapped+= ListView_ItemTapped;
         }
 
-      async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var info = (infodir)e.Item;
+            item = (infodir)e.Item;
+
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                await PopupNavigation.PushAsync(new Modal2());
+            }
+            else { 
 
             var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Eliminar", "Modificar");
-            if(!string.IsNullOrEmpty(action)){
-            if (action.Equals("Modificar"))
+            if (!string.IsNullOrEmpty(action))
             {
-                await Navigation.PushAsync(new ModificarDireccion(info.id, info.idCat, 0, info.estado, info.tipoasentamiento) { BindingContext = (infodir)e.Item });
-            }
-            if(action.Equals("Eliminar")){
-                var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar esta dirección?", "Si", "Cancelar");{
-                    
-                    if(respuesta){
+                if (action.Equals("Modificar"))
+                {
+                    await Navigation.PushAsync(new ModificarDireccion(info.id, info.idCat, 0, info.estado, info.tipoasentamiento) { BindingContext = (infodir)e.Item });
+                }
+                if (action.Equals("Eliminar"))
+                {
+                    var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar esta dirección?", "Si", "Cancelar");
+                    {
 
-
-
-                    HttpResponseMessage response;
-
-                     
-                        try
+                        if (respuesta)
                         {
-                            HttpClient cliente = new HttpClient();
-                            //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
-                            if (Application.Current.Properties.ContainsKey("token"))
-                            {
 
-                                cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+
+
+                            HttpResponseMessage response;
+
+
+                            try
+                            {
+                                HttpClient cliente = new HttpClient();
+                                //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
+                                if (Application.Current.Properties.ContainsKey("token"))
+                                {
+
+                                    cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                                }
+
+                                var uri = new Uri(string.Format(Constantes.URL + "/direccion/eliminar/{0}", info.id));
+                                response = await cliente.DeleteAsync(uri);
+                                var y = await response.Content.ReadAsStringAsync();
+                                System.Diagnostics.Debug.WriteLine(y);
+
+
+                                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                                {
+
+                                    System.Diagnostics.Debug.WriteLine("Se eliminó con exito");
+                                    await DisplayAlert("Eliminado", "Dirección eliminada con exito", "OK");
+                                    conectar();
+                                }
+
+                                else
+                                {
+                                    System.Diagnostics.Debug.WriteLine(response);
+                                    var resp = JsonConvert.DeserializeObject<Respuesta>(y);
+
+                                    await DisplayAlert("Error", resp.respuesta, "OK");
+
+                                }
+                            }
+                            catch (HttpRequestException ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
+                                await DisplayAlert("Error", "No fué posible intente mas tarde", "OK");
                             }
 
-                            var uri = new Uri(string.Format(Constantes.URL+"/direccion/eliminar/{0}", info.id));
-                            response = await cliente.DeleteAsync(uri);
-                            var y = await response.Content.ReadAsStringAsync();
-                            System.Diagnostics.Debug.WriteLine(y);
 
-
-                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                            {
-
-                                System.Diagnostics.Debug.WriteLine("Se eliminó con exito");
-                                await  DisplayAlert("Eliminado","Dirección eliminada con exito","OK");
-                                conectar();
-                            }
-
-                            else
-                            {
-                                System.Diagnostics.Debug.WriteLine(response);
-                                var resp = JsonConvert.DeserializeObject<Respuesta>(y);
-
-                                await DisplayAlert("Error", resp.respuesta, "OK");
-
-                            }
                         }
-                        catch (HttpRequestException ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
-                            await DisplayAlert("Error", "No fué posible intente mas tarde", "OK");
-                        }
-
-
                     }
                 }
             }
-            }
+        }
             ((ListView)sender).SelectedItem = null;
         }
 
@@ -141,6 +157,67 @@ namespace PagoEnLinea.Paginas
         protected override void OnAppearing()
         {
             conectar();
+
+            MessagingCenter.Subscribe<Modal2>(this,"modificar",(obj) => {
+                MessagingCenter.Unsubscribe<Modal2>(this,"modificar");
+
+                Navigation.PushAsync(new ModificarDireccion(item.id, item.idCat, 0, item.estado, item.tipoasentamiento) { BindingContext = item });
+
+
+
+
+            });
+
+            MessagingCenter.Subscribe<Modal2>(this, "eliminar", async(obj) => {
+                MessagingCenter.Unsubscribe<Modal2>(this, "eliminar");
+
+
+                HttpResponseMessage response;
+
+
+                try
+                {
+                    HttpClient cliente = new HttpClient();
+                    //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
+                    if (Application.Current.Properties.ContainsKey("token"))
+                    {
+
+                        cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                    }
+
+                    var uri = new Uri(string.Format(Constantes.URL + "/direccion/eliminar/{0}", item.id));
+                    response = await cliente.DeleteAsync(uri);
+                    var y = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine(y);
+
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+
+                        System.Diagnostics.Debug.WriteLine("Se eliminó con exito");
+                        await DisplayAlert("Eliminado", "Dirección eliminada con exito", "OK");
+                        conectar();
+                    }
+
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine(response);
+                        var resp = JsonConvert.DeserializeObject<Respuesta>(y);
+
+                        await DisplayAlert("Error", resp.respuesta, "OK");
+
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
+                    await DisplayAlert("Error", "No fué posible intente mas tarde", "OK");
+                }
+
+
+
+            });
+           
         }
 
         void Handle_Clicked(object sender, System.EventArgs e)

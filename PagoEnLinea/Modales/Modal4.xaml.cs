@@ -5,10 +5,10 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
-    public partial class ModalPopUp
+    public partial class Modal4
     {
         public static string respuesta;
-        public ModalPopUp()
+        public Modal4()
         {
             InitializeComponent();
             var tapGestureRecognizer = new TapGestureRecognizer();

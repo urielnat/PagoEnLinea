@@ -139,6 +139,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Paginas\ModalPopUp.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modales\Modal.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modales\Modal2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modales\Modal3.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Modales\Modal4.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -254,6 +274,21 @@
     <Compile Include="PaginasPago\PasarelaPage.xaml.cs">
       <DependentUpon>PasarelaPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Paginas\ModalPopUp.xaml.cs">
+      <DependentUpon>ModalPopUp.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modales\Modal.xaml.cs">
+      <DependentUpon>Modal.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modales\Modal2.xaml.cs">
+      <DependentUpon>Modal2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modales\Modal3.xaml.cs">
+      <DependentUpon>Modal3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Modales\Modal4.xaml.cs">
+      <DependentUpon>Modal4.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Xfx.Controls">
@@ -318,6 +353,7 @@
     <Folder Include="camara\" />
     <Folder Include="PaginasPago\" />
     <Folder Include="PaginasMisPagos\" />
+    <Folder Include="Modales\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CarritoBD\CarritoBD.csproj">

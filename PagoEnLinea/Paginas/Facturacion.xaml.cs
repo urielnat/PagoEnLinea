@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using PagoEnLinea.Modales;
 using PagoEnLinea.Modelos;
 using PagoEnLinea.servicios;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
@@ -13,7 +15,7 @@ namespace PagoEnLinea.Paginas
         public static List<string> list;
 
         public static List<MostrarDatosFacturacion> lista;
-
+        public static MostrarDatosFacturacion item;
 
 
         public Facturacion()
@@ -73,6 +75,57 @@ namespace PagoEnLinea.Paginas
         protected override void OnAppearing()
         {
             conectar();
+            MessagingCenter.Subscribe<Modal3>(this,"modificar",(obj) =>{
+                MessagingCenter.Unsubscribe<Modal3>(this,"modificar");
+                 Navigation.PushAsync(new Modificarfacturacion(item.id, item.idDireccion, item.idCatDir, 0, item.email,item.calle) { BindingContext =item });
+
+            });
+
+            MessagingCenter.Subscribe<Modal3>(this,"eliminar",async(obj) => {
+                MessagingCenter.Unsubscribe<Modal3>(this, "eliminar");
+                HttpResponseMessage response;
+
+
+                try
+                {
+                    HttpClient cliente = new HttpClient();
+                    //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
+
+                    if (Application.Current.Properties.ContainsKey("token"))
+                    {
+
+                        cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                    }
+
+                    var uri = new Uri(string.Format(Constantes.URL + "/datos-facturacions/{0}", item.id));
+                    response = await cliente.DeleteAsync(uri);
+                    var y = await response.Content.ReadAsStringAsync();
+                    System.Diagnostics.Debug.WriteLine(y);
+
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+
+                        System.Diagnostics.Debug.WriteLine("Se eliminó con exito");
+                        await DisplayAlert("Eliminado", "Información eliminada con exito", "OK");
+                        conectar();
+
+                    }
+
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine(response);
+                        await DisplayAlert("Error", "No fué posible intente mas tarde", "OK");
+
+                    }
+                }
+                catch (HttpRequestException ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
+
+                }
+
+            });
         }
 
         async void OnitemTapped(object sender, ItemTappedEventArgs e)
@@ -82,66 +135,73 @@ namespace PagoEnLinea.Paginas
 
 
 
-
+            item = (MostrarDatosFacturacion)e.Item;
             var info = (MostrarDatosFacturacion)e.Item;
 
-            var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Eliminar", "Modificar");
-            if (!string.IsNullOrEmpty(action)) { 
-            if (action.Equals("Modificar"))
+            if (Device.RuntimePlatform == Device.Android)
             {
-                await Navigation.PushAsync(new Modificarfacturacion(((MostrarDatosFacturacion)e.Item).id, ((MostrarDatosFacturacion)e.Item).idDireccion, ((MostrarDatosFacturacion)e.Item).idCatDir, 0, ((MostrarDatosFacturacion)e.Item).email, ((MostrarDatosFacturacion)e.Item).calle) { BindingContext = (MostrarDatosFacturacion)e.Item });
+                await PopupNavigation.PushAsync(new Modal3());
             }
-            if (action.Equals("Eliminar"))
+            else { 
+            var action = await DisplayActionSheet("¿Qué desea hacer?", "Cancelar", "Eliminar", "Modificar");
+            if (!string.IsNullOrEmpty(action))
             {
-                var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar esta información de facturación?", "Si", "Cancelar");
+                if (action.Equals("Modificar"))
                 {
-                    if (respuesta)
+                    await Navigation.PushAsync(new Modificarfacturacion(((MostrarDatosFacturacion)e.Item).id, ((MostrarDatosFacturacion)e.Item).idDireccion, ((MostrarDatosFacturacion)e.Item).idCatDir, 0, ((MostrarDatosFacturacion)e.Item).email, ((MostrarDatosFacturacion)e.Item).calle) { BindingContext = (MostrarDatosFacturacion)e.Item });
+                }
+                if (action.Equals("Eliminar"))
+                {
+                    var respuesta = await DisplayAlert("Eliminar", "¿Esta seguro que desea eliminar esta información de facturación?", "Si", "Cancelar");
                     {
-
-                        HttpResponseMessage response;
-
-
-                        try
+                        if (respuesta)
                         {
-                            HttpClient cliente = new HttpClient();
-                            //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
 
-                            if (Application.Current.Properties.ContainsKey("token"))
+                            HttpResponseMessage response;
+
+
+                            try
                             {
+                                HttpClient cliente = new HttpClient();
+                                //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
 
-                                cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                                if (Application.Current.Properties.ContainsKey("token"))
+                                {
+
+                                    cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                                }
+
+                                var uri = new Uri(string.Format(Constantes.URL + "/datos-facturacions/{0}", info.id));
+                                response = await cliente.DeleteAsync(uri);
+                                var y = await response.Content.ReadAsStringAsync();
+                                System.Diagnostics.Debug.WriteLine(y);
+
+
+                                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                                {
+
+                                    System.Diagnostics.Debug.WriteLine("Se eliminó con exito");
+                                    await DisplayAlert("Eliminado", "Información eliminada con exito", "OK");
+                                    conectar();
+
+                                }
+
+                                else
+                                {
+                                    System.Diagnostics.Debug.WriteLine(response);
+                                    await DisplayAlert("Error", "No fué posible intente mas tarde", "OK");
+
+                                }
+                            }
+                            catch (HttpRequestException ex)
+                            {
+                                System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
+
                             }
 
-                            var uri = new Uri(string.Format(Constantes.URL + "/datos-facturacions/{0}", info.id));
-                            response = await cliente.DeleteAsync(uri);
-                            var y = await response.Content.ReadAsStringAsync();
-                            System.Diagnostics.Debug.WriteLine(y);
 
 
-                            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                            {
-
-                                System.Diagnostics.Debug.WriteLine("Se eliminó con exito");
-                                await DisplayAlert("Eliminado", "Información eliminada con exito", "OK");
-                                conectar();
-
-                            }
-
-                            else
-                            {
-                                System.Diagnostics.Debug.WriteLine(response);
-                                await DisplayAlert("Error", "No fué posible intente mas tarde", "OK");
-
-                            }
                         }
-                        catch (HttpRequestException ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
-
-                        }
-
-
-
                     }
                 }
             }

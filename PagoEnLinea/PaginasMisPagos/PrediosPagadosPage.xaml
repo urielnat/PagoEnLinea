@@ -1,24 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="PagoEnLinea.PaginasMisPagos.PrediosPagadosPage" Title="Pagos">
 	<ContentPage.Content>
-          <StackLayout Padding="20,20,20,20">
-             <Grid>
-                  <Grid.ColumnDefinitions>
-
-                  <ColumnDefinition Width="*" />
-                   <ColumnDefinition Width="9*" /> 
-                     
-                </Grid.ColumnDefinitions>
-                  <Grid.RowDefinitions>
-                  <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-                  <Image x:Name="imgBuscar" Grid.Row="0" Grid.Column="0" Source="search.png"/>
-               <Entry x:Name="enBuscar"  Grid.Row="0" Grid.Column="1" Placeholder="Ingrese el número de liquidación" HorizontalOptions="FillAndExpand" Keyboard="Numeric" HeightRequest="50"/> 
-                 <SearchBar x:Name="buscar"  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" SearchButtonPressed="Handle_SearchButtonPressed" Placeholder="Ingrese el número de liquidación" HeightRequest="50" IsVisible="false"></SearchBar>
-                </Grid>
+          <StackLayout Padding="20,20,20,0">
+           
             
-            <ScrollView>
-           <ListView x:Name="listView" RowHeight="200" ItemTapped="Handle_ItemTapped" SeparatorVisibility="None">
+            <ScrollView VerticalOptions="FillAndExpand">
+           <ListView x:Name="listView" RowHeight="110"  SeparatorVisibility="None" ItemTapped="ListView_ItemTapped">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell >
@@ -41,21 +28,23 @@
                 <Grid.ColumnDefinitions>
 
                   <ColumnDefinition Width="*" />
-                
+                  <ColumnDefinition Width="2*" />
                     
 
                 </Grid.ColumnDefinitions>
                    
                   
                                       
-                     <Label Text="{Binding Clave}" Grid.Row ="1" Grid.Column="0"/>
+                    
                                         
-                     <Label Text="{Binding fechaPago}" Grid.Row ="2" Grid.Column="0"/>
-                     <Label Text="{Binding liquidacion}" Grid.Row ="3" Grid.Column="0"/>
-                                        
-                     <Label Text="{Binding liquidacionDesc}" Grid.Row ="4" Grid.Column="0"/>
+                     <Label Text="{Binding fecha}" Grid.Row ="0" Grid.Column="1"/>
+                      <Label Text="Fecha: " Font="Bold" Grid.Row ="0" Grid.Column="0"/>                   
+                     <Label Text="{Binding estatus}" Grid.Row ="1" Grid.Column="1"/>
+                       <Label Text="Estatus: " Font="Bold" Grid.Row ="1" Grid.Column="0"/>                   
+                     <Label Text="{Binding importe}" Grid.Row ="2" Grid.Column="1"/>
+                       <Label Text="Importe: $" Font="Bold" Grid.Row ="2" Grid.Column="0"/>                   
                                        
-                     <Label Text="{Binding total}" Grid.Row ="5" Grid.Column="0"/>
+                       
 
                                        
                 </Grid>                 

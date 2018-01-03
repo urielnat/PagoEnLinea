@@ -35,6 +35,7 @@ namespace PagoEnLinea
            
             enCod.TextChanged += OnTextChanged;
             enNumero.TextChanged += validarNumero;
+            enNumInt.TextChanged += validarNumero;
 
             enColonia.TextChanged += borrarError;
             enDomicilio.TextChanged += borrarError;
@@ -164,7 +165,7 @@ namespace PagoEnLinea
             }
             else if (sender == enNumero)
             {
-                if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9]*$").Success)
+                if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9/-]*$").Success)
                 {
                     lblnum.TextColor = Xamarin.Forms.Color.Red;
 
@@ -234,7 +235,7 @@ namespace PagoEnLinea
             {
                 if (!string.IsNullOrEmpty(enNumInt.Text))
                 {
-                    if (!Regex.Match(enNumInt.Text, "^[a-zA-Z0-9]*$").Success)
+                    if (!Regex.Match(enNumInt.Text, "^[a-zA-Z0-9/-]*$").Success)
                     {
                         lblNumInt.TextColor = Xamarin.Forms.Color.Red;
                     }
@@ -295,7 +296,7 @@ namespace PagoEnLinea
             }
             else if (sender == enLADA)
             {
-                if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 3)
+                if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 2)
                 {
                     enLADA.ErrorText = "LADA";
 
@@ -336,7 +337,7 @@ namespace PagoEnLinea
 
                 if (!string.IsNullOrEmpty(enLADA2.Text))
                 {
-                    if (enLADA2.Text.Length != 3)
+                    if (enLADA2.Text.Length < 2)
                     {
 
                         enLADA2.ErrorText = "LADA incorrecta";
@@ -379,7 +380,7 @@ namespace PagoEnLinea
             }
             else if (sender == enNumero)
             {
-                if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9]*$").Success)
+                if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9/-]*$").Success)
                 {
                     lblnum.TextColor = Xamarin.Forms.Color.Red;
 
@@ -447,7 +448,7 @@ namespace PagoEnLinea
             }else if(sender==enNumInt){
                 if (!string.IsNullOrEmpty(enNumInt.Text))
                 {
-                    if (!Regex.Match(enNumInt.Text, "^[a-zA-Z0-9]*$").Success)
+                    if (!Regex.Match(enNumInt.Text, "^[a-zA-Z0-9/-]*$").Success)
                     {
                         lblNumInt.TextColor = Xamarin.Forms.Color.Red;
                     }
@@ -498,7 +499,7 @@ namespace PagoEnLinea
 
                 }
             }else if (sender==enLADA){
-                if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 3)
+                if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 2)
                 {
                     enLADA.ErrorText = "LADA";
                    
@@ -536,10 +537,10 @@ namespace PagoEnLinea
 
             if (!string.IsNullOrEmpty(enLADA2.Text))
                 {
-                    if (enLADA2.Text.Length != 3)
+                    if (enLADA2.Text.Length < 2)
                     {
                         
-                        enLADA2.ErrorText = "LADA incorrecta";
+                        enLADA2.ErrorText = "LADA";
                     }
                     else
                     {
@@ -639,7 +640,7 @@ namespace PagoEnLinea
 
             if (!string.IsNullOrEmpty(enNumInt.Text))
             {
-                if (!Regex.Match(enNumInt.Text, "^[a-zA-Z0-9]*$").Success)
+                if (!Regex.Match(enNumInt.Text, "^[a-zA-Z0-9/-]*$").Success)
                 {
                     comodin2 = false;
                 }
@@ -659,7 +660,7 @@ namespace PagoEnLinea
 
             if (!string.IsNullOrEmpty(enLADA2.Text))
             {
-                if (enLADA2.Text.Length != 3)
+                if (enLADA2.Text.Length < 2)
                 {
                     com = false;
                     await DisplayAlert("Advertencia", "LADA incorrecta", "OK");
@@ -726,7 +727,7 @@ namespace PagoEnLinea
                 enDomicilio.ErrorText = "";
                 a2 = true;
             }
-            if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9]*$").Success)
+            if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9/-]*$").Success)
             {
                 lblnum.TextColor = Xamarin.Forms.Color.Red;
                 a3 = false;
@@ -764,7 +765,7 @@ namespace PagoEnLinea
                 a5 = true;
             }
 
-            if (ValidarVacio(enEstado.Text) || !Regex.Match(enEstado.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
+            if (ValidarVacio(enEstado.Text) || !Regex.Match(enEstado.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚÜü\s0-9]+$").Success)
             {
                 
                 enEstado.ErrorText = "Introduzca un estado valido";
@@ -819,7 +820,7 @@ namespace PagoEnLinea
                 a9 = true;
             }
 
-            if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 3)
+            if (ValidarVacio(enLADA.Text) || enLADA.Text.Length < 2)
             {
                 await DisplayAlert("Advertencia", "LADA incorrecta", "OK");
                 enLADA.ErrorText = "LADA";
@@ -899,7 +900,7 @@ namespace PagoEnLinea
 
                 ClienteRest cliente = new ClienteRest();
 
-                cliente.POST(Constantes.URL + "/registrar?movil=true", user, 1);
+                cliente.POST(Constantes.URL + "/registrar?movil=true&tramitta=false", user, 1);
 
              
                 MessagingCenter.Subscribe<ClienteRest>(this, "OK", async (Sender) =>

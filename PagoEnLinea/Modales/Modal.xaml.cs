@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
-namespace PagoEnLinea.Paginas
+namespace PagoEnLinea.Modales
 {
-    public partial class ModalPopUp
+    public partial class Modal
     {
         public static string respuesta;
-        public ModalPopUp()
+        public Modal()
         {
             InitializeComponent();
             var tapGestureRecognizer = new TapGestureRecognizer();
@@ -16,7 +16,7 @@ namespace PagoEnLinea.Paginas
             {
                 if (s == modificar)
                 {
-                    MessagingCenter.Send(this,"modificar");
+                    MessagingCenter.Send(this, "modificar");
                     PopupNavigation.PopAsync();
                 }
                 else if (s == eliminar)

@@ -3,7 +3,7 @@
 	<ContentPage.Content>
         <StackLayout Padding="20,20,20,5">
             <Label HorizontalTextAlignment="Center" Text="Datos de Facturación" FontSize="15"/> 
-                <ScrollView>
+                <ScrollView VerticalOptions="FillAndExpand">
            <ListView x:Name="listView" RowHeight="200" SeparatorVisibility="None">
         <ListView.ItemTemplate>
             <DataTemplate>

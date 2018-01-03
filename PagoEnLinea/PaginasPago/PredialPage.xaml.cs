@@ -48,6 +48,10 @@ namespace PagoEnLinea.PaginasPago
                 enBuscar.IsVisible = true;
                 imgBuscar.IsVisible = true;
             }
+            NavigationPage test = new NavigationPage();
+            test.Popped += (sender, e) => {
+                System.Diagnostics.Debug.WriteLine("algo");
+            };
 
         }
 
@@ -122,10 +126,10 @@ namespace PagoEnLinea.PaginasPago
                             bimFin = total.bimFinal,
                             pago = total.total,
                             Detalles = (total.detalle.Count()>0)?
-                                "$ "+total.detalle[0].importe + "\t" +total.detalle[0].conceptoDescripcion + "\n"+"\n"+
-                                          "$ " + total.detalle[1].importe + "\t" + total.detalle[1].conceptoDescripcion + "\n"+"\n"+
-                                          "$ " + total.detalle[2].importe + "\t" + total.detalle[2].conceptoDescripcion + "\n"+"\n"+
-                                          "$ " + total.detalle[3].importe + "\t" + total.detalle[3].conceptoDescripcion + "\n":"No hay detalles que mostrar"
+                                         total.detalle[0].conceptoDescripcion +"\n"+ "$ " + total.detalle[0].importe + "\n"+"\n"+
+                                              total.detalle[1].conceptoDescripcion + "\n" + "$ " + total.detalle[1].importe + "\n" + "\n" +
+                                              total.detalle[2].conceptoDescripcion + "\n" + "$ " + total.detalle[2].importe + "\n" + "\n" +
+                                              total.detalle[3].conceptoDescripcion + "\n" + "$ " + total.detalle[3].importe :"No hay detalles que mostrar"
 
                         });
                     }
@@ -207,7 +211,7 @@ namespace PagoEnLinea.PaginasPago
                
                     multiPage = new DesglosePredios<CheckItem>(items) { Title = "Seleccione el pago" };
 
-                await Navigation.PushAsync(multiPage);
+                await Navigation.PushModalAsync(multiPage);
              
             }
             else

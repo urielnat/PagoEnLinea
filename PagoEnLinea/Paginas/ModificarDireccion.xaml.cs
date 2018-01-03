@@ -45,7 +45,7 @@ namespace PagoEnLinea.Paginas
                
                
             }
-
+            enNumero.TextChanged += validarNumero;
             enCP.Completed += algo_Completed;
             pkAsentamiento.SelectedIndexChanged += onIndexChange;
         }
@@ -74,7 +74,7 @@ namespace PagoEnLinea.Paginas
             bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false,a7=false;
 
 
-            if (ValidarVacio(enCalle.Text))
+            if (ValidarVacio(enCalle.Text)|| !Regex.Match(enCalle.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s0-9]+$").Success)
             {
                 await DisplayAlert("Campo no valida","Introduza una calle válida","Ok");
                 a1 = false;
@@ -86,7 +86,7 @@ namespace PagoEnLinea.Paginas
                 a1 = true;
             }
 
-            if (ValidarVacio(enNumero.Text))
+            if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9/-]*$").Success)
             { 
                 await DisplayAlert("Campo no valido", "Introduza una número válido", "Ok");  
                 a2 = false;
@@ -122,9 +122,9 @@ namespace PagoEnLinea.Paginas
                 a4 = true;
             }
 
-            if (ValidarVacio(enMunicipio.Text))
+            if (ValidarVacio(enMunicipio.Text)|| !Regex.Match(enMunicipio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s0-9]+$").Success)
             {
-                await  DisplayAlert("Campo vacio", "Introduzca un municipio válido", "ok");
+                await  DisplayAlert("Campo incorrecto", "Introduzca un municipio valido", "ok");
                 a5 = false;
 
             }
@@ -134,7 +134,7 @@ namespace PagoEnLinea.Paginas
                 a5 = true;
             }
 
-            if (ValidarVacio(enEstado.Text))
+            if (ValidarVacio(enEstado.Text) || !Regex.Match(enEstado.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚÜü\s0-9]+$").Success)
             {
                 await DisplayAlert("Campo vacio", "Introduzca un estado valido", "ok");
                 a6 = false;
@@ -260,7 +260,7 @@ namespace PagoEnLinea.Paginas
             bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false,a7=false,a8=true;
 
 
-            if (ValidarVacio(enCalle.Text))
+            if (ValidarVacio(enCalle.Text)|| !Regex.Match(enCalle.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s0-9]+$").Success)
             {
                 DisplayAlert("Campo no valida", "Introduza una calle válida", "Ok");
                 a1 = false;
@@ -272,7 +272,7 @@ namespace PagoEnLinea.Paginas
                 a1 = true;
             }
 
-            if (ValidarVacio(enNumero.Text))
+            if (ValidarVacio(enNumero.Text) || !Regex.Match(enNumero.Text, "^[a-zA-Z0-9/-]*$").Success)
             {
                 DisplayAlert("Campo no valido", "Introduza una número valido", "Ok");
                 a2 = false;
@@ -308,7 +308,7 @@ namespace PagoEnLinea.Paginas
                 a4 = true;
             }
 
-            if (ValidarVacio(enMunicipio.Text))
+            if (ValidarVacio(enMunicipio.Text)|| !Regex.Match(enMunicipio.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚÜü\s0-9]+$").Success)
             {
                 DisplayAlert("Campo vacio", "Introduzca un municipio valido", "ok");
                 a5 = false;
@@ -320,9 +320,9 @@ namespace PagoEnLinea.Paginas
                 a5 = true;
             }
 
-            if (ValidarVacio(enEstado.Text))
+            if (ValidarVacio(enEstado.Text) || !Regex.Match(enEstado.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚÜü\s0-9]+$").Success)
             {
-                 DisplayAlert("Campo vacio", "Introduzaca un estado", "ok");
+                 DisplayAlert("Campo incorrecto", "Introduzaca un estado valido", "ok");
                 a6 = false;
 
             }
@@ -517,6 +517,20 @@ namespace PagoEnLinea.Paginas
                 }
             }
 
+
+        }
+
+        public void validarNumero(object sender, TextChangedEventArgs args)
+        {
+            if (!Regex.IsMatch(args.NewTextValue, "^[0-9/-A-Fa-f]+$", RegexOptions.CultureInvariant))
+                (sender as Entry).Text = Regex.Replace(args.NewTextValue, "[^0-9]", string.Empty);
+            Entry entry = sender as Entry;
+            String val = entry.Text;
+            if (val.Length > 5)
+            {
+                val = val.Remove(val.Length - 1);
+                entry.Text = val;
+            }
 
         }
     }

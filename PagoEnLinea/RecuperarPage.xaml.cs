@@ -29,8 +29,9 @@ namespace PagoEnLinea
                 try
                 {
                     HttpClient cliente = new HttpClient();
-
-                    response = await cliente.PostAsync(Constantes.URL + "/account/reset-password?movil=true", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                  //  cliente.DefaultRequestHeaders.Add("Origin","http://192.168.0.44:8083") ;
+                    response = await cliente.PostAsync(Constantes.URL + "/account/reset-password?movil=false&tramitta=false", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                    System.Diagnostics.Debug.WriteLine(cliente.DefaultRequestHeaders);
                     var y = await response.Content.ReadAsStringAsync();
                     System.Diagnostics.Debug.WriteLine(y);
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)

@@ -192,8 +192,29 @@ namespace PagoEnLinea.Modelos
         public string estado { get; set; }
         public string ciudad { get; set; }
         public string pais { get; set; }
+        public string idPago { get; set; }
+        public string fecha { get; set; }
+        public string estatus { get; set; }
+        public string importe { get; set; }
+
+
+
+       
+        public string concepto { get; set; }
+        public string fechaVigencia { get; set; }
+
+        public string llave { get; set; }
+        public bool generoUs { get; set; }
+        public string carroId { get; set; }
+        public string liquidacionId { get; set; }
         
     }
+
+
+
+
+
+
 
     public class CodigoPostal
     {
@@ -207,5 +228,18 @@ namespace PagoEnLinea.Modelos
         public int catID { get; set; }
 
     }
+
+    public class Historial
+    {
+        public IList<Respuesta> respuesta { get; set; }
+    }
+
+   
+
+    public class DetallesHIstorial
+    {
+        public IList<Respuesta> respuesta { get; set; }
+    }
+
 }
 
