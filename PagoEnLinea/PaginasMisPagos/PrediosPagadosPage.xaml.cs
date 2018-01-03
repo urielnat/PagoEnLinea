@@ -53,7 +53,7 @@ namespace PagoEnLinea.PaginasMisPagos
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
 
-                response = await cliente.GetAsync("http://192.168.0.18:8081/api/historial-pagos/" + clave);
+                response = await cliente.GetAsync("http://192.168.0.100:8081/api/historial-pagos/" + clave);
                 var y = await response.Content.ReadAsStringAsync();
 
 
@@ -163,7 +163,7 @@ namespace PagoEnLinea.PaginasMisPagos
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
 
-                response = await cliente.GetAsync("http://192.168.0.18:8081/api/historial-pagos/"+clave);
+                response = await cliente.GetAsync("http://192.168.0.100:8081/api/historial-pagos/"+clave);
                 var y = await response.Content.ReadAsStringAsync();
 
 
