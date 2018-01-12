@@ -1,6 +1,10 @@
 ﻿using System;
 namespace PagoEnLinea.PaginasPago
 {
+    /// <summary>
+    /// modelo de tipo CheckItem, contiene información acerca de una fecha especifica a pagar
+    /// cuando se desgloza un predial
+    /// </summary>
     public class CheckItem
     {
         

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 namespace PagoEnLinea.Modelos
 {
 
+    /// <summary>
+    /// modelo de liquidaciones, empleado para manipular los JSON al consumir servicios
+    /// </summary>
 
     public class Datos{
         public IList<Liquidacion> data { set; get; }
@@ -93,7 +96,11 @@ namespace PagoEnLinea.Modelos
         public bool guardaLiquidacion = true;
     }
 
-
+    public class Pago
+    {
+        public string auth { get; set; }
+        public IList<int> idLiqs { get; set; }
+    }
 
 
 }

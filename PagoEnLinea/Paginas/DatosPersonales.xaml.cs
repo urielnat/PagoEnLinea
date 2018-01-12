@@ -11,10 +11,20 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
+    /// <summary>
+    /// Es clase muestra una pantalla al usuario con sus datos personales (nombre, apellido, sexto etc.)
+    /// permitiendole visulizarlos y modificarlos al consumir diversos servicios.
+    /// </summary>
     public partial class DatosPersonales : ContentPage
     {
         
         Persona persona = new Persona();
+
+        /// <summary>
+        /// inicializa los componentes visuales del XAML
+        /// añade un evento de tipo TextChanged
+        /// al componente dtFecha se le establce como fecha máxima ha seleccionar la fecha actual
+        /// </summary>
         public DatosPersonales()
         {
             InitializeComponent();
@@ -23,6 +33,12 @@ namespace PagoEnLinea.Paginas
           
         }
 
+
+
+        /// <summary>
+        /// Consume al servicio que obtiene la información del usuario mediante una instancia de la clase CLienteRest
+        /// y llena los campos correspondientes
+        /// </summary>
         async void conectar()
         {
             if (Application.Current.Properties.ContainsKey("token"))
@@ -58,10 +74,21 @@ namespace PagoEnLinea.Paginas
             }
 
         }
+
+        /// <summary>
+        /// llama al método conectar para mostrar cada vez que esta pantalla se muestra.
+        /// </summary>
         protected override void OnAppearing()
         {
             conectar();
         }
+
+
+        /// <summary>
+        /// añade un evento de tipo click al boton modificar que permite habilitar las entradas de texto
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
        void Handle_Clicked(object sender, System.EventArgs e)
         {
             //var action = await DisplayActionSheet("Modificar datos", "Cancelar", "Eliminar", "Modificar", "Agregar");
@@ -83,13 +110,22 @@ namespace PagoEnLinea.Paginas
             btnContraseña.BackgroundColor = Color.Silver;
         }
 
+        /// <summary>
+        /// añade un evento de tipo click al presionar el boton modficar contraseña el cual muestra al usuario pantalla
+        /// para modificarla
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>         /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
         async void contraseña_Clicked(object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new ModificarContraseña());       
         }
 
 
-
+        /// <summary>
+        /// evento click al presionar el boton guardar, verifica que los campos añadidos sean correctos antes de
+        /// consumir el servicio para modificarlos
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>         /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
          void modificar_Clicked(object sender, System.EventArgs e)
         {
 
@@ -156,7 +192,7 @@ namespace PagoEnLinea.Paginas
 
            
 
-                client.PUT(Constantes.URL+"/personas/actualizar", persona);
+                client.PUT(Constantes.URL_USUARIOS+"/personas/actualizar", persona);
 
             MessagingCenter.Subscribe<ClienteRest>(this, "OK", (send) =>
             {
@@ -196,6 +232,13 @@ namespace PagoEnLinea.Paginas
             }
            
         }
+
+        /// <summary>
+        /// evento que permite cambiar dinámicamente las letras a mayusculas ingresadas en el teclado virtual
+        /// es usado por la entrada CURP
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void MayusChanged(object sender, TextChangedEventArgs e)
         {
 

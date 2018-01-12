@@ -12,13 +12,20 @@ using PagoEnLinea.Modales;
 
 namespace PagoEnLinea.Paginas
 {
+    /// <summary>
+    /// esta clase muestra una pantalla todos los correos electrónicos que el usuario ha dado de alta
+    /// permitiendole la posibilidad de modificarlos y eliminarlos
+    /// </summary>
     public partial class CorreosElectronicos : ContentPage
     {
         public static List<Email> list;
         public static string resp;
         public static Email item;
 
-
+        /// <summary>
+        /// inicializa los componenetes visuales correspondientes a su XAML y añade un evento de tipo item tapped a la lista
+        /// que contiene todos los corres electrónicos del usuario.
+        /// </summary>
         public CorreosElectronicos()
         {
             
@@ -27,6 +34,14 @@ namespace PagoEnLinea.Paginas
            
         }
 
+
+
+        /// <summary>
+        /// evento que permite seleccionar un correo de la lista y elegir la opcion de modificarlo o eliminarlo
+        /// unicamente en android se hará uso del cuadro de diálogo personalizado ya que en iOS
+        /// sus configuraciones nativas no lo requieren. Así mismo consume los servicios correspondientes.
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>         /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             item = (Email)e.Item;
@@ -47,7 +62,13 @@ namespace PagoEnLinea.Paginas
             {
                 if (action.Equals("Modificar"))
                 {
-                    await Navigation.PushAsync(new ModificarCorreo((e.Item as Email).id, 0) { BindingContext = (Email)e.Item });
+                        if(Application.Current.Properties.ContainsKey("user")){
+                             if(item.correoe.ToUpper().Equals((Application.Current.Properties["user"] as string).ToUpper())){
+                               await DisplayAlert("Advertencia", "No puedes modificar tu email de inicio de sesión", "OK");
+                            }else{
+                                await Navigation.PushAsync(new ModificarCorreo((e.Item as Email).id, 0) { BindingContext = (Email)e.Item });
+                            }
+                        }  
                 }
                 if (action.Equals("Eliminar"))
                 {
@@ -66,7 +87,7 @@ namespace PagoEnLinea.Paginas
                                 //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
 
 
-                                var uri = new Uri(string.Format(Constantes.URL + "/email/eliminar/{0}", info.id));
+                                var uri = new Uri(string.Format(Constantes.URL_USUARIOS + "/email/eliminar/{0}", info.id));
                                 if (Application.Current.Properties.ContainsKey("token"))
                                 {
 
@@ -113,7 +134,9 @@ namespace PagoEnLinea.Paginas
 
         }
 
-       
+       /// <summary>
+       /// llama al servicio para mostrar todos los corres electrónicos ingresados por el usuario y añadirlos a una lista.
+       /// </summary>
         async void conectar()
         {
             if (Application.Current.Properties.ContainsKey("token"))
@@ -147,13 +170,30 @@ namespace PagoEnLinea.Paginas
 
             }
         }
+
+
+
+        /// <summary>
+        /// llama el método conectar que permite mostrar los correos electrónicos al desplegar la pantalla correos electróncios
+        /// del módulo perfil, a su vez esta conectado a la subpantalla "Modal" la cual muestra un cuadro de dialogo el cual
+        /// a partir de el resultado obtenido permite modificar o eliminar un elemento de la lista de correos
+        /// (unicamente en Android)
+        /// </summary>
         protected override void OnAppearing()
         {
             conectar();
             MessagingCenter.Subscribe<Modal>(this, "modificar", (Sender) =>
             {   MessagingCenter.Unsubscribe<Modal>(this, "modificar");
-                
-                Navigation.PushAsync(new ModificarCorreo(item.id, 0) { BindingContext = item });
+
+
+                if(Application.Current.Properties.ContainsKey("user")){
+                    if(item.correoe.ToUpper().Equals((Application.Current.Properties["user"] as string).ToUpper())){
+                                DisplayAlert("Advertencia", "No puedes modificar tu email de inicio de sesión", "OK");
+                            }else{
+                                Navigation.PushAsync(new ModificarCorreo(item.id, 0) { BindingContext = item });
+                            }
+                        }  
+               
                 MessagingCenter.Unsubscribe<Modal>(this, "modificar");
 
             });
@@ -171,7 +211,7 @@ namespace PagoEnLinea.Paginas
                     //cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
 
 
-                    var uri = new Uri(string.Format(Constantes.URL + "/email/eliminar/{0}", item.id));
+                    var uri = new Uri(string.Format(Constantes.URL_USUARIOS + "/email/eliminar/{0}", item.id));
                     if (Application.Current.Properties.ContainsKey("token"))
                     {
 
@@ -218,6 +258,12 @@ namespace PagoEnLinea.Paginas
            
         }
 
+        /// <summary>
+        /// Evento click al presionar el boton flotante, muestra al usuario la pantalla modificar correo
+        /// pero al no recibir parámetros se toma como una pantalla para añadir un nuevo correo electrónico
+        /// </summary>
+        /// <param name="sender">objeto que hace refencia al evento</param>
+        /// <param name="e">propiedades o argumentos del objeto que son accesibles a travez de la llamada al evento</param>
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
             await Navigation.PushAsync(new ModificarCorreo(null,1) );

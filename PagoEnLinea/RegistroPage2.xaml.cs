@@ -17,7 +17,11 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea
 {
-
+    /// <summary>
+    /// esta clase corresponde a la segunda de dos pantallas para el registro de un usuario
+    /// añade la funcionalidad de OCR aunque la mayoria de campos ya son autocompletados al ingresar el código postal
+    /// ya que en su mayoria son campos correspondientes a direcciones
+    /// </summary>
     public partial class RegistroPage2 : ContentPage
     {
         public static List<string> tipoas;
@@ -26,6 +30,22 @@ namespace PagoEnLinea
         public CatalogoDir catdire { set; get; }
         public Direccion direc = new Direccion();
         public static bool cargaCP = false;
+
+
+        /// <summary>
+        /// en el constructor se la asignan diferentes eventos a las entradas de texto:
+        /// permite detectar cuando cuando el usuario teclea nuevamente encaso de que
+        /// la interfaz le muestre un error para borrarlo dinámicamente
+        /// asi mismo muestra un error en caso de detectarlo al presionar la tecla de retorno
+        /// o cambiar el foco de la entrada
+        /// obtiene información de la pantalla anterior para poder consumir el servicio de dar de alta un usuario
+        /// ademas de que  si se hizo uso del OCR desde la pantalla anterior algunos campos son compleatados
+        /// actualmente esto esta desabilitado para estos y otros datos al cargar el catálogo de direcciones
+        /// con el código postal
+        /// </summary>
+        /// <param name="u">objeto de tipo usuario contiene toda la información capturada de la pantalla anterior</param>
+        /// <param name="d">contiene toda la informacion de direcciones capturada por el OCR para manipularla mas facilmente</param>
+        /// <param name="cd">contiene toda la informacion del catálogo de direcciones captura por el OCR</param>
         public RegistroPage2(Usuarios u, Direccion d, CatalogoDir cd)
         {
             user = u;
@@ -58,7 +78,7 @@ namespace PagoEnLinea
           //  enCod.Text = cd.cp;
            // enNumero.Text = d.numero;
 
-            enCod.Completed += onCompleted;  
+           
             if (Application.Current.Properties.ContainsKey("lada"))
             {
                 enDomicilio.Text = Application.Current.Properties["calle"] as string;
@@ -118,7 +138,12 @@ namespace PagoEnLinea
         }
 
        
-
+        /// <summary>
+        /// sube el scroll automáticamente en caso de que el usuario este posisionado en el campo LADA del teléfono celular
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
+       
         private async void OnFocus(object sender, FocusEventArgs e)
         {
 
@@ -149,7 +174,7 @@ namespace PagoEnLinea
         /// </summary>
         /// <param name="sender">Sender.</param>
         /// <param name="e">E.</param>
-        private async void UnfocusError(object sender, FocusEventArgs e)
+        private  void UnfocusError(object sender, FocusEventArgs e)
         {
             if (sender == enDomicilio)
             {
@@ -358,10 +383,12 @@ namespace PagoEnLinea
         }
 
         /// <summary>
-        /// Validate the error.
+        /// método que permite detectar dinámicamente si existe algun error en un campo al oprimir
+        /// la tecla de retorno en el teclado virtual
         /// </summary>
-        /// <param name="sender">Sender.</param>
-        /// <param name="e">E.</param>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
+      
         private async void verificarError(object sender, EventArgs e)
         {
             if (sender == enDomicilio)
@@ -556,12 +583,12 @@ namespace PagoEnLinea
 
             }
         }
+       
 
-        private void onCompleted(object sender, EventArgs e)
-        {
-           //
-        }
-
+        /// <summary>
+        /// permite cargar los datos ya ingresados en caso de regresar a la pantalla anterior y volver a esta
+        /// 
+        /// </summary>
         protected override  void OnAppearing()
         {   
             base.OnAppearing();
@@ -590,7 +617,12 @@ namespace PagoEnLinea
             //scroll2.ScrollToAsync(enDomicilio, ScrollToPosition.MakeVisible, true);
          
         }
-
+        /// <summary>
+        /// valida que solo se puedan ingresar números en la lada del celular y hacer el salto automático 
+        /// al la entrada celular
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         private void OnLada2Changed(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -613,7 +645,12 @@ namespace PagoEnLinea
         }
 
 
-
+        /// <summary>
+        /// evento del boton registrar valida que todos los campos ingresados sean correctos
+        /// y en caso afirmativo consume al servicio de dar de alta un nuevo usuario
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void registrar_Clicked(object sender, System.EventArgs e)
         {
             bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false, a7 = false, a8 = false, a9 = false, a10 = false, a11 = true, a12 = false;
@@ -900,7 +937,7 @@ namespace PagoEnLinea
 
                 ClienteRest cliente = new ClienteRest();
 
-                cliente.POST(Constantes.URL + "/registrar?movil=true&tramitta=false", user, 1);
+                cliente.POST(Constantes.URL_USUARIOS + "/registrar?movil=true&tramitta=false", user, 1);
 
              
                 MessagingCenter.Subscribe<ClienteRest>(this, "OK", async (Sender) =>
@@ -942,6 +979,12 @@ namespace PagoEnLinea
                 //await Navigation.PopToRootAsync();
             }
         }
+
+        /// <summary>
+        /// valida dinamicamente que solo se ingresen numeros en el código postal 
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void OnTextChanged(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -955,7 +998,11 @@ namespace PagoEnLinea
                 entry.Text = val;
             }
         }
-
+        /// <summary>
+        /// verifica que solo se ingresen cierto tipo de caracteres al ingresar un número de direccion y número interior
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void validarNumero(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9A-Fa-f/-]+$", RegexOptions.CultureInvariant))
@@ -970,7 +1017,12 @@ namespace PagoEnLinea
 
         }
 
-
+        /// <summary>
+        /// valida que solo se puedan ingresar números en la lada del teléfono y hacer el salto automático 
+        /// al la entrada teléfono
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void OnLadaChanged(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -991,6 +1043,11 @@ namespace PagoEnLinea
             }
         }
 
+        /// <summary>
+        /// valida que solo se ingresen números en la entrada teléfono y evita que sean mas de 7 digitos
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void OnTelefonoChanged(object sender, TextChangedEventArgs args)
         {
             if(!string.IsNullOrEmpty((sender as Entry).Text)){
@@ -1009,20 +1066,40 @@ namespace PagoEnLinea
 
         }
 
+        /// <summary>
+        /// borra en la pantalla el error detectado dinámicamente al ingresar texto nuevo
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void borrarError(Object sender, TextChangedEventArgs args)
         {
             (sender as Xfx.XfxEntry).ErrorText = "";
         }
 
+        /// <summary>
+        /// verifica si la entrada de texto esta vacia.
+        /// </summary>
+        /// <returns><c>true</c>, si el campo esta vacio, <c>false</c> en caso contrario.</returns>
+        /// <param name="x">texto ingresado en la entrada.</param>
         bool ValidarVacio(string x)
         {
             var auth = (String.IsNullOrEmpty(x)) ? true : false;
             return auth;
         }
 
-        VisionServiceClient visionClient = new VisionServiceClient("7fa718b2312047ec92cf07211dd72b50");
 
-        private async Task<OcrResults> GetTextDescription(Stream imageStream)
+        /// <summary>
+        /// Cliente de para hacer uso de "Cognitive services de microsoft" para poder añadir la funcionalidad
+        /// de OCR, es necesaria obtener una clave personal atra vez de su sitio web
+        /// </summary>
+        VisionServiceClient visionClient = new VisionServiceClient("2b2d900d589946d4aea338483921078b");
+
+        /// <summary>
+        /// Método asincrono envia una imagen para ser reconocida en la API de microsoft
+        /// </summary>
+        /// <returns>The text description.</returns>
+        /// <param name="imageStream">imagen a enviar</param>
+       private async Task<OcrResults> GetTextDescription(Stream imageStream)
         {
 
 
@@ -1031,7 +1108,14 @@ namespace PagoEnLinea
             return await visionClient.RecognizeTextAsync(imageStream, "es", true);
         }
 
-        private async void TakePicture(PhotoResultEventArgs result)
+
+        /// <summary>
+        /// evento del boton capturar, hace una llamada a la pantalla camara (se renderiza nativamente según el dispositivo)
+        /// cualquier cambio a la camara es necesaria hacerla en CamaraPageRenderer.cs contenido en el modulo de .droid y .iOS respectivamente
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
+       private async void TakePicture(PhotoResultEventArgs result)
         {
             await Navigation.PopModalAsync();
             if (!result.Success)
@@ -1196,7 +1280,13 @@ namespace PagoEnLinea
 
 
 
-
+        /// <summary>
+        /// evento cuando se presiona la tecla de retorno en el teclado virtual de la entrada enCod "codigo postal"
+        /// para consumir al servicio que muestra el catálodo de direcciones correspondiente al código postal ingresado
+        /// y llenar automáticamente los campos correspondientes
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void algo_Completed(object sender, System.EventArgs e)
         {
             
@@ -1207,7 +1297,7 @@ namespace PagoEnLinea
             {
 
                 ClienteRest cliente = new ClienteRest();
-                var resp = await cliente.GET<CodigoPostal>(Constantes.URL + "/catalogo-dirs/mostrarCatalogo/" + cp);
+                var resp = await cliente.GET<CodigoPostal>(Constantes.URL_USUARIOS + "/catalogo-dirs/mostrarCatalogo/" + cp);
 
                 if(resp!=null){
                     pkAsentamiento.IsVisible = true;

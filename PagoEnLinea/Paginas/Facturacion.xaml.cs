@@ -10,26 +10,34 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
+    /// <summary>
+    /// esta clase muestra una pantalla todos los datos de facturación que el usuario ha dado de alta
+    /// permitiendole la posibilidad de modificarlos y eliminarlos
+    /// </summary>
     public partial class Facturacion : ContentPage
     {
-        public static List<string> list;
+      
 
         public static List<MostrarDatosFacturacion> lista;
         public static MostrarDatosFacturacion item;
 
-
+        /// <summary>
+        /// inicializa los componenetes visuales correspondientes a su XAML y añade un evento de tipo item tapped a la lista
+        /// que contiene todos los datos de facturación del usuario.
+        /// </summary>
         public Facturacion()
         {
          
-            list = new List<string>();
+           
             InitializeComponent();
-            list.Add("");
-            list.Add("");
+          
             listView.ItemTapped += OnitemTapped;
            
         }
 
-
+        /// <summary>
+       /// llama al servicio para mostrar todos los datos de facturacíon ingresadas por el usuario y añadirlos a una lista.
+       /// </summary>>
         async void conectar()
         {
             if (Application.Current.Properties.ContainsKey("token"))
@@ -72,6 +80,14 @@ namespace PagoEnLinea.Paginas
                 }
             }
         }
+
+
+        /// <summary>
+        /// llama el método conectar que permite llenar la lista de datos de facturación al desplegar la pantalla dirección
+        /// del módulo perfil, a su vez esta conectado a la subpantalla "Modal3" la cual muestra un cuadro de dialogo el cual
+        /// a partir de el resultado obtenido permite modificar o eliminar un elemento de la lista de correos
+        /// (unicamente en Android)
+        /// </summary>
         protected override void OnAppearing()
         {
             conectar();
@@ -97,7 +113,7 @@ namespace PagoEnLinea.Paginas
                         cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                     }
 
-                    var uri = new Uri(string.Format(Constantes.URL + "/datos-facturacions/{0}", item.id));
+                    var uri = new Uri(string.Format(Constantes.URL_USUARIOS + "/datos-facturacions/{0}", item.id));
                     response = await cliente.DeleteAsync(uri);
                     var y = await response.Content.ReadAsStringAsync();
                     System.Diagnostics.Debug.WriteLine(y);
@@ -128,7 +144,14 @@ namespace PagoEnLinea.Paginas
             });
         }
 
-        async void OnitemTapped(object sender, ItemTappedEventArgs e)
+        /// <summary>
+        /// evento que permite seleccionar un dato de facturación de la lista y elegir la opción de modificarlo o eliminarlo
+        /// unicamente en android se hará uso del cuadro de diálogo personalizado ya que en iOS
+        /// sus configuraciones nativas no lo requieren. Así mismo consume los servicios correspondientes.
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
+         async void OnitemTapped(object sender, ItemTappedEventArgs e)
         {
 
 
@@ -171,7 +194,7 @@ namespace PagoEnLinea.Paginas
                                     cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                                 }
 
-                                var uri = new Uri(string.Format(Constantes.URL + "/datos-facturacions/{0}", info.id));
+                                var uri = new Uri(string.Format(Constantes.URL_USUARIOS + "/datos-facturacions/{0}", info.id));
                                 response = await cliente.DeleteAsync(uri);
                                 var y = await response.Content.ReadAsStringAsync();
                                 System.Diagnostics.Debug.WriteLine(y);
@@ -218,7 +241,13 @@ namespace PagoEnLinea.Paginas
       
 
        
-
+        /// <summary>
+        /// Evento click al presionar el boton flotante, muestra al usuario la pantalla modificar datos de facturación
+        /// pero al recibir parámetros nulos se toma como una pantalla para añadir nueva información de facturacíon
+        /// </summary>
+        /// <param name="sender">objeto que hace refencia al evento</param>
+        /// <param name="e">propiedades o argumentos del objeto que son accesibles a travez de la llamada al evetno</param>
+       
         void Handle_Clicked(object sender, System.EventArgs e)
         {
             Navigation.PushAsync(new Modificarfacturacion(null, null, null, 1,null,null));

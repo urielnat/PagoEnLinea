@@ -11,12 +11,23 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
+
+    /// <summary>
+    /// esta clase muestra una pantalla todas los direcciones que el usuario ha dado de alta
+    /// permitiendole la posibilidad de modificarlos y eliminarlos
+    /// </summary>
     public partial class Direccion : ContentPage
     {
         public static List<infodir> list;
         public infodir infdir { set; get; }
         public CatalogoDir catdir { set; get; }
         public static infodir item;
+
+
+        /// <summary>
+        /// inicializa los componenetes visuales correspondientes a su XAML y añade un evento de tipo item tapped a la lista
+        /// que contendrá todos las direccioes del usuario.
+        /// </summary>
         public Direccion()
         {
           
@@ -24,6 +35,14 @@ namespace PagoEnLinea.Paginas
             listView.ItemTapped+= ListView_ItemTapped;
         }
 
+
+        /// <summary>
+        /// evento que permite seleccionar una direccion de la lista y elegir la opcion de modificarlo o eliminarlo
+        /// unicamente en android se hará uso del cuadro de diálogo personalizado ya que en iOS
+        /// sus configuraciones nativas no lo requieren. Así mismo consume los servicios correspondientes.
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var info = (infodir)e.Item;
@@ -66,7 +85,7 @@ namespace PagoEnLinea.Paginas
                                     cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                                 }
 
-                                var uri = new Uri(string.Format(Constantes.URL + "/direccion/eliminar/{0}", info.id));
+                                var uri = new Uri(string.Format(Constantes.URL_USUARIOS + "/direccion/eliminar/{0}", info.id));
                                 response = await cliente.DeleteAsync(uri);
                                 var y = await response.Content.ReadAsStringAsync();
                                 System.Diagnostics.Debug.WriteLine(y);
@@ -105,7 +124,9 @@ namespace PagoEnLinea.Paginas
         }
 
      
-
+        /// <summary>
+       /// llama al servicio para mostrar todas las direcciones ingresadas por el usuario y añadirlos a una lista.
+       /// </summary>
         async void conectar()
         {
             if (Application.Current.Properties.ContainsKey("token"))
@@ -154,6 +175,14 @@ namespace PagoEnLinea.Paginas
 
             }
         }
+
+
+        /// <summary>
+        /// llama el método conectar que permite llenar la lista de direcciones al desplegar la pantalla dirección
+        /// del módulo perfil, a su vez esta conectado a la subpantalla "Modal2" la cual muestra un cuadro de dialogo el cual
+        /// a partir de el resultado obtenido permite modificar o eliminar un elemento de la lista de correos
+        /// (unicamente en Android)
+        /// </summary>
         protected override void OnAppearing()
         {
             conectar();
@@ -185,7 +214,7 @@ namespace PagoEnLinea.Paginas
                         cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                     }
 
-                    var uri = new Uri(string.Format(Constantes.URL + "/direccion/eliminar/{0}", item.id));
+                    var uri = new Uri(string.Format(Constantes.URL_USUARIOS + "/direccion/eliminar/{0}", item.id));
                     response = await cliente.DeleteAsync(uri);
                     var y = await response.Content.ReadAsStringAsync();
                     System.Diagnostics.Debug.WriteLine(y);
@@ -220,6 +249,14 @@ namespace PagoEnLinea.Paginas
            
         }
 
+
+        /// <summary>
+        /// Evento click al presionar el boton flotante, muestra al usuario la pantalla modificar dirección
+        /// pero al recibir parámetros nulos se toma como una pantalla para añadir una nueva dirección
+        /// </summary>
+        /// <param name="sender">objeto que hace refencia al evento</param>
+        /// <param name="e">propiedades o argumentos del objeto que son accesibles a travez de la llamada al evento</param>
+       
         void Handle_Clicked(object sender, System.EventArgs e)
         {
             Navigation.PushAsync(new ModificarDireccion(null, null, 1,null,null));

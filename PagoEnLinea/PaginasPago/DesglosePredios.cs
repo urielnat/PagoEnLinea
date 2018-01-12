@@ -7,10 +7,28 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.PaginasPago
 {
+
+
+    /// <summary>
+    /// Esta clase muestra en pantalla el desgloce por fecha de un predio a pagar mediante una lista
+    /// con multiples Switch que permiten seleccionar multiples fechas a la vez
+    /// NO posee un XAML debido a que fué necesario realizar configuraciones especificas 
+    /// en los componentes visuales  
+    /// </summary>
     public class DesglosePredios<T> : ContentPage
     {
+
+
         public static string DETALLES;
-        public class WrappedSelection<T> : INotifyPropertyChanged
+
+        /// <summary>
+        /// Subclase que establece propieades especificas para ser implementadas por los componentes visuales
+        /// IsSelect es usada por los switch para detectar que se encuentran en modo toggled
+        /// mientras que IsEnabled cuando los switch estan desabilitados (actualmente no esta implementada ya que
+        /// no permitia cambiar el color del switch)
+        /// 
+        /// </summary>
+        public class SeleccionPropiedades<T> : INotifyPropertyChanged
         {
             public T Item { get; set; }
             bool isSelected = false;
@@ -52,43 +70,25 @@ namespace PagoEnLinea.PaginasPago
 
             public event PropertyChangedEventHandler PropertyChanged = delegate { };
         }
-        public class WrappedItemSelectionTemplate : ViewCell
+
+        /// <summary>
+        /// crea una celda personalizada para establecerla como modelo en la lista con dos views principales
+        /// texto que contendra informacion (fechas y precio) y un switch
+        /// </summary>
+        public class CustomCell : ViewCell
         {
-            public WrappedItemSelectionTemplate() : base()
+            public CustomCell() : base()
             {
 
                 Label name = new Label();
-                Label info = new Label();
+              
 
                 name.SetBinding(Label.TextProperty, new Binding("Item.Name"));
-                info.SetBinding(Label.TextProperty, new Binding("Item.sinOrdenbimFin"));
-                DETALLES = info.Text;
+               
                 Switch mainSwitch = new Switch();
                 mainSwitch.SetBinding(Switch.IsToggledProperty, new Binding("IsSelected"));
                 mainSwitch.SetBinding(Switch.IsEnabledProperty, new Binding("IsEnabled"));
-                /**
-                Button invisible = new Button();
-                invisible.IsVisible = true;
-                invisible.Text = "##########";
-                var image = new Image();
-                image.Source = "user.png";
-                StackLayout stack = new StackLayout();
-                Grid grid = new Grid();
-                mainSwitch.BackgroundColor = Color.Green;
-                mainSwitch.WidthRequest= 20;
-                name.VerticalTextAlignment = TextAlignment.Center;
-                name.HorizontalTextAlignment = TextAlignment.Start;
-                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(0, GridUnitType.Auto) });
-                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1,GridUnitType.Star) });
-                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(9, GridUnitType.Star) });
-
-
-                grid.Children.Add(name,0,0,0,0);
-                grid.Children.Add(mainSwitch, 0, 1,0,0);
-                grid.Children.Add(image, 0, 1,0,0);
-
-                 **/
-
+            
 
                 RelativeLayout layout = new RelativeLayout();
 
@@ -110,21 +110,30 @@ namespace PagoEnLinea.PaginasPago
                 View = layout;
             }
 
-            private void OnFocus(object sender, FocusEventArgs e)
-            {
-                (sender as Switch).IsToggled = ((sender as Switch).IsToggled) ? false : true;  
-                System.Diagnostics.Debug.WriteLine("Focus");
-            }
+          
                 
                 
          
 
 
         }
-        public  List<WrappedSelection<T>> WrappedItems = new List<WrappedSelection<T>>();
+
+        public  List<SeleccionPropiedades<T>> WrappedItems = new List<SeleccionPropiedades<T>>();
+
+        /// <summary>
+        /// Constructor de la clase principal recibe los items (fechas y precios) a mostrar al usuario y establece
+        /// propiedadades especificas antes de mostrarlas (implementado la subclase SeleccionPropiedades)
+        /// asigna estos items a una lista con celdas personalizadas de tipo "CustomCell"
+        /// Muestra un boton al cual le asigna un vento que llama al metodo SelectALll();
+        /// añade un evento de tipo item tapped el cual muestra al usuario
+        /// la opcioón de ver los detalles los detalles de una fecha en especifica de un predio a pagar
+        /// o la opcion de selecciónar o deseleccionar esta fecha para pagarla
+        /// 
+        /// </summary>
+        /// <param name="items">items que seran añadidos a la lista</param>
         public DesglosePredios(List<T> items)
         {
-            WrappedItems = items.Select(item => new WrappedSelection<T>() { Item = item, IsSelected = true, IsEnabled = true }).ToList();
+            WrappedItems = items.Select(item => new SeleccionPropiedades<T>() { Item = item, IsSelected = true, IsEnabled = true }).ToList();
 
            
 
@@ -132,7 +141,7 @@ namespace PagoEnLinea.PaginasPago
             ListView mainList = new ListView()
             {
                 ItemsSource = WrappedItems,
-                ItemTemplate = new DataTemplate(typeof(WrappedItemSelectionTemplate)),
+                ItemTemplate = new DataTemplate(typeof(CustomCell)),
             };
 
 
@@ -143,12 +152,12 @@ namespace PagoEnLinea.PaginasPago
             {
 
                 if (e.SelectedItem == null) return;
-                var item = (WrappedSelection<T>)e.SelectedItem;
+                var item = (SeleccionPropiedades<T>)e.SelectedItem;
                 var tipo = (item.IsSelected) ? "Deseleccionar" : "Seleccionar";
                 var resp = await  DisplayAlert("Seleccion","Seleccione una opción",tipo,"Ver detalles");
                
                 if(resp){
-                var o = (WrappedSelection<T>)e.SelectedItem;
+                var o = (SeleccionPropiedades<T>)e.SelectedItem;
                 o.IsSelected = !o.IsSelected;
                 if(o.IsSelected){
                         await SelectAll();
@@ -157,7 +166,7 @@ namespace PagoEnLinea.PaginasPago
                 }
                 }else{
                   
-                    var seleccion =  mainList.SelectedItem as WrappedSelection<T>;
+                    var seleccion =  mainList.SelectedItem as SeleccionPropiedades<T>;
                     var prop = seleccion.Item as CheckItem;
                     
                     //var index = (mainList.ItemsSource as WrappedItems).IndexOf(e.SelectedItem as CheckItem);
@@ -176,11 +185,16 @@ namespace PagoEnLinea.PaginasPago
             button3.Clicked += async(sender, e) => {
                
                  await SelectAll();
-                //await DisplayAlert("Información", "Algunos campos se seleccionaron automáticamente debido a que no es posible pagar una fecha con adeudos anteriores.", "OK");
                 await Navigation.PopModalAsync();
             };
             
         }
+
+        /// <summary>
+        /// Metodo que permite validar que no se puedan seleccionar fechas recientes sin seleccionar fechas anteriores
+        /// para pagarlas
+        /// </summary>
+        /// <returns>The all.</returns>
         async Task SelectAll()
         {
             var x = 0;
@@ -207,17 +221,12 @@ namespace PagoEnLinea.PaginasPago
   
             }
 
-            /**
-              foreach (var wi in WrappedItems)
-            {
-                wi.IsSelected = true;
-            }
-             
-              
-            foreach (var w1 in WrappedItems){
-                WrappedItems.Count();
-            }**/
+           
         }
+
+        /// <summary>
+        ///metodo que deselecciona todas automáticamente todas las fechas posteriores a una fecha fecha deseleccionada
+        /// </summary>
         void SelectNone()
         {
             var y = 0;
@@ -240,47 +249,18 @@ namespace PagoEnLinea.PaginasPago
             }
         }
 
-        void Validar()
-        {
-            var x = 0;
-            bool match = false;
-
-
-            for (var i = 0; i < WrappedItems.Count(); i++)
-            {
-                
-                if (WrappedItems[i].IsSelected)
-                {
-                    match = true;
-                }
-
-            }
-
-          
-
-            /**
-              foreach (var wi in WrappedItems)
-            {
-                wi.IsSelected = true;
-            }
-             
-              
-            foreach (var w1 in WrappedItems){
-                WrappedItems.Count();
-            }**/
-        }
-
-
+       
+        /// <summary>
+        /// obtiene los items que tienen la propiedad IsSelected como true (cuando el switch de cada item esta habilitado)
+        ///  y los retorna en forma de lista
+        /// </summary>
+        /// <returns>La lista de items</returns>
         public List<T> GetSelection()
         {
             return WrappedItems.Where(item => item.IsSelected).Select(wrappedItem => wrappedItem.Item).ToList();
 
         }
-        public List<T> GetSelectionh()
-        {
-            return WrappedItems.Where(item => item.IsSelected).Select(wrappedItem => wrappedItem.Item).ToList();
-
-        }
+       
         protected override  bool OnBackButtonPressed()
         {
             // If you want to continue going back

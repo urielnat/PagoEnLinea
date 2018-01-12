@@ -12,7 +12,16 @@ namespace PagoEnLinea
     {
 
         MasterDetailPage fpm;
-       
+        /// <summary>
+        /// constructor de la aplicacion añade un evento de tipo gesturo
+        /// para detectar cuando se preciono el texto de olvido de contraseña
+        /// una vez precionaddo lleva a la pantalla para ingresar correo electronico correspondiente
+        /// el constructor esta subscrito a una subpantalla llamada PopUpcarga la cual muestra un cuadro de dialogo de carga
+        /// el cual se muestra hasta que se recibe una respuesta del servidor
+        /// esta respuesta puede ser exitosa "Auth" lo que permite llevar al usuario a la pagina principal de la aplicacion
+        /// otra respuesta puede ser "noAuth" lo que implica que las credenciales de inicio de sesion no son correctas y se notifica al usuario
+        /// la respuesta obtenida "errorservidor" implica que la conexion con el servidor fallo por algun motivo y se notifica al usuario
+        /// </summary>
         public LoginPage()
         {
             InitializeComponent();
@@ -22,28 +31,32 @@ namespace PagoEnLinea
             {
                 Navigation.PushAsync(new RecuperarPage());
             };
-            //algo asj
+           
 
-            MessagingCenter.Subscribe<PopupCarga,string>(this, "noAuth", (Sender,value) => { enUsuario.ErrorText = "Correo electronico"; enContraseña.ErrorText = "contraseña";
-            
-              DisplayAlert("Error",value,"ok");
-                MessagingCenter.Unsubscribe<PopupCarga>(this,"noAuth");
+
+
+            MessagingCenter.Subscribe<PopupCarga,string>(this, "noAuth", async(Sender,value) => { enUsuario.ErrorText = "Correo electronico"; enContraseña.ErrorText = "contraseña";
+                MessagingCenter.Unsubscribe<PopupCarga,string>(this, "noAuth");
+                await DisplayAlert("Error",value,"ok");
+               
             });
 
             MessagingCenter.Subscribe<PopupCarga>(this, "errorServidor", (Sender) => { DisplayAlert("Error","No fué posible conectarse al servidor intente mas tarde","OK");
                 MessagingCenter.Unsubscribe<PopupCarga>(this, "errorServidor");
             });
 
-            MessagingCenter.Subscribe<PopupCarga>(this, "Auth", (Sender) => {
+            MessagingCenter.Subscribe<PopupCarga>(this, "Auth", async(Sender) => {
+                MessagingCenter.Unsubscribe<PopupCarga,string>(this, "noAuth");
                 Application.Current.Properties["user"] = enUsuario.Text;
                 Application.Current.Properties["psw"] = enContraseña.Text;
                 System.Diagnostics.Debug.WriteLine(Application.Current.Properties["user"] as string);
 
-                Application.Current.SavePropertiesAsync();
+                await  Application.Current.SavePropertiesAsync();
                 MessagingCenter.Unsubscribe<PopupCarga>(this, "Auth");
-                fpm = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage()) };
+                  fpm = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage()) };
             
-                Navigation.PushModalAsync(fpm);
+                await Navigation.PushModalAsync(fpm);
+               
             });
 
 
@@ -54,27 +67,31 @@ namespace PagoEnLinea
         }
 
 
-
+        /// <summary>
+        /// evento click al precionar el boton registrar permite llevar al usuario a la pantalla de registro
+        /// 
+        /// </summary>
+        /// <param name="sender">objeto que hace refencia al eveto</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir de la llamada del metodo</param>
         void Registrar_Clicked(object sender, System.EventArgs e)
         {
             Navigation.PushAsync(new RegistroPage());
         }
 
+
+        /// <summary>
+        /// evento click al precionar el boton iniciar sesion el cual permite mostrar la subpantalla PopUpcarga al usuario
+        /// </summary>
+        /// <param name="sender">objeto que hace refencia al eveto</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir de la llamada del metodo</param>
        async void Handle_Clicked(object sender, System.EventArgs e)
         {
-            //Application.Current.MainPage = new Menu();
-
-           // Application.Current.MainPage = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(new HomePage()) };
-            //await Navigation.PushModalAsync(new NavigationPage(fmp);
+            
+           
             await PopupNavigation.PushAsync(new PopupCarga(enUsuario.Text, enContraseña.Text), false);
-            //viewModel.SignIn();
+           
         }
 
-        void Handle_Completed(object sender, System.EventArgs e)
-        {
-            var text = ((Entry)sender).Text; 
-            System.Diagnostics.Debug.WriteLine("se completó");
-        }
     }
 }
 

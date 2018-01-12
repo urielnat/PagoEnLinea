@@ -18,12 +18,26 @@ using Rg.Plugins.Popup.Services;
 
 namespace PagoEnLinea
 {
+
+    /// <summary>
+    /// esta clase corresponde a la primera de dos pantallas para el registro de un usuario
+    /// añade la funcionalidad de OCR
+    /// </summary>
     public partial class RegistroPage : ContentPage
     {
         public Usuarios users = new Usuarios();
         public Persona p = new Persona();
         public Direccion dire = new Direccion();
         public CatalogoDir catDir = new CatalogoDir();
+
+        /// <summary>
+        /// en el constructor se la asignan diferentes eventos a las entradas de texto:
+        /// permite detectar cuando cuando el usuario teclea nuevamente encaso de que
+        /// la interfaz le muestre un error para borrarlo dinámicamente
+        /// asi mismo muestra un error en caso de detectarlo al presionar la tecla de retorno
+        /// o cambiar el foco de la entrada
+        /// muestra al iniciar una subpantalla con una leve explicacion de la funcionalidad de OCR
+        /// </summary>
         public RegistroPage()
         {
             InitializeComponent();
@@ -62,7 +76,11 @@ namespace PagoEnLinea
         }
 
 
-
+        /// <summary>
+        /// sube el scroll automáticamente en caso de que el usuario este posisionado en el campo contraseña
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
         private async void OnFocus(object sender, FocusEventArgs e)
         {
 
@@ -86,7 +104,13 @@ namespace PagoEnLinea
 
         }
 
-        async private void errorUnfocus(object sender, FocusEventArgs e)
+        /// <summary>
+        /// método que permite detectar dinámicamente si existe algun error en un campo al cambiar
+        /// el foco de la aplicación
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
+        private void errorUnfocus(object sender, FocusEventArgs e)
         {
 
 
@@ -178,6 +202,14 @@ namespace PagoEnLinea
             }
         }
 
+
+
+        /// <summary>
+        /// método que permite detectar dinámicamente si existe algun error en un campo al oprimir
+        /// la tecla de retorno en el teclado virtual
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
         private async void VerificarError(object sender, EventArgs e)
         {
 
@@ -271,7 +303,13 @@ namespace PagoEnLinea
         }
 
    
-
+        /// <summary>
+        /// evento click del boton "siguiente" no permite acceder a la siguiente pantalla
+        /// hasta tener validados todos los campos 
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
+       
         async void Handle_Clicked(object sender, System.EventArgs e)
         {
             
@@ -281,7 +319,7 @@ namespace PagoEnLinea
             if (string.IsNullOrEmpty(enNombre.Text) || !Regex.Match(enNombre.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
             {
                 enNombre.ErrorText = "Introduzca un nombre valido";
-                await DisplayAlert("Advertencia","Introduzca un nombre válido","OK");
+                await DisplayAlert("Advertencia","Introduzca un nombre valido","OK");
                 a1 = false;
             }
             else
@@ -292,7 +330,7 @@ namespace PagoEnLinea
             if (string.IsNullOrEmpty(enPaterno.Text) || !Regex.Match(enPaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
             {
                 enPaterno.ErrorText = "Introduzca un apellido valido";
-                await DisplayAlert("Advertencia", "Introduzca un apellido válido", "OK");
+                await DisplayAlert("Advertencia", "Introduzca un apellido valido", "OK");
                 a2 = false;
 
             }
@@ -306,7 +344,7 @@ namespace PagoEnLinea
                 if (!Regex.Match(enMaterno.Text, @"^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ\s]+$").Success)
                 {
                     enMaterno.ErrorText = "Introduzca un apellido valido";
-                    await DisplayAlert("Advertencia", "Introduzca un nombre válido", "OK");
+                    await DisplayAlert("Advertencia", "Introduzca un nombre valido", "OK");
                     comodin = false;
 
                 }else{
@@ -414,13 +452,7 @@ namespace PagoEnLinea
                 };
 
  
-                /**
-                users.persona.amaterno = enMaterno.Text;
-                users.persona.sexo = pkSexo.Items[pkSexo.SelectedIndex];
-                users.email.correoe = enCorreo.Text;
-                users.usuario.password = enPassword.Text;
-                **/
-               //FALTA CONTRASEÑA Y CORREO
+          
 
                 await Navigation.PushAsync(new RegistroPage2(users,dire,catDir));
             }
@@ -430,8 +462,23 @@ namespace PagoEnLinea
         {
             (sender as Xfx.XfxEntry).ErrorText = "";
         }
-        VisionServiceClient visionClient = new VisionServiceClient("7fa718b2312047ec92cf07211dd72b50");
 
+
+
+       
+
+        /// <summary>
+        /// Cliente de para hacer uso de "Cognitive services de microsoft" para poder añadir la funcionalidad
+        /// de OCR, es necesaria obtener una clave personal a traves de su sitio web
+        /// </summary>
+        VisionServiceClient visionClient = new VisionServiceClient("2b2d900d589946d4aea338483921078b");
+
+
+        /// <summary>
+        /// Método asincrono envia una imagen para ser reconocida en la API de microsoft
+        /// </summary>
+        /// <returns>The text description.</returns>
+        /// <param name="imageStream">imagen a enviar</param>
         private async Task<OcrResults> GetTextDescription(Stream imageStream)
         {
             
@@ -439,7 +486,14 @@ namespace PagoEnLinea
         }
 
        
-        async void OCR_Clicked(object sender, System.EventArgs e)
+
+        /// <summary>
+        /// evento del boton capturar, hace una llamada a la pantalla camara (se renderiza nativamente según el dispositivo)
+        /// cualquier cambio a la camara es necesaria hacerla en CamaraPageRenderer.cs contenido en el modulo de .droid y .iOS respectivamente
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
+       async void OCR_Clicked(object sender, System.EventArgs e)
         {
             if (CrossConnectivity.Current.IsConnected)
             {
@@ -454,7 +508,13 @@ namespace PagoEnLinea
         }
 
 
-
+        /// <summary>
+        /// obtiene la imagen capturada apartir de la foto que el usuario tomó hace una instancia al metodo GetTextDescription
+        /// mismo que obtiene un resultado de texto apartir de la imagen enviada (en este caso adaptado para IFE/INE)
+        /// la variable OCR contiene una coleccion de texto dividio en regiones, lineas y palabras mismos que son recorridos
+        /// para obtener texto especifico dentro del resultado y llenar los campos de entrada
+        /// </summary>
+        /// <param name="result">Imagen resultante al tomar la foto</param>
         async void CameraPage_OnPhotoResult(PhotoResultEventArgs result)
         {
             await Navigation.PopModalAsync();
@@ -664,6 +724,11 @@ namespace PagoEnLinea
             
         }
 
+        /// <summary>
+        /// convierte el texto ingresado en la entrada de manera dinámica CURP en mayusculas
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void MayusChanged(object sender, TextChangedEventArgs e) { 
             
             (sender as Entry).Text = e.NewTextValue.ToUpper();

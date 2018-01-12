@@ -8,6 +8,10 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
+    /// <summary>
+    /// Esta clase muestra una pantalla ya sea para modificar o añadir una dirección
+    /// según el tipo de parámetros que recibe ya que muestra diferentes botones con eventos asociados.
+    /// </summary>
     public partial class ModificarDireccion : ContentPage
     {
         
@@ -17,6 +21,18 @@ namespace PagoEnLinea.Paginas
         public static List<CargaCP> asentmientos;
         public static bool cargaCP;
         public static int cargaID;
+
+        /// <summary>
+        /// inicializa los componentes visuales de su XAML
+        /// muestra u oculta componentes según el tipo de parámetro recibido
+        /// añade evento de textChanged a la entrada codigo postal y a la entrada número de dirección
+        /// añade evento de tipo completed a la entrada codigo postal (cuando se presiona tecla de retorno en teclado virtual)
+        /// </summary>
+        /// <param name="id">id de la dirección a modificar</param>
+        /// <param name="idcat">id del catálogo de direcciones a modificar</param>
+        /// <param name="tipo">tipo de pantalla que se mostrará, 0 para tipo modificar 1 para tipo añadir</param>
+        /// <param name="estado">No implementado actualmente</param>
+        /// <param name="tipoAsentamiento">Tipo asentamiento a modificar</param>
         public ModificarDireccion(string id, string idcat, int tipo,string estado, string tipoAsentamiento)
         {
             ID = id;
@@ -50,6 +66,16 @@ namespace PagoEnLinea.Paginas
             pkAsentamiento.SelectedIndexChanged += onIndexChange;
         }
 
+
+        /// <summary>
+        /// Obtiene el indice del tipo de asentamiento seleccionado apartir del picker
+        /// este indice corresponde tambien a la posision de una lista temporal de tipo tipo CargaCP
+        /// el cual tiene en sus propiedades el asentamiento, tipo e ID. Por lo que al seleccionar un elemento del picker
+        ///es posible obtener su ID apartir del indice del picker seleccionado y mostrarle al usuario
+        /// automáticamente un tipo de asentamiento si corresponde al cargado en la lista temporal
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void onIndexChange(object sender, EventArgs e)
         {
             int position = pkAsentamiento.SelectedIndex;
@@ -68,6 +94,11 @@ namespace PagoEnLinea.Paginas
 
         }
 
+
+        /// <summary>
+        /// este método valida que los campos ingresados en las entradas sean correctos antes de consumir al servicio
+        /// de añadir una nueva dirección, en caso contrario se notifica al usuario
+        /// </summary>
         async void Añadir()
         {
 
@@ -206,7 +237,7 @@ namespace PagoEnLinea.Paginas
                
 
 
-                cliente.POST(Constantes.URL+"/direccion/agregar",agredire,1);
+                cliente.POST(Constantes.URL_USUARIOS+"/direccion/agregar",agredire,1);
 
                 MessagingCenter.Subscribe<ClienteRest>(this, "OK", (Sender) =>
                 {
@@ -224,22 +255,36 @@ namespace PagoEnLinea.Paginas
 
             }
         }
-        protected override void OnAppearing()
-        {
-            
-        }
+       
+
+        /// <summary>
+        /// Método para verificar si una entrada de texto esta vacia 
+        /// </summary>
+        /// <returns><c>true</c>si la entrada esta vacio<c>false</c>caso contrario</returns>
+        /// <param name="x">texto en la entrada</param>
         bool ValidarVacio(string x)
         {
             var auth = (String.IsNullOrEmpty(x)) ? true : false;
             return auth;
         }
 
+        /// <summary>
+        ///  evento click de boton modificar que hace una llamada al método Modificar();
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
        
         void Handle_Clicked(object sender, System.EventArgs e)
         {
             Modificar(); 
         }
 
+
+        /// <summary>
+        /// evento de la entrada codigo postal permite validar dinámicamente el texto ingresado en el teclado virtual
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void OnTextChanged(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -254,9 +299,12 @@ namespace PagoEnLinea.Paginas
             }
         }
 
-
+        /// <summary>
+        /// Este método permite verificar que el texto introducido en las entradas sea correcto antes de consumir el servicio para
+        /// modificar los datos de facturación. enc aso contrario notifica al usuario
+        /// </summary>
         void Modificar(){
-            System.Diagnostics.Debug.WriteLine("dlansdlansdpñ");
+            
             bool a1 = false, a2 = false, a3 = false, a4 = false, a5 = false, a6 = false,a7=false,a8=true;
 
 
@@ -381,7 +429,7 @@ namespace PagoEnLinea.Paginas
                 };
 
 
-                client.PUT(Constantes.URL+"/direccion/actualizar", dir);
+                client.PUT(Constantes.URL_USUARIOS+"/direccion/actualizar", dir);
 
                 MessagingCenter.Subscribe<ClienteRest>(this, "OK", (Sender) => {
                     MessagingCenter.Unsubscribe<ClienteRest>(this, "OK");
@@ -400,13 +448,21 @@ namespace PagoEnLinea.Paginas
             }
         }
        
-
+        /// <summary>
+        /// evento click del boton Agregar que llama al método Añadir una vez que es presionado
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         void Guardar_Clicked(object sender, System.EventArgs e)
         {
             Añadir();
         }
 
-
+        /// <summary>
+        /// LLena el contenido del picker que contiene el tipo de asentamiento al consumir un servicio
+        /// que carga los tipos de asentamientos, si el tipo de pantalla es 0 (modificar datos)
+        /// muestra automáticamente el tipo de asentamiento que el usuario tenia ingresado
+        /// </summary>
         void llenarPicker()
         {
             Device.BeginInvokeOnMainThread(async () =>
@@ -414,7 +470,7 @@ namespace PagoEnLinea.Paginas
                 if (CrossConnectivity.Current.IsConnected)
                 {
                     ClienteRest client = new ClienteRest();
-                    var httpclient = await client.GET<TipoAsentamiento>("http://192.168.0.18:8080/api/catalogo-dirs/tipo-asentamiento");
+                    var httpclient = await client.GET<TipoAsentamiento>(Constantes.URL_USUARIOS+"/catalogo-dirs/tipo-asentamiento");
                     tipoas = new List<string>();
                     if (httpclient != null)
                     {
@@ -445,12 +501,19 @@ namespace PagoEnLinea.Paginas
 
 
                 }
-                else { await DisplayAlert("Error de conexion", "No hay conexión a internet", "ok"); }
+                else { await DisplayAlert("Error de conexión", "No hay conexión a internet", "ok"); }
 
             });
         }
 
-
+        /// <summary>
+        /// evento completed que se incia una vez que el usuario presiona la tecla de retorno en el teclado virutual
+        /// una vez que termina de escribir los digitos del código postal
+        /// este evento llama al servicio que muestra un catálogo de direcciones a partir del código postal ingresado 
+        /// para poder llenar automáticamente algunos de los campos de direcciones (asentamiento, tipo, ciudad, municipio etc.)
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void algo_Completed(object sender, System.EventArgs e)
         {
 
@@ -464,7 +527,7 @@ namespace PagoEnLinea.Paginas
 
                 cargaCP = true;
                 ClienteRest cliente = new ClienteRest();
-                var resp = await cliente.GET<CodigoPostal>(Constantes.URL + "/catalogo-dirs/mostrarCatalogo/" + cp);
+                var resp = await cliente.GET<CodigoPostal>(Constantes.URL_USUARIOS + "/catalogo-dirs/mostrarCatalogo/" + cp);
 
                 if (resp != null)
                 {
@@ -505,21 +568,16 @@ namespace PagoEnLinea.Paginas
             else { await DisplayAlert("Error de conexion", "No hay conexión a internet", "ok"); }
         }
 
-        void Handle_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            for (var i = 0; i < pkTipoAsentamiento.Items.Count; i++)
-            {
-                int position = pkAsentamiento.SelectedIndex;
-                if (pkTipoAsentamiento.Items[i].Equals(asentmientos[position]))
-                {
-                    pkTipoAsentamiento.SelectedIndex = i;
-                    break;
-                }
-            }
 
 
-        }
 
+
+        /// <summary>
+        /// evento de la entrada Número de direccion valida que solo se puedan escribir cierto tipo de caracteres 
+        /// a traves del teclado virtual
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void validarNumero(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9/-A-Fa-f]+$", RegexOptions.CultureInvariant))

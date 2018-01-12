@@ -11,7 +11,12 @@ namespace PagoEnLinea
 {
     public partial class HomePage : ContentPage
     {
-        
+        /// <summary>
+        /// constructor de la clase inicializa todos los componentes visuales y añade un evento 
+        /// de tipo gesture el cual permite detactar cuando una imagen es presionada
+        /// las imagenes corresponden a los módulos de la aplicación principales y al precionarlos
+        /// cambian a la pantalla del modulo correspondiente
+        /// </summary>
         public HomePage()
         {
          
@@ -37,12 +42,15 @@ namespace PagoEnLinea
         }
 
      
-
+        /// <summary>
+        /// Método asincrono que consume al servicio InfoContribuyente para obtener el nombre del usuario logueado
+        /// a su vez muestra en el carrito los items que han sido añadidos al carrito al obtener la cantidad de la
+        /// base de datos interna
+        /// </summary>
         async void conectar(){
             if (Application.Current.Properties.ContainsKey("token"))
             {
 
-                //System.Diagnostics.Debug.WriteLine("propiedad guardada"+Application.Current.Properties["token"] as string);
                 ClienteRest cliente = new ClienteRest();
                 var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["token"] as string);
                 if (inf != null)
@@ -63,7 +71,9 @@ namespace PagoEnLinea
 
            
         
-
+        /// <summary>
+        /// al aparecer esta pantalla hace una llamada el metodo conectar(); para obtener el nombre de usuario
+        /// </summary>
 
         protected override void OnAppearing()
         {

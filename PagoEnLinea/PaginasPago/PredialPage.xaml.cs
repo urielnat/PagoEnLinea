@@ -12,6 +12,10 @@ using System.Text.RegularExpressions;
 
 namespace PagoEnLinea.PaginasPago
 {
+    /// <summary>
+    /// Esta clase muestra una pantalla donde el usuario puede buscar mediante una clave castral
+    /// un predio a pagar para ser añadido al carrito
+    /// </summary>
     public partial class PredialPage : ContentPage
     {
         public static List<Carrito> list;
@@ -22,6 +26,14 @@ namespace PagoEnLinea.PaginasPago
         public static double TOTAL;
         public static int BIMIN, BIFIN;
         public static List<int> ordenlista;
+
+        /// <summary>
+        /// Inicializa los componentes visuales de su XAML
+        /// dependiente si el dispositivo es android o iOS muestra
+        /// una barra de busqueda diferente debido a que no poseen las mismas propiedades
+        /// según sea el sistema operativo donde se esta corriendo la aplicación
+        /// añade eventos a las barras de busqueda y a la lista que mostrará el predio correspondiente
+          /// </summary>
         public PredialPage()
         {
             list = new List<Carrito>();
@@ -48,13 +60,15 @@ namespace PagoEnLinea.PaginasPago
                 enBuscar.IsVisible = true;
                 imgBuscar.IsVisible = true;
             }
-            NavigationPage test = new NavigationPage();
-            test.Popped += (sender, e) => {
-                System.Diagnostics.Debug.WriteLine("algo");
-            };
+
 
         }
 
+        /// <summary>
+        /// valida dinámicamente que solo se puedan introducir números en las barra de busqueda de android
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void onSearchChanged(object sender, TextChangedEventArgs e)
         {
             if (!Regex.IsMatch(e.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -69,6 +83,11 @@ namespace PagoEnLinea.PaginasPago
             }
         }
 
+        /// <summary>
+        /// valida dinámicamente que solo se puedan introducir números en las barra de busqueda de iOS
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void onSearchBarChanged(object sender, TextChangedEventArgs e)
         {
             if (!Regex.IsMatch(e.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -83,6 +102,15 @@ namespace PagoEnLinea.PaginasPago
             }
         }
 
+
+        /// <summary>
+        /// evento que corresponde a la barra de busqueda en dispositivos android
+        /// una vez que el usuario presina la tecla de retorno en su teclado virtual
+        /// se consume el servicio para mostrar los predios asociadas a una clave catastral
+        /// y se llena una lista que la contiene
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async private void onSearchComp(object sender, EventArgs e)
         {
             HttpResponseMessage response;
@@ -102,8 +130,7 @@ namespace PagoEnLinea.PaginasPago
 
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
-                //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                response = await cliente.PostAsync("http://192.168.0.100:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                response = await cliente.PostAsync(Constantes.URL_CAJA+"/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
                 var y = await response.Content.ReadAsStringAsync();
 
                 System.Diagnostics.Debug.WriteLine(y);
@@ -196,7 +223,15 @@ namespace PagoEnLinea.PaginasPago
         }
 
         DesglosePredios<CheckItem> multiPage;
-        async void OnitemTapped(object sender, ItemTappedEventArgs e)
+
+        /// <summary>
+        /// evento que corresponde a la lista que contiene el predial buscado
+        /// muestra un cuadro de diálogo en donde se le presenta al usuario la opción
+        /// de ver detalles del predial seleccionado o añadirla al carrito
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
+       async void OnitemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item == null) return;
             // do something with e.SelectedItem
@@ -236,8 +271,7 @@ namespace PagoEnLinea.PaginasPago
 
                     HttpClient cliente = new HttpClient();
                     cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
-                    //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                    response = await cliente.PostAsync("http://192.168.0.100:8081/api/liquidacion-predials/genera", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                    response = await cliente.PostAsync(Constantes.URL_CAJA+"/liquidacion-predials/genera", new StringContent(jsonstring, Encoding.UTF8, ContentType));
                     var y = await response.Content.ReadAsStringAsync();
 
                     var x = "{\"data\":" + y + "}";
@@ -270,7 +304,8 @@ namespace PagoEnLinea.PaginasPago
                                 Description = dato.concepto,
                                 price = dato.total,
                                 ClaveCastrasl = dato.liquidacionPredial.clavecatastral,
-                                NoLiquidacion = dato.numeroLiquidacion
+                                NoLiquidacion = dato.numeroLiquidacion,
+                                idLiqs = dato.id
                                                     
                             };
                           
@@ -317,14 +352,14 @@ namespace PagoEnLinea.PaginasPago
         }
 
 
-        void conectar()
+
+        /// <summary>
+        /// obtiene el total apagar a partir las fechas de pago que el usuario seleccionó en la pantalla DesglosePredios
+        /// para poderlos añadir al carrito en forma de liquidación
+        /// </summary>
+        void ObtenerTotal()
         {
-
-
-
-
-
-
+            
             if (multiPage != null)
             {
                 double valores = 0;
@@ -337,10 +372,11 @@ namespace PagoEnLinea.PaginasPago
 
                 }
 
-                BIMIN=answers.First().binIn;
-                BIFIN= answers.Last().sinOrdenbimFin;
+               
                 if (answers.Count > 0)
                 {
+                    BIMIN = answers.First().binIn;
+                    BIFIN = answers.Last().sinOrdenbimFin;
                     list = new List<Carrito>{new Carrito
                         {
                             Name = "Predio:" +pred.cveCatastral,owner= pred.propietario ,Description =  pred.colonia+" "+pred.calle + " "+ pred.numeroExt, price = valores
@@ -352,6 +388,7 @@ namespace PagoEnLinea.PaginasPago
                 }
                 else
                 {
+                    DisplayAlert("Información","No es posible dejar todas las fechas sin seleccionar por lo que se tomó el total de las mismas.","OK");
                     list = new List<Carrito> { new Carrito{
                                 Name = "Predio: "+pred.cveCatastral,
                             owner= pred.propietario,
@@ -367,28 +404,22 @@ namespace PagoEnLinea.PaginasPago
          
 
 
-
-
-
-
-
-
-
-
         }
         protected override void OnAppearing()
         {
-            conectar();
+            ObtenerTotal();
 
         }
 
         /// <summary>
-        /// solo ios
+        /// evento que corresponde a la barra de busqueda en dispositivos iOS
+        /// una vez que el usuario presina la tecla de "Buscar" en su teclado virtual
+        /// se consume el servicio para mostrar los prediales asociadas a una clave catastral
+        /// y se llena una lista que la contendrá
         /// </summary>
         /// <param name="sender">Sender.</param>
         /// <param name="e">E.</param>
-
-        async void Handle_SearchButtonPressed(object sender, System.EventArgs e)
+         async void Handle_SearchButtonPressed(object sender, System.EventArgs e)
         {
             //throw new NotImplementedException();
 
@@ -410,8 +441,7 @@ namespace PagoEnLinea.PaginasPago
 
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
-                //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                response = await cliente.PostAsync("http://192.168.0.100:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                response = await cliente.PostAsync(Constantes.URL_CAJA+"/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
                 var y = await response.Content.ReadAsStringAsync();
 
 
@@ -502,6 +532,12 @@ namespace PagoEnLinea.PaginasPago
         }
 
 
+        /// <summary>
+        /// metodo que ordena porfecha el desgloce de fechas a pagar ya que originalmente
+        /// no vienen ordenados y es necesario para las validaciones de pago
+        /// </summary>
+        /// <returns>la nueva lista ordenada</returns>
+        /// <param name="t">una lista de tipo DesglocePredio</param>
         List<DesglosePredio> Ordenar(List<DesglosePredio> t){
 
             List<DesglosePredio> lista = new List<DesglosePredio>();

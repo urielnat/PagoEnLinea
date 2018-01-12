@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace PagoEnLinea.Modelos
 {
+    /// <summary>
+    /// modelo de predios, empleado para manipular los JSON al consumir servicios
+    /// </summary>
     public class Detalle
     {
         public object id { get; set; }

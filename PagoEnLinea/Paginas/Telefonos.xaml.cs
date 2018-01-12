@@ -9,6 +9,10 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
+        /// <summary>
+        /// inicializa los componenetes visuales correspondientes a su XAML y añade un evento de tipo item tapped a la lista
+        /// que contiene todos los teléfonos del usuario.
+        /// </summary>
     public partial class Telefonos : ContentPage
     {
         public static List<Telefono> list;
@@ -21,6 +25,14 @@ namespace PagoEnLinea.Paginas
           
         }
 
+
+        /// <summary>
+        /// evento que permite seleccionar un teléfono de la lista y elegir la opción de modificarlo o eliminarlo
+        /// unicamente en android se hará uso del cuadro de diálogo personalizado ya que en iOS
+        /// sus configuraciones nativas no lo requieren. Así mismo consume los servicios correspondientes.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var info = (Telefono)e.Item;
@@ -59,7 +71,7 @@ namespace PagoEnLinea.Paginas
                                     cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                                 }
 
-                                var uri = new Uri(string.Format(Constantes.URL + "/telefono/eliminar/{0}", info.id));
+                                var uri = new Uri(string.Format(Constantes.URL_USUARIOS + "/telefono/eliminar/{0}", info.id));
                                 response = await cliente.DeleteAsync(uri);
                                 var y = await response.Content.ReadAsStringAsync();
                                 System.Diagnostics.Debug.WriteLine(y);
@@ -99,8 +111,10 @@ namespace PagoEnLinea.Paginas
         }
 
 
-
-        async void conectar()
+        /// <summary>
+        /// llama al servicio para mostrar todos los teléfonos ingresados por el usuario y añadirlos a una lista.
+        /// </summary>
+       async void conectar()
         {
             if (Application.Current.Properties.ContainsKey("token"))
             {
@@ -135,6 +149,14 @@ namespace PagoEnLinea.Paginas
 
             }
         }
+
+
+        /// <summary>
+        /// llama el método conectar que permite mostrar los teléfonos ingresados por el usuario al desplegar la pantalla 
+        /// del módulo perfil, a su vez esta conectado a la subpantalla "Modal4" la cual muestra un cuadro de dialogo el cual
+        /// a partir de el resultado obtenido permite modificar o eliminar un elemento de la lista de correos
+        /// (unicamente en Android)
+        /// </summary>
         protected override void OnAppearing()
         {
             conectar();
@@ -160,7 +182,7 @@ namespace PagoEnLinea.Paginas
                     cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
                 }
 
-                var uri = new Uri(string.Format(Constantes.URL + "/telefono/eliminar/{0}", item.id));
+                var uri = new Uri(string.Format(Constantes.URL_USUARIOS + "/telefono/eliminar/{0}", item.id));
                 response = await cliente.DeleteAsync(uri);
                 var y = await response.Content.ReadAsStringAsync();
                 System.Diagnostics.Debug.WriteLine(y);
@@ -190,6 +212,12 @@ namespace PagoEnLinea.Paginas
             });
         }
 
+        /// <summary>
+        /// Evento click al presionar el boton flotante, muestra al usuario la pantalla modificar teléfono
+        /// pero al no recibir parámetros se toma como una pantalla para añadir un nuevo teléfono
+        /// </summary>
+        /// <param name="sender">objeto que hace refencia al evento</param>
+        /// <param name="e">propiedades o argumentos del objeto que son accesibles a travez de la llamada al evento</param>
         void Handle_Clicked(object sender, System.EventArgs e)
         {
             Navigation.PushAsync(new ModificarTelefono(null,null,1));

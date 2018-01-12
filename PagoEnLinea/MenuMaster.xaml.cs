@@ -17,8 +17,16 @@ namespace PagoEnLinea
     {
 
         public static string TOKEN="";
+
         ClienteRest client = new ClienteRest();
         info inf = new info();
+
+        /// <summary>
+        /// esta clase permite mostrar un menu lateral en la aplicación, mismo que da la opción al usuario
+        /// de dirigirse a un modulo específico de la aplicacíon o cerrar su sesión
+        /// en su constructor inicializa los componentes visuales ademas de que llama a los metodos init(); y conectar();
+        /// añade un evento a la lista que contiene los elementos del menu laterl
+        /// </summary>
         public MenuMaster()
         {
             InitializeComponent();
@@ -29,7 +37,7 @@ namespace PagoEnLinea
 
    
        
-
+        //inicializa la lista del menu lateral y añade propiedades visuales
         void Init()
         {
             List<string> list = new List<string>();
@@ -58,17 +66,26 @@ namespace PagoEnLinea
 
         }
 
-
+        /// <summary>
+        /// evento al presionar un item de la lista muestra al usuario el módulo seleccionado
+        /// pero sin quitar la parte visual del menu lateral
+        /// existen dos tipos de opciones en la barra lateral la mayoria de items son de tipo "0"
+        /// lo cual implica que redigen al usuario a otra pantalla al presionarse
+        /// mientras que el tipo 1 es para cerrar sesión y consume al servicio de logout para notificar al servidors
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia el eveto</param>
+        /// <param name="e">propiedades del objeto en este caso es usado para obtener el item de la lista seleccionada y 
+        /// acceder a su propiedad page la cual contiene la "pagina" o pantalla de la aplicación que se le mostrará al usuario
+        /// </param>
         async void OnitemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item == null) return;
-            // do something with e.SelectedItem
+
             var menu = e.Item as MenuItem2;
             if (menu != null && menu.Tipo != 1)
             {
                 Application.Current.MainPage = new MasterDetailPage { Master = new MenuMaster(), Detail = new NavigationPage(menu.Page) };
-                // NavigationPage NP = ((NavigationPage)((MasterDetailPage)Application.Current.MainPage).Detail);
-                //NP.PushAsync(menu.Page);
+               
             }
             if (menu.Tipo == 1)
             {
@@ -95,7 +112,7 @@ namespace PagoEnLinea
                         if (response.StatusCode == System.Net.HttpStatusCode.OK)
                         {
 
-                            System.Diagnostics.Debug.WriteLine("SE ENVIO POR POST");
+                            System.Diagnostics.Debug.WriteLine("NOTIFICADO");
 
                           
                         }
@@ -117,7 +134,7 @@ namespace PagoEnLinea
                     }
 
                     ((App)Application.Current).ResumeAtTodoId = -1;
-                  var  list = await App.Database.GetItemsAsync();
+                    var  list = await App.Database.GetItemsAsync();
                     foreach(var item in list){
                         await App.Database.DeleteItemAsync(item);
                     }
@@ -135,7 +152,9 @@ namespace PagoEnLinea
         }
 
 
-
+        /// <summary>
+        /// Consume al servicio infoContribuyente para mostrar el nombre en la barra lateral
+        /// </summary>
         async void conectar()
         {
             if (Application.Current.Properties.ContainsKey("token"))
@@ -159,7 +178,9 @@ namespace PagoEnLinea
 
     }
 
-
+    /// <summary>
+    /// modelo del menu lateral
+    /// </summary>
     public class MenuItem2
     {
         public String MenuTitle2
@@ -178,7 +199,7 @@ namespace PagoEnLinea
         {
             get;
             set;
-        }
+        } 
         public int Tipo
         {
             get;

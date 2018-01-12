@@ -5,10 +5,19 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
+    /// <summary>
+    /// Esta subclase crea un cuadro de diálogo personalizado con las opciones de modifica, eliminar y cancelar
+    /// este cuadro de dialogo es usado por la pantalla de teléfono en el módulo de perfil
+    /// </summary>
     public partial class Modal4
     {
-        public static string respuesta;
-        public Modal4()
+
+        /// <summary>
+        /// inicializa los componentes visuales correspondientes a su XAML
+        /// añade un evento de tipo gesture a cada componente
+        /// para detectar cuando el usuario presiona una opcián en el cuadro de diálogo
+        /// </summary>
+       public Modal4()
         {
             InitializeComponent();
             var tapGestureRecognizer = new TapGestureRecognizer();
@@ -37,9 +46,6 @@ namespace PagoEnLinea.Paginas
         }
 
 
-        public string Respuesta()
-        {
-            return respuesta;
-        }
+
     }
 }

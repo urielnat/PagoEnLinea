@@ -155,7 +155,7 @@ namespace PagoEnLinea.servicios
             try
             {
                 HttpResponseMessage response;
-                string sUrl = Constantes.URL+"/info-contribuyente";
+                string sUrl = Constantes.URL_USUARIOS+"/info-contribuyente";
                
                 info inf = new info();
                 //inf.usuario = user;

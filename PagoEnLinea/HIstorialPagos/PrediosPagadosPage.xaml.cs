@@ -11,10 +11,17 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.PaginasMisPagos
 {
+    /// <summary>
+    /// esta clase muestra una pantalla al usuario con un Historial de sus de pagos realizados
+    /// </summary>
     public partial class PrediosPagadosPage : ContentPage
     {
         public static Pagos pag;
         public static List<Respuesta> list;
+
+        /// <summary>
+        /// Inicializa los compnentes visuales de de su XAML
+        /// </summary>
         public PrediosPagadosPage()
         {
             InitializeComponent();
@@ -24,6 +31,12 @@ namespace PagoEnLinea.PaginasMisPagos
 
         }
 
+
+        /// <summary>
+        /// evento de asociado la la lista de historial de pagos, muestra detalles del pago al presionar un item de la lista al consumir un servicio.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void ListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             var info = (Respuesta)e.Item;
@@ -35,17 +48,13 @@ namespace PagoEnLinea.PaginasMisPagos
 
             HttpResponseMessage response;
 
-
-
             try
             {
 
 
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
-                //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                // response = await cliente.PostAsync("http://192.168.0.18:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
-                response = await cliente.GetAsync("http://192.168.0.18:8081/api/historico-pagos-movil/detalles/" + info.idPago);
+                response = await cliente.GetAsync(Constantes.URL_CAJA+"/historico-pagos-movil/detalles/" + info.idPago);
                 var y = await response.Content.ReadAsStringAsync();
 
 
@@ -87,7 +96,7 @@ namespace PagoEnLinea.PaginasMisPagos
 
 
 
-                    await DisplayAlert("Error", "No encontrado", "OK");
+                    await DisplayAlert("Error", "Error del servidor", "OK");
 
 
                 }
@@ -95,6 +104,7 @@ namespace PagoEnLinea.PaginasMisPagos
             catch (HttpRequestException ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
+                await DisplayAlert("Error", "No fué posible establecer la conexión intente mas tarde", "OK");
 
             }
 
@@ -113,21 +123,40 @@ namespace PagoEnLinea.PaginasMisPagos
 
         }
 
-
+           /// <summary>
+           /// método que permite consumir servicio que muestra el historial de pagos a manera de una lista
+           /// </summary>
             async void conectar()
             {
                 if (Application.Current.Properties.ContainsKey("token"))
                 {
+                HttpResponseMessage response;
+                try
+                {
 
 
-                    ClienteRest cliente = new ClienteRest();
-                    var inf = await cliente.GET<Historial>("http://192.168.0.18:8081/api/historico-pagos-movil/");
+                HttpClient cliente = new HttpClient();
+                cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
+                    response = await cliente.GetAsync(Constantes.URL_CAJA+"/historico-pagos-movil/");
+                var y = await response.Content.ReadAsStringAsync();
                     list = new List<Respuesta>();
-                    if (inf != null)
+
+
+
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+
+                    System.Diagnostics.Debug.WriteLine(y);
+                    Historial detalles = new Historial();
+                    detalles = JsonConvert.DeserializeObject<Historial>(y);
+
+                   
+
+                    if (detalles.respuesta.Count > 0)
                     {
-                        foreach (var dato in inf.respuesta)
+                        foreach (var dato in detalles.respuesta)
                         {
-                            //catdir.cp = dato.catalogoDir.cp;
+                           
                             list.Add(new Respuesta
                             {
 
@@ -137,34 +166,56 @@ namespace PagoEnLinea.PaginasMisPagos
                                 estatus = dato.estatus
 
 
-
-
                             });
                         }
 
-
+                        lblHistorial.IsVisible = false;
+                        historial.IsVisible = true;
                         BindingContext = list;
                         listView.ItemsSource = list;
 
                     }
+                    else
+                    {
+                        lblHistorial.IsVisible = true;
+                        historial.IsVisible = false;
+
+                    }
+                }else
+                {
+                    System.Diagnostics.Debug.WriteLine(y);
+
+
+
+                    await DisplayAlert("Error", "Error del servidor", "OK");
+
 
                 }
             }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.InnerException.Message);
+                await DisplayAlert("Error", "No fué posible establecer la conexión intente mas tarde", "OK");
+
+            }
+
+
+            }
+        }
         
     
 
             
         
         
-
+        /// <summary>
+        /// Lamama al método conectar al mostrar la pantalla Historial de pagos.
+        /// </summary>
         protected override void OnAppearing()
         {
             conectar();
         }
 
-        void Handle_Clicked(object sender, System.EventArgs e)
-        {
-           // Navigation.PushAsync(new ModificarTelefono(null, null, 1));
-        }
+
     }
 }

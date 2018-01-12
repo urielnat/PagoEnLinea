@@ -11,6 +11,10 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.PaginasPago
 {
+    /// <summary>
+    /// Esta clase muestra una pantalla donde el usuario puede buscar mediante un número
+    /// una liquidación para ser añadida al carrito
+    /// </summary>
     public partial class LiquidacionPage : ContentPage
     {
         public static List<Carrito> list;
@@ -18,6 +22,14 @@ namespace PagoEnLinea.PaginasPago
         public static Liquidacion liq;
         public static List<Liquidacion> deslip;
         public static IList<LiquidacionDesConcepto> liqdesconcep;
+      
+        /// <summary>
+        /// Inicializa los componentes visuales de su XAML
+        /// dependiente si el dispositivo es android o iOS muestra
+        /// una barra de busqueda diferente debido a que no poseen las mismas propiedades
+        /// según sea el sistema operativo donde se esta corriendo la aplicación
+        /// añade eventos a las barras de busqueda y a la lista que mostrará la liquidacion correspondiente
+        /// </summary>
         public LiquidacionPage()
         {
 
@@ -44,6 +56,14 @@ namespace PagoEnLinea.PaginasPago
        
         }
 
+        /// <summary>
+        /// evento que corresponde a la barra de busqueda en dispositivos android
+        /// una vez que el usuario presina la tecla de retorno en su teclado virtual
+        /// se consume el servicio para mostrar las liquidaciones asociadas a un número
+        /// y se llena una lista que la contiene
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async private void onSearchComp(object sender, EventArgs e)
         {
             HttpResponseMessage response;
@@ -57,9 +77,7 @@ namespace PagoEnLinea.PaginasPago
 
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
-                //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                // response = await cliente.PostAsync("http://192.168.0.18:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
-                response = await cliente.GetAsync("http://192.168.0.100:8081/api/liquidacions/numero/" + numero);
+                 response = await cliente.GetAsync(Constantes.URL_CAJA+"/liquidacions/numero/" + numero);
                 var y = await response.Content.ReadAsStringAsync();
 
 
@@ -81,7 +99,9 @@ namespace PagoEnLinea.PaginasPago
                             owner = liq.liquidacionPredial.propietarios,
                             Description =liq.concepto,
                             NoLiquidacion = liq.numeroLiquidacion,
-                            price = liq.total}};
+                            price = liq.total,
+                            idLiqs = liq.id
+                        }};
 
                     BindingContext = lista;
                     listView.ItemsSource = lista;
@@ -114,6 +134,12 @@ namespace PagoEnLinea.PaginasPago
             }
         }
 
+
+        /// <summary>
+        /// valida dinámicamente que solo se puedan introducir números en las barra de busqueda de android
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void onSearchChanged(object sender, TextChangedEventArgs e)
         {
             if (!Regex.IsMatch(e.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -128,6 +154,11 @@ namespace PagoEnLinea.PaginasPago
             }
         }
 
+        /// <summary>
+        /// valida dinámicamente que solo se puedan introducir números en las barra de busqueda de iOS
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         private void onSearchBarChanged(object sender, TextChangedEventArgs e)
         {
             if (!Regex.IsMatch(e.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -143,6 +174,14 @@ namespace PagoEnLinea.PaginasPago
         }
 
 
+        /// <summary>
+        /// evento que corresponde a la barra de busqueda en dispositivos iOS
+        /// una vez que el usuario presina la tecla de "Buscar" en su teclado virtual
+        /// se consume el servicio para mostrar las liquidaciones asociadas a un número
+        /// y se llena una lista que la contendrá
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void Handle_SearchButtonPressed(object sender, System.EventArgs e)
         {
             HttpResponseMessage response;
@@ -156,9 +195,7 @@ namespace PagoEnLinea.PaginasPago
 
                 HttpClient cliente = new HttpClient();
                 cliente.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"] as string);
-                //response = await cliente.PostAsync("http://192.168.0.18:8080/management/audits/logout", new StringContent("", Encoding.UTF8, ContentType));
-                // response = await cliente.PostAsync("http://192.168.0.18:8081/api/liquidacion-predials/adeudos", new StringContent(jsonstring, Encoding.UTF8, ContentType));
-                response = await cliente.GetAsync("http://192.168.0.100:8081/api/liquidacions/numero/" + numero);
+                response = await cliente.GetAsync(Constantes.URL_CAJA+"/liquidacions/numero/" + numero);
                 var y = await response.Content.ReadAsStringAsync();
 
 
@@ -180,7 +217,9 @@ namespace PagoEnLinea.PaginasPago
                             owner = liq.liquidacionPredial.propietarios,
                             Description =liq.concepto,
                             NoLiquidacion = liq.numeroLiquidacion,
-                            price = liq.total}};
+                            price = liq.total,
+                            idLiqs = liq.id
+                        }};
 
                     BindingContext = lista;
                     listView.ItemsSource = lista;
@@ -216,6 +255,13 @@ namespace PagoEnLinea.PaginasPago
         }
 
 
+        /// <summary>
+        /// evento que corresponde a la lista que contiene la liquidación buscada
+        /// muestra un cuadro de diálogo en donde se le presenta al usuario la opción
+        /// de ver detalles de la liquidación seleccionada o añadirla al carrito
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void OnitemTapped(object sender, ItemTappedEventArgs e)
         {
             var existe = false;

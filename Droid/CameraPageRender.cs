@@ -41,10 +41,7 @@ namespace PagoEnLinea.Droid
         {
             mainLayout = new RelativeLayout(Context);
 
-            //RelativeLayout.LayoutParams mainLayoutParams = new RelativeLayout.LayoutParams(
-            //  RelativeLayout.LayoutParams.MatchParent,
-            //  RelativeLayout.LayoutParams.MatchParent);
-            //mainLayout.LayoutParameters = mainLayoutParams;
+           
 
             liveView = new TextureView(Context);
 

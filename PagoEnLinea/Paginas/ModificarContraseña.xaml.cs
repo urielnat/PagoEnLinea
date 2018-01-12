@@ -10,9 +10,18 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
+    /// <summary>
+    /// Esta clase muestra una pantalla al usuario con entradas para modificar su contraseña consumiendo
+    /// el servicio correspondiente. 
+    /// </summary>
     public partial class ModificarContraseña : ContentPage
     {
         public static string TOKEN;
+
+        /// <summary>
+        /// inicializa los componentes visuales del XAML
+        /// añade un evento de tipo click al boton añadir  
+        /// </summary>
         public ModificarContraseña()
         {
             InitializeComponent();
@@ -21,18 +30,20 @@ namespace PagoEnLinea.Paginas
            // btnCambiar.Clicked += Handle_Clicked;
         }
 
+
+        /// <summary>
+        /// Este método valida que las entradas de texto sean correctas,si no es así notifica al usuario
+        /// una vez que sean correctas consume al servicio para modificar la contraseña
+        /// </summary>
         async void conectar()
         {
             if (Application.Current.Properties.ContainsKey("token"))
             {
 
                 TOKEN = Application.Current.Properties["token"] as string;
-                ClienteRest cliente = new ClienteRest();
-                var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["token"] as string);
-                if (inf != null)
-                {
+               
                     contraseña psw = new contraseña();
-                    psw.persona = inf.persona;
+
                     bool auth = false, auth2 = false, auth3 = false;
                     psw.contrasenaNueva = enPsw.Text;
                     psw.contrasenaActual = enPsw0.Text;
@@ -46,7 +57,7 @@ namespace PagoEnLinea.Paginas
                     else
                     {
                         auth = false;
-                        await DisplayAlert("Error", "Contraseña Invalida", "ok");
+                        await DisplayAlert("Error", "Contraseña incorrecta, deben ser al menos 8 caracteres", "ok");
                     }
                     if (!(string.IsNullOrEmpty(enPsw2.Text)))
                     {
@@ -91,7 +102,7 @@ namespace PagoEnLinea.Paginas
                             HttpClient clients = new HttpClient();
                             clients.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", TOKEN);
 
-                            response = await clients.PutAsync(Constantes.URL+"/usuarios/actualizar-contrasena",new StringContent(jsonstring, Encoding.UTF8, ContentType));
+                            response = await clients.PutAsync(Constantes.URL_USUARIOS+"/usuarios/actualizar-contrasena",new StringContent(jsonstring, Encoding.UTF8, ContentType));
                             var y = await response.Content.ReadAsStringAsync();
                             System.Diagnostics.Debug.WriteLine(y);
 
@@ -123,7 +134,7 @@ namespace PagoEnLinea.Paginas
                         }
 
                     }
-                }
+                
 
             }
 
@@ -131,7 +142,11 @@ namespace PagoEnLinea.Paginas
 
 
 
-
+        /// <summary>
+        /// evento que hace uso del metodo conectar(); para poder modificar la contraseña
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         void Handle_Clicked(object sender, System.EventArgs e)
         {
             

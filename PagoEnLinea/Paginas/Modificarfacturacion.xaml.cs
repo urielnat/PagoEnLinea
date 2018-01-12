@@ -7,6 +7,11 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
+   
+    /// <summary>
+    /// Esta clase muestra una pantalla ya sea para modificar o añadir información de facturación
+    /// según el tipo de parámetros que recibe ya que muestra diferentes botones con eventos asociados.
+    /// </summary>
     public partial class Modificarfacturacion : ContentPage
     {
         public static List<Modelos.infodir> listDir;
@@ -17,6 +22,16 @@ namespace PagoEnLinea.Paginas
         string ID, IDDIR, IDCATDIR,email,direccion;
         int tipos;
 
+        /// <summary>
+        /// inicializa los componentes visuales de su XAML
+        /// muestra u oculta componentes según el tipo de parámetro recibido
+        /// añade evento de textChanged a la entrada RFC 
+        /// <param name="id">id de los datos de facturación a modificar</param>
+        /// <param name="idDir">id de la direccion asociada a los datos de facturación a modificar</param>
+        /// <param name="idcat">Id del catalogo de direcciones asociados a los datos de facturacion a modificar</param>
+        /// <param name="tipo">tipo de pantalla que se mostrará, 0 para tipo modificar 1 para tipo añadir</param>
+        /// <param name="correo">Correo a modificar asociado a los datos de facturación</param>
+        /// <param name="dir">direccón a modificar asociada a los datos de facturación </param>
         public Modificarfacturacion(string id,string idDir, string idcat,int tipo,string correo,string dir)
         {
             facturacion = new DatosFacturacion();
@@ -42,7 +57,10 @@ namespace PagoEnLinea.Paginas
 
         }
 
-
+        /// <summary>
+        /// consume al servicio que contiene la información del usuario para mostrarla y pueda ser seleccionada como datos de facturación
+        /// entre este información se encuentra sus direcciones y correos añadidos
+        /// </summary>
         async void conectar()
         {
             
@@ -156,12 +174,23 @@ namespace PagoEnLinea.Paginas
 
             }
         }
+        /// <summary>
+        /// Llama al método conectar una vez que la pantalla para Modificar o agregar datos de facturación
+        /// </summary>
         protected override void OnAppearing()
         {
             conectar();
         }
       
 
+        /// <summary>
+        /// Obtiene el indice de la dirección seleccionado apartir del picker
+        /// este indice corresponde tambien a la posision de una lista temporal de tipo email
+        /// el cual tiene en sus propiedades el ID. Por lo que al seleccionar un elemento del picker
+        /// es posible obtener un ID apartir del indice del picker seleccionado y añadirlo al objecto
+        /// facturacion que posteriormente sera mandado como JSON al consumir los servicios correspondientes
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         void Direccion_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             int position = pkDireccion.SelectedIndex;
@@ -176,6 +205,15 @@ namespace PagoEnLinea.Paginas
             }  
         }
 
+
+        /// <summary>
+        /// Obtiene el indice del correo seleccionado apartir del picker
+        /// este indice corresponde tambien a la posision de una lista temporal de tipo infodir
+        /// el cual tiene en sus propiedades el ID. Por lo que al seleccionar un elemento del picker
+        /// es posible obtener un ID apartir del indice del picker seleccionado y añadirlo al objecto
+        /// facturacion que posteriormente sera mandado como JSON al consumir los servicios correspondientes
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         void Correo_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             int position = pkCorreo.SelectedIndex;
@@ -187,6 +225,13 @@ namespace PagoEnLinea.Paginas
             }
         }
 
+        /// <summary>
+        /// Este evento corresponde al boton agregar cuando se hace click al boton
+        /// primero valida que todos los campos añadidos sean validos y una vez que todo sea correcto
+        /// consume al servicio para añadir nueva informacion de facturacion.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         void Agregar_Clicked(object sender, System.EventArgs e)
         {
             facturacion.rfc = enRFC.Text;
@@ -203,7 +248,7 @@ namespace PagoEnLinea.Paginas
                 {
                     DisplayAlert("Advertencia", "Introduzca un RFC valido", "OK");
                 }else{
-                    client.POST(Constantes.URL+"/datos-facturacion/agregar", facturacion, 1); 
+                    client.POST(Constantes.URL_USUARIOS+"/datos-facturacion/agregar", facturacion, 1); 
                 }
 
             }else{
@@ -228,6 +273,12 @@ namespace PagoEnLinea.Paginas
 
         }
 
+        /// <summary>
+        /// Este evento corresponde al boton modificar cuando se hace click al boton
+        /// primero valida que todos los campos añadidos sean validos y una vez que todo sea correcto
+        /// consume al servicio para modificar la información de facturacion.
+          /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         void Modificar_Clicked(object sender, System.EventArgs e)
         {
             facturacion.rfc = enRFC.Text;
@@ -249,7 +300,7 @@ namespace PagoEnLinea.Paginas
                 {
                     DisplayAlert("Advertencia", "Introduzca un RFC valido", "OK");
                 }else{
-                    client.PUT(Constantes.URL + "/datos-facturacion/actualizar", facturacion);
+                    client.PUT(Constantes.URL_USUARIOS + "/datos-facturacion/actualizar", facturacion);
                 }
 
             }else{
@@ -278,8 +329,12 @@ namespace PagoEnLinea.Paginas
             
         }
 
-
-        public void OnRFCChanged(object sender, TextChangedEventArgs args)
+        /// <summary>
+        /// convierte el texto ingresado en la entrada de manera dinámica RFC en mayusculas
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
+         public void OnRFCChanged(object sender, TextChangedEventArgs args)
         {
            
             (sender as Entry).Text = args.NewTextValue.ToUpper();

@@ -7,9 +7,21 @@ using Xamarin.Forms;
 
 namespace PagoEnLinea.Paginas
 {
-    public partial class ModificarTelefono : ContentPage
+    /// <summary>
+    /// Esta clase muestra una pantalla ya sea para modificar o añadir un teléfono
+    /// según la el tipo de parámetros que recibe ya que muestra diferentes botones con eventos asociados.
+    /// </summary>
+   public partial class ModificarTelefono : ContentPage
     {
         string ID;
+
+        /// <summary>
+        /// inicializa los componentes visuales de su XAML
+        /// muestra u oculta componentes según el tipo de parametro recibido
+        /// </summary>
+        /// <param name="id">id del teléfono a modificar</param>
+        /// <param name="tipoTel">Tipo del teléfono a modficar</param>
+        /// <param name="tipo">tipo de pantalla que se mostrará, 0 para tipo modificar 1 para tipo añadir</param>
         public ModificarTelefono(string id, string tipoTel,int tipo)
         {
             InitializeComponent();
@@ -38,6 +50,9 @@ namespace PagoEnLinea.Paginas
             }
         }
 
+        /// <summary>
+        /// método usado para consumir al servicio de modificar un teléfono, primero valida si los campos ingresados sean correctos
+        /// </summary>
         async void conectar()
         {
             if (Application.Current.Properties.ContainsKey("token"))
@@ -91,7 +106,7 @@ namespace PagoEnLinea.Paginas
 
                     if(auth&&auth2){
 
-                        client.PUT(Constantes.URL+"/telefonos/modificar", modtel);
+                        client.PUT(Constantes.URL_USUARIOS+"/telefonos/modificar", modtel);
                         MessagingCenter.Subscribe<ClienteRest>(this, "OK", (Sender) => {
                             DisplayAlert("Guardado", "¡Teléfono Modificado con Exito!", "OK");
                             MessagingCenter.Unsubscribe<ClienteRest>(this,"OK");
@@ -111,12 +126,23 @@ namespace PagoEnLinea.Paginas
 
         }
 
+        /// <summary>
+        /// evento del boton modificar que llama al evento conectar();
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         void Handle_Clicked(object sender, System.EventArgs e)
         {
             conectar();
         }
 
-        async void Agregar_Clicked(object sender, System.EventArgs e)
+
+        /// <summary>
+        /// evento click del botón agregar para consumir al servicio de agregar un nuevo teléfono
+        /// </summary>
+        /// <param name="sender">objeto que hace referencia al evento</param>
+        /// <param name="e">argumentos que son posibles de obtener apartir del objeto que hace llamada al evento</param>
+         async void Agregar_Clicked(object sender, System.EventArgs e)
         {
             ClienteRest cliente = new ClienteRest();
             var inf = await cliente.InfoUsuario<InfoUsuario>(Application.Current.Properties["token"] as string);
@@ -179,7 +205,7 @@ namespace PagoEnLinea.Paginas
                 if (auth && auth2&&auth3)
                 {
 
-                    client.POST(Constantes.URL + "/telefono/agregar", modtel,1);
+                    client.POST(Constantes.URL_USUARIOS + "/telefono/agregar", modtel,1);
                     MessagingCenter.Subscribe<ClienteRest>(this, "OK", (Sender) => {
                         DisplayAlert("Guardado", "¡Teléfono Añadido con Exito!", "OK");
                         MessagingCenter.Unsubscribe<ClienteRest>(this, "OK");
@@ -197,6 +223,12 @@ namespace PagoEnLinea.Paginas
 
         }
 
+        /// <summary>
+        /// valida dinamicamente que solo se puedan ingresar ciertos caracteres en la entrada LADA 
+        /// 
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void OnLadaChanged(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))
@@ -213,6 +245,11 @@ namespace PagoEnLinea.Paginas
             }
         }
 
+        /// <summary>
+        /// valida dinámicamente que solo se puedan ingresar ciertos caracteres en la entreda teléfono
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="args">Arguments.</param>
         public void OnTelefonoChanged(object sender, TextChangedEventArgs args)
         {
             if (!Regex.IsMatch(args.NewTextValue, "^[0-9]+$", RegexOptions.CultureInvariant))

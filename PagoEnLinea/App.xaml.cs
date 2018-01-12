@@ -11,11 +11,16 @@ namespace PagoEnLinea
 {
     public partial class App : Application
     {
+
+        /// <summary>
+        /// establece la pantalla de inicio de la aplicacion
+        /// actualmente solo se encuentra habilitado para que la pagina de inicio sea el login ya que
+        ///   Properties.Clear(); elimina toda la informacíon almacenada que en este caso es el token de login
+        /// </summary>
         public App()
         {
             InitializeComponent();
             Properties.Clear();
-            //MessagingCenter.Subscribe<PopupCarga>(this, "login", (Sender) => { MainPage = new NavigationPage(new Menu()); });
 
             if (Current.Properties.ContainsKey("token"))
             {
@@ -23,17 +28,20 @@ namespace PagoEnLinea
                 //var id = Current.Properties["user"] as string;
                 // do something with id
             }else{
-                Current.Properties.Clear();
+                
                 MainPage = new NavigationPage(new LoginPage());
             }
-          // MainPage = new RegistroPage2(null, null, null);
+          
 
 
         }
+
+        //instancia a la base de datos interna del teléfono la cual cuarda el carrito
         static TodoItemDatabase database;
 
    
-
+        //si no se encuentra creada una base de datos interna primero se crea, en caso contrario solo se retorna
+        //hacer esto desde esta clase permite que este disponible para todos los modulos
         public static TodoItemDatabase Database
         {
             get

@@ -37,12 +37,6 @@
     <EmbeddedResource Include="PopupCarga.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="PerfilPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Menu.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Include="Paginas\TabPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -107,41 +101,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="RecuperarContraseñaPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PaginasMisPagos\TabPagos.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PaginasMisPagos\PrediosPagadosPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PaginasMisPagos\TabPredios.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PaginasMisPagos\Datos.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PaginasMisPagos\Predios.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PaginasMisPagos\LiquidacionesPagadasPage.xaml">
+    <EmbeddedResource Include="HIstorialPagos\PrediosPagadosPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="PaginasPago\PasarelaPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Paginas\ModalPopUp.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Modales\Modal.xaml">
       <SubType>Designer</SubType>
@@ -175,12 +141,6 @@
     <Compile Include="servicios\ClienteRest.cs" />
     <Compile Include="PopupCarga.xaml.cs">
       <DependentUpon>PopupCarga.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PerfilPage.xaml.cs">
-      <DependentUpon>PerfilPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Menu.xaml.cs">
-      <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
     <Compile Include="HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
@@ -246,26 +206,8 @@
     <Compile Include="RecuperarPage.xaml.cs">
       <DependentUpon>RecuperarPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RecuperarContraseñaPage.xaml.cs">
-      <DependentUpon>RecuperarContraseñaPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PaginasMisPagos\TabPagos.xaml.cs">
-      <DependentUpon>TabPagos.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PaginasMisPagos\PrediosPagadosPage.xaml.cs">
+    <Compile Include="HIstorialPagos\PrediosPagadosPage.xaml.cs">
       <DependentUpon>PrediosPagadosPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PaginasMisPagos\TabPredios.xaml.cs">
-      <DependentUpon>TabPredios.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PaginasMisPagos\Datos.xaml.cs">
-      <DependentUpon>Datos.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PaginasMisPagos\Predios.xaml.cs">
-      <DependentUpon>Predios.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PaginasMisPagos\LiquidacionesPagadasPage.xaml.cs">
-      <DependentUpon>LiquidacionesPagadasPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="PaginasPago\CheckItem.cs" />
     <Compile Include="PaginasPago\DesglosePredios.cs" />
@@ -273,9 +215,6 @@
     <Compile Include="Modelos\Liquidacion.cs" />
     <Compile Include="PaginasPago\PasarelaPage.xaml.cs">
       <DependentUpon>PasarelaPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Paginas\ModalPopUp.xaml.cs">
-      <DependentUpon>ModalPopUp.xaml</DependentUpon>
     </Compile>
     <Compile Include="Modales\Modal.xaml.cs">
       <DependentUpon>Modal.xaml</DependentUpon>
@@ -352,7 +291,7 @@
     <Folder Include="Paginas\" />
     <Folder Include="camara\" />
     <Folder Include="PaginasPago\" />
-    <Folder Include="PaginasMisPagos\" />
+    <Folder Include="HIstorialPagos\" />
     <Folder Include="Modales\" />
   </ItemGroup>
   <ItemGroup>

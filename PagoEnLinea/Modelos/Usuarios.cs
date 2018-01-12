@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace PagoEnLinea.Modelos
 {
+
+
+    /// <summary>
+    /// modelo de usuarios, empleado para manipular los JSON al consumir servicios
+    /// relacionados al perfil y creacion de un usuario
+    /// </summary>
     public class CatalogoDir
     {
         public string asentamiento { get; set; }
@@ -115,7 +121,7 @@ namespace PagoEnLinea.Modelos
     {
         public string contrasenaActual { get; set; }
         public string contrasenaNueva { get; set; }
-        public Persona persona { get; set; }
+       
        
     }
 
@@ -178,7 +184,8 @@ namespace PagoEnLinea.Modelos
 
     public static class Constantes{
 
-       public  static string URL = "http://192.168.0.18:8080/api";
+       public  static string URL_USUARIOS = "http://192.168.0.18:8080/api";
+       public static string URL_CAJA = "http://192.168.0.18:8081/api";
     }
 
     public class Respuesta
